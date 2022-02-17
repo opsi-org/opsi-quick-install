@@ -1,0 +1,100 @@
+# Variable definitions
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+  RUN_PIPLINE:
+    value: "true"  # run pipline NOT by default
+    description: "Run the pipline if set to true."
+
+  PROJECT_NAME:
+    value: "opsi_quick_install_project"
+    description: "Project name of the project the pipline should run on."
+
+  BINARY_VERSION:
+    value: "4.12.4.30"
+    description: "Version of the binary"
+
+  PLATFORM:
+    value: "Linux"
+    description: "For which build modes should the lazarus project be compiled?  
+    all: build project for all platforms (Win32, Win64, Linux, MacOS)
+    Windows (Linux, MacOS):  build project for the specified platform only"
+
+# Control of the Pipline
+workflow:
+  rules:
+    - if: '$RUN_PIPLINE == "true"' # && $CI_PIPELINE_SOURCE == "push"'
+    # - if: '$CI_COMMIT_MESSAGE =~ /-compile$/ && $CI_PIPELINE_SOURCE == "push"'
+      when: always
+
+stages:
+  - build
+  - publish
+
+default:
+  before_script:
+    - echo "Execute this command before any 'script:' commands."
+
+#***************************************#
+#  opsi-script pipline                  #
+#***************************************#
+
+compile opsi-quickinstall linux:
+  stage: build
+  tags:
+    - laz-linux
+  variables:
+    PROJECT_REPOSITORY_PATH: "opsi-misc/opsi-quickinstall"
+  rules:
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux") 
+      when: always
+    - if: $UPDATE_SUBMODULE == "true"
+  before_script:
+    - git submodule update --init
+  script:
+    - git submodule update --init --recursive 
+    - git submodule update --remote
+    - LAZ_PROJECT_FILE_GUI=${PROJECT_REPOSITORY_PATH}/gui/${PROJECT_NAME}.lpi
+    - LAZ_PROJECT_FILE_NOGUI=${PROJECT_REPOSITORY_PATH}/nogui/${PROJECT_NAME}.lpi
+    - echo "$LAZ_PROJECT_FILE"
+    - echo "Compiling $PROJECT_NAME for Linux with no GUI"
+    - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI
+    - echo "Compiling $PROJECT_NAME for Linux with GUI"
+    - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI
+    - MAINVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    - SUBVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - mkdir opsi-misc/opsi-quickinstall/build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
+    - cp -r opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/* opsi-misc/opsi-quickinstall/build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
+    #- cd opsi-misc/opsi-quickinstall/build/opsi-quickinstall/ &&
+    # - $BINARY_OUT_PATH = $PROJECT_NAME -eq "opsiscript")
+   
+  artifacts:
+    name: "opsi-quickinstall $BINARY_VERSION linux"
+    paths:
+      - opsi-misc/opsi-quickinstall/build/*
+
+publish opsi-quick-install:
+  stage: publish
+  tags:
+    - laz-linux
+  variables:
+    PROJECT_REPOSITORY_PATH: "opsi-misc/opsi-quickinstall"
+  rules:
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+      when: always
+  before_script:
+    - git submodule update --init
+  script:
+    - git submodule update --init --recursive 
+    - git submodule update --remote
+    - MAINVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    - SUBVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - echo $MAINVERSION $SUBVERSION
+    - cd opsi-misc/opsi-quickinstall/build/
+    - rm -rf opsi-quickinstall/l-opsi-server
+    - '[ "$CI_COMMIT_TAG" = "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
+    - '[ "$CI_COMMIT_TAG" = "" ] || zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
+    - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
+    - '[ "$CI_COMMIT_TAG" = "" ] || scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/'
+    - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
