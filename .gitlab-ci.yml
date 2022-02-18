@@ -43,8 +43,6 @@ compile opsi-quickinstall linux:
   stage: build
   tags:
     - laz-linux
-  variables:
-    PROJECT_REPOSITORY_PATH: "opsi-misc/opsi-quickinstall"
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux") 
       when: always
@@ -54,31 +52,29 @@ compile opsi-quickinstall linux:
   script:
     - git submodule update --init --recursive 
     - git submodule update --remote
-    - LAZ_PROJECT_FILE_GUI=${PROJECT_REPOSITORY_PATH}/gui/${PROJECT_NAME}.lpi
-    - LAZ_PROJECT_FILE_NOGUI=${PROJECT_REPOSITORY_PATH}/nogui/${PROJECT_NAME}.lpi
+    - LAZ_PROJECT_FILE_GUI=$gui/${PROJECT_NAME}.lpi
+    - LAZ_PROJECT_FILE_NOGUI=$nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE"
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI
-    - MAINVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
-    - SUBVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
-    - mkdir opsi-misc/opsi-quickinstall/build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
-    - cp -r opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/* opsi-misc/opsi-quickinstall/build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
-    #- cd opsi-misc/opsi-quickinstall/build/opsi-quickinstall/ &&
+    - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - mkdir build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
+    - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
+    #- cd build/opsi-quickinstall/ &&
     # - $BINARY_OUT_PATH = $PROJECT_NAME -eq "opsiscript")
    
   artifacts:
     name: "opsi-quickinstall $BINARY_VERSION linux"
     paths:
-      - opsi-misc/opsi-quickinstall/build/*
+      - build/*
 
 publish opsi-quick-install:
   stage: publish
   tags:
     - laz-linux
-  variables:
-    PROJECT_REPOSITORY_PATH: "opsi-misc/opsi-quickinstall"
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
       when: always
@@ -87,10 +83,10 @@ publish opsi-quick-install:
   script:
     - git submodule update --init --recursive 
     - git submodule update --remote
-    - MAINVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
-    - SUBVERSION=$(cat opsi-misc/opsi-quickinstall/l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
     - echo $MAINVERSION $SUBVERSION
-    - cd opsi-misc/opsi-quickinstall/build/
+    - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
     - '[ "$CI_COMMIT_TAG" = "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
