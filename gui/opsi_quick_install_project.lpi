@@ -129,7 +129,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../../../common;../../../external_libraries/synapse;../../../external_libraries/misc;.."/>
+      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
