@@ -73,6 +73,8 @@ compile opsi-quickinstall linux:
 
 publish opsi-quick-install:
   stage: publish
+  only:
+    - Release
   tags:
     - laz-linux
   rules:
