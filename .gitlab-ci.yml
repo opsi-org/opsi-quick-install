@@ -50,9 +50,10 @@ compile opsi-quickinstall linux:
       when: always
   before_script:
     - git submodule update --init
+    - git submodule sync --recursive
   script:
     - git submodule update --init --recursive --jobs 2
-    - git submodule update --remote lazarus
+    - git submodule update --remote
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE"
