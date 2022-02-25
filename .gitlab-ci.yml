@@ -46,8 +46,8 @@ compile opsi-quickinstall linux:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $CI_COMMIT_BRANCH == "Release"
-      when: always
     - if: $UPDATE_SUBMODULE == "true"
+      when: always
   before_script:
     - git submodule update --init
   script:
@@ -79,6 +79,7 @@ publish opsi-quick-install:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $CI_COMMIT_BRANCH == "Release"
+      when: always
   before_script:
     - git submodule update --init
   script:
