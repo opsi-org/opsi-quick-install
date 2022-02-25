@@ -3,5 +3,5 @@
 	url = https://gitlab+deploy-token-1:LXeNre7Mczjx_kzzGrpX@gitlab.uib.gmbh/uib/opsiproducts/l-opsi-server-products.git
 [submodule "lazarus"]
 	path = lazarus
-	url = ../../../uib/lazarus.git
+	url = ../../lazarus.git
 	branch = experimental
