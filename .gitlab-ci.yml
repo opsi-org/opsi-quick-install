@@ -49,11 +49,9 @@ compile opsi-quickinstall linux:
     - if: $UPDATE_SUBMODULE == "true"
       when: always
   before_script:
-    - git submodule sync --recursive
-    - git submodule foreach --recursive git fetch
-    - git submodule update --init --recursive
+    - git submodule update --init
   script:
-    - git submodule update --init --recursive --jobs 2
+    - git submodule update --init --recursive
     - git submodule update --remote
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
@@ -85,7 +83,7 @@ publish opsi-quick-install:
   before_script:
     - git submodule update --init
   script:
-    - git submodule update --init --recursive --jobs 2 
+    - git submodule update --init --recursive 
     - git submodule update --remote
     - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
     - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
