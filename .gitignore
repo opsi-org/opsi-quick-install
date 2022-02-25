@@ -37,6 +37,4 @@ build/opsi-quickinstall/nogui/opsi_quick_install_project
 # download on runtime
 build/opsi-quickinstall/downloaded_l-opsi-server_*
 # submodules
-lazarus
-l-opsi-server-products
 build/opsi-quickinstall/l-opsi-server_*
