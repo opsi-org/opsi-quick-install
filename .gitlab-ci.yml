@@ -73,12 +73,11 @@ compile opsi-quickinstall linux:
 
 publish opsi-quick-install:
   stage: publish
-  only:
-    - Release
   tags:
     - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+    - if: $CI_COMMIT_BRANCH == "Release"
       when: always
   before_script:
     - git submodule update --init
