@@ -79,7 +79,6 @@ publish opsi-quick-install:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $CI_COMMIT_BRANCH == "Release"
-      when: always
   before_script:
     - git submodule update --init
   script:
