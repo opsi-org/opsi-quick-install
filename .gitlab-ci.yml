@@ -44,7 +44,8 @@ compile opsi-quickinstall linux:
   tags:
     - laz-linux
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux") 
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+    - if: $CI_COMMIT_BRANCH == "Release"
       when: always
     - if: $UPDATE_SUBMODULE == "true"
   before_script:
