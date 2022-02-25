@@ -49,8 +49,9 @@ compile opsi-quickinstall linux:
     - if: $UPDATE_SUBMODULE == "true"
       when: always
   before_script:
-    - git submodule update --init
     - git submodule sync --recursive
+    - git submodule foreach --recursive git fetch
+    - git submodule update --init --recursive
   script:
     - git submodule update --init --recursive --jobs 2
     - git submodule update --remote
