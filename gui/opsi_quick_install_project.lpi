@@ -129,7 +129,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common"/>
+      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common;.."/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Linking>
@@ -142,10 +142,6 @@
     <Other>
       <CustomOptions Value="-dSYNAPSE
 -dGUI"/>
-      <OtherDefines Count="2">
-        <Define0 Value="SYNAPSE"/>
-        <Define1 Value="GUI"/>
-      </OtherDefines>
     </Other>
   </CompilerOptions>
   <Debugging>
