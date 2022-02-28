@@ -63,6 +63,7 @@ compile opsi-quickinstall linux:
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI
     - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
     - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - rm -r build/opsi-quickinstall/l-opsi-server*
     - mkdir build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
     - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
     #- cd build/opsi-quickinstall/ &&
