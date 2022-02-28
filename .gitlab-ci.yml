@@ -55,7 +55,8 @@ compile opsi-quickinstall linux:
     - git submodule update --remote
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
-    - echo "$LAZ_PROJECT_FILE"
+    - echo "$LAZ_PROJECT_FILE_GUI"
+    - echo "$LAZ_PROJECT_FILE_NOGUI"
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
