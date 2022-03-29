@@ -239,7 +239,7 @@ if $myIPName$ = "auto"
 						set $domainlist$ = shellCall("cat /run/systemd/netif/leases/2 | grep 'DOMAINNAME' | awk -F= '{ print $2 }'")
 					endif
 				endif
-			    for %s% in $domainlist$ do set $domain$ = %s%
+			    for %s% in $domainlist$ do set $domain$ = "%s%"
 			    if ($dnsdomain$ = $domain$)
 			        comment "dnsdomain and read domain-name are the same"
 			        message "dnsdomain and read domain-name are the same"
