@@ -1421,7 +1421,7 @@ type
       if Data.DistrInfo.Distr = other then
       begin
         writeln(rsNoSupport + #10 + Data.DistrInfo.Distribs);
-        Exit;
+        Halt(1);
       end;
     end;
   end;
