@@ -2,6 +2,7 @@
 
 This is a description of the functionality of Opsi-QuickInstall for any developer who wants to or must work with the Opsi-QuickInstall source code.
 
+
 ## Forms of GUI-Version
 
 First I want to list all forms belonging to Opsi-QuickInstall (and their units in brackets) in their order of appearance:
@@ -53,7 +54,10 @@ If opsi supports a new linux distribution and you want to add it to QuickIntsall
 	+ Add the distriution in the procedure TLinuxRepository.Add .
 
 3. In osDistributionInfo:
-	+ Add the distriution to the const string Distribs of TDistributionInfo.
-	+ Add the distriution to the procedure TDistributionInfo.SetInfo .
+	+ Add the distriution to the procedure TDistributionInfo.SetDistrAndUrlPart .
+	+ Don't forget to add the distribution after test to
+        * the const string Distribs of TDistributionInfo,
+        * the changelog,
+        * the oqi manual.
 
 
