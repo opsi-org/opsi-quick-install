@@ -1,6 +1,12 @@
 
-opsi-quickinstall (4.2.0.5-2) experimental; urgency=low
-  * CentOS8, RHEL8 added to supported distributions
+opsi-quickinstall (4.2.0.7-?) experimental; urgency=low
+  * UCS 5.0, Alma Linux 8, RHEL 8 and Rocky Linux 8 added to supported distributions
+  * deprecated apt-key replaced
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  04 Apr 2022 17:30
+
+
+opsi-quickinstall (4.2.0.6-3) experimental; urgency=low
   * openSUSE 15.1 removed from supported distributions (discontinued)
   * opsi-quickinstall version from now on synchronized with latest released l-opsi-server
   * default l-opsi-server of quickinstall from now on synchronized with latest released l-opsi-server
@@ -11,7 +17,7 @@ opsi-quickinstall (4.2.0.5-2) experimental; urgency=low
       2b) If 2a) failed then try to install the older l-opsi-server.
   * logging improved
     
--- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  01 Feb 2022 10:40
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  15 Mar 2022 11:40
 
 
 opsi-quickinstall (4.2.0.1-2) experimental; urgency=low
