@@ -1,7 +1,12 @@
 
-opsi-quickinstall (4.2.0.7-?) experimental; urgency=low
-  * UCS 5.0, Alma Linux 8, RHEL 8 and Rocky Linux 8 added to supported distributions
-  * deprecated apt-key replaced
+opsi-quickinstall (4.2.0.7-1) experimental; urgency=low
+  * Added to supported distributions:
+  	  UCS 5.0,
+  	  Alma Linux 8,
+  	  RHEL 8,
+  	  Rocky Linux 8,
+  	  Ubuntu 22.04.
+  * Deprecated 'apt-key' replaced
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  04 Apr 2022 17:30
 
