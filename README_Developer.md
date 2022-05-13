@@ -49,13 +49,13 @@ If opsi supports a new linux distribution and you want to add it to QuickIntsall
 1. Check that the distribution is available on http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/stable/ .
 
 2. In osLinuxRepository:
-	+ Add the distriution to TDistribution with exactly the same name that the folder on download.opensuse.org has.
+	+ Add the distriution to TDistribution with exactly the same name (except "." and "_") that the folder on download.opensuse.org has.
 	+ Add the distriution in the function TLinuxRepository.GetDefaultURL .
 	+ Add the distriution in the procedure TLinuxRepository.Add .
 
 3. In osDistributionInfo:
 	+ Add the distriution to the procedure TDistributionInfo.SetDistrAndUrlPart .
-	+ Don't forget to add the distribution after test to
+	+ Don't forget to add the distribution after tests are done to
         * the const string Distribs of TDistributionInfo,
         * the changelog,
         * the oqi manual.
