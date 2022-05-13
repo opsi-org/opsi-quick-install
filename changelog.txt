@@ -6,12 +6,12 @@ opsi-quickinstall (4.2.0.7-1) experimental; urgency=low
   	  RHEL 8,
   	  Rocky Linux 8,
   	  Ubuntu 22.04.
-  * Deprecated 'apt-key' replaced
+  * Deprecated 'apt-key' replaced.
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  04 Apr 2022 17:30
 
 
-opsi-quickinstall (4.2.0.6-3) experimental; urgency=low
+opsi-quickinstall (4.2.0.6-3) stable; urgency=low
   * openSUSE 15.1 removed from supported distributions (discontinued)
   * opsi-quickinstall version from now on synchronized with latest released l-opsi-server
   * default l-opsi-server of quickinstall from now on synchronized with latest released l-opsi-server
@@ -25,7 +25,7 @@ opsi-quickinstall (4.2.0.6-3) experimental; urgency=low
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  15 Mar 2022 11:40
 
 
-opsi-quickinstall (4.2.0.1-2) experimental; urgency=low
+opsi-quickinstall (4.2.0.1-2) stable; urgency=low
   * new default l-opsi-server 4.2.0.5-2
   * openSUSE 15.3 added as supported distribution
   * Debian 11 added as supported distribution
@@ -36,7 +36,7 @@ opsi-quickinstall (4.2.0.1-2) experimental; urgency=low
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu,  30 Sep 2021 18:30:00 +0200
 
 
-opsi-quickinstall (4.2.0.1) experimental; urgency=low
+opsi-quickinstall (4.2.0.1) stable; urgency=low
   * installing opsi 4.2 from stable (default), testing or experimental
   * try downloading latest l-opsi-server now from stable
   * log the version number of downloaded l-opsi-server
@@ -50,7 +50,7 @@ opsi-quickinstall (4.2.0.1) experimental; urgency=low
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  01 Jun 2021 17:30:00 +0200
 
 
-opsi-quickinstall (4.2.0.0) experimental; urgency=low
+opsi-quickinstall (4.2.0.0) stable; urgency=low
   * initial
   * installing opsi 4.2 from testing or experimental
   
