@@ -257,6 +257,9 @@ begin
   LogDatei.log('Log file created', LLdebug);
   SetCurrentDir(ExtractFilePath(ParamStr(0)));
   LogDatei.log('Working directory: ' + GetCurrentDir, LLessential);
+  LogDatei.log('', LLessential);
+  LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
+  LogDatei.log('', LLessential);
   // log file will be saved in /tmp/opsi_quickinstall.log
   logFileName := LogDatei.StandardMainLogPath + logFileName;
 

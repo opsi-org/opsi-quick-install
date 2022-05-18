@@ -89,21 +89,22 @@ begin
     UserEditedDistroRelease :=
       Copy(EditDistr.Text, Pos(' ', EditDistr.Text) + 1, Length(EditDistr.Text) -
       Pos(' ', EditDistr.Text));
-    Data.DistrInfo.CorrectDistributionNameAndRelease(UserEditedDistroName, UserEditedDistroRelease);
+    Data.DistrInfo.CorrectDistributionNameAndRelease(UserEditedDistroName,
+      UserEditedDistroRelease);
   end;
 
   // set Data.DistrInfo
-  with Data do
+  LogDatei.Log(Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease,
+    LLessential);
+  Data.DistrInfo.SetDistrAndUrlPart;
+  //ShowMessage(DistrInfo.DistrUrlPart);
+  // If the distribution is not supported, show an information and close QuickInstall:
+  if Data.DistrInfo.Distr = other then
   begin
-    LogDatei.Log(Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease, LLessential);
-    DistrInfo.SetDistrAndUrlPart;
-    //ShowMessage(DistrInfo.DistrUrlPart);
-    // If the distribution is not supported, show an information and close QuickInstall:
-    if DistrInfo.Distr = other then
-    begin
-      ShowMessage(rsNoSupport + #10 + #10 + DistrInfo.Distribs);
-      Close;
-    end;
+    ShowMessage(rsNoSupport + #10 + #10 + Data.DistrInfo.Distribs);
+    FreeAndNil(LogDatei);
+    FreeAndNil(Data);
+    Close;
   end;
 end;
 

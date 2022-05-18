@@ -1371,6 +1371,9 @@ type
     LogDatei.log('Log file created', LLdebug);
     SetCurrentDir(ExtractFilePath(ParamStr(0)));
     LogDatei.log('Working directory: ' + GetCurrentDir, LLessential);
+    LogDatei.log('', LLessential);
+    LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
+    LogDatei.log('', LLessential);
   end;
 
   procedure UseSystemLanguageForResourcestrings;
@@ -1421,6 +1424,8 @@ type
       if Data.DistrInfo.Distr = other then
       begin
         writeln(rsNoSupport + #10 + Data.DistrInfo.Distribs);
+        FreeAndNil(LogDatei);
+        FreeAndNil(Data);
         Halt(1);
       end;
     end;
@@ -1466,7 +1471,7 @@ begin
   if QuickInstall.HasOption('d', 'default') then
   begin
     writeln('');
-    writeln('Start opsi-quickinstall');
+    writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
   end;
 
   InitializeDistributionInfo(QuickInstall);
