@@ -136,15 +136,15 @@ begin
       // set background image
       (Sender.Components[compIndex] as TImage).Picture.LoadFromFile(
         ExtractFilePath(ParamStr(0)) + QuickInstall.BackgrImageFileName);
-      (Sender.Components[compIndex] as TImage).BorderSpacing.Top:=10;
+      (Sender.Components[compIndex] as TImage).BorderSpacing.Top := 10;
     end;
   end;
 
   // big decoration line at bottom in opsi-blue
   PanelBigLine := TPanel.Create(Sender);
-  PanelBigLine.Parent:=Sender;
-  PanelBigLine.ParentColor:=False;
-  PanelBigLine.BevelOuter:=bvNone;
+  PanelBigLine.Parent := Sender;
+  PanelBigLine.ParentColor := False;
+  PanelBigLine.BevelOuter := bvNone;
   PanelBigLine.Height := 5;
   PanelBigLine.Top := Sender.Height - PanelBigLine.Height;
   PanelBigLine.Left := 0;
@@ -155,9 +155,9 @@ begin
 
   // thin decoration line above the big one in opsi-red
   PanelSmallLine := TPanel.Create(Sender);
-  PanelSmallLine.Parent:=Sender;
-  PanelSmallLine.ParentColor:=False;
-  PanelSmallLine.BevelOuter:=bvNone;
+  PanelSmallLine.Parent := Sender;
+  PanelSmallLine.ParentColor := False;
+  PanelSmallLine.BevelOuter := bvNone;
   PanelSmallLine.Height := 3;
   PanelSmallLine.Top := Sender.Height - 11;
   PanelSmallLine.Left := 0;
@@ -227,7 +227,7 @@ begin
   //note that BtnNext.Width = width for english caption
   BtnNext.Left := Width - BtnBack.Left - BtnNext.Width;
   //BtnBack.Top := 410;
-  BtnBack.Top := Height-50;
+  BtnBack.Top := Height - 50;
   BtnNext.Top := BtnBack.Top;
 
   SetBasics(self);

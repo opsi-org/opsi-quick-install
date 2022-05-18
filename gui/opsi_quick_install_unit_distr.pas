@@ -81,7 +81,8 @@ begin
   Distribution.Close;
 
   // If the distribution was edited:
-  if EditDistr.Text <> Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease then
+  if EditDistr.Text <> Data.DistrInfo.DistroName + ' ' +
+    Data.DistrInfo.DistroRelease then
   begin
     // set new distribution name and release
     // function Copy is 1-based like Pos
