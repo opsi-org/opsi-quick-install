@@ -1,5 +1,5 @@
 
-opsi-quickinstall (4.2.0.7-1) experimental; urgency=low
+opsi-quickinstall (4.2.0.7-2) experimental; urgency=low
   * Added to supported distributions:
   	  UCS 5.0,
   	  Alma Linux 8,
