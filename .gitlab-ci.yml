@@ -52,7 +52,7 @@ compile opsi-quickinstall linux:
     - git submodule update --init
   script:
     - git submodule update --init --recursive
-    - git submodule update --remote --merge
+    #- git submodule update --remote --merge
     - cd l-opsi-server-products && git pull origin master && cd ..
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
