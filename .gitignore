@@ -37,4 +37,4 @@ build/opsi-quickinstall/nogui/opsi_quick_install_project
 # download on runtime
 build/opsi-quickinstall/downloaded_l-opsi-server_*
 # l-opsi-server copy from submodule
-build/opsi-quickinstall/l-opsi-server_*
+#build/opsi-quickinstall/l-opsi-server_*
