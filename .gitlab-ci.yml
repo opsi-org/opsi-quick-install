@@ -46,13 +46,13 @@ compile opsi-quickinstall linux:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $CI_COMMIT_BRANCH == "Release"
-    - if: $UPDATE_SUBMODULE == "true"
+    #- if: $UPDATE_SUBMODULE == "true"
       when: always
   before_script:
     - git submodule update --init
   script:
     - git submodule update --init --recursive
-    - git submodule update --remote
+    - git submodule update --remote --merge
     - cd l-opsi-server-products && git pull origin master && cd ..
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
@@ -93,7 +93,7 @@ publish opsi-quick-install:
     - echo $MAINVERSION $SUBVERSION
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
-    - '[ "$CI_COMMIT_TAG" = "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_TAG" =~ "oqi" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
     - '[ "$CI_COMMIT_TAG" = "" ] || zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
     - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
