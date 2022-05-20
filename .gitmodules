@@ -4,3 +4,4 @@
 [submodule "lazarus"]
 	path = lazarus
 	url = ../../lazarus.git
+	branch = development
