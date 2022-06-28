@@ -1359,7 +1359,7 @@ type
     if not ((user = 'root') and (userID = '0')) then
     begin
       writeln('Please execute Opsi Quick-Install as root!');
-      exit;
+      Halt(1);
     end;
   end;
 
