@@ -511,12 +511,10 @@ type
       NoGuiQuery
     else
     begin
-      if input = '' then
+      if (input = '') or (input = 's') then
         Data.CustomSetup := false
-        else Data.CustomSetup := true;
-      writeln('');
-      writeln(rsCarryOut);
-      writeln('');
+      else
+        Data.CustomSetup := true;
       if Data.CustomSetup then
         // following queries only for custom setup
         //QueryOpsiVersion
