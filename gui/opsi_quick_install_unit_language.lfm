@@ -6,6 +6,7 @@ object QuickInstall: TQuickInstall
   Caption = 'Opsi Quick Install'
   ClientHeight = 450
   ClientWidth = 730
+  OnActivate = FormActivate
   OnCreate = FormCreate
   LCLVersion = '2.2.0.4'
   object BackgrImage: TImage

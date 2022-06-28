@@ -229,6 +229,15 @@ msgstr "Installation "
 msgid "Installation of "
 msgstr "Installation of "
 
+#: opsi_quick_install_resourcestrings.rsinvalidfqdnwarning
+msgid ""
+"Opsi-QuickInstall Warning:\n"
+"We could not find a valid local DNS hostname on this computer. This can lead to problems during the installation! Please see\n"
+"https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/\n"
+"quickinstall-manual.html#opsi-quickinstall-prep\n"
+"for more information."
+msgstr ""
+
 #: opsi_quick_install_resourcestrings.rsipname
 msgctxt "opsi_quick_install_resourcestrings.rsipname"
 msgid "Set a different IP name (\"auto\" = use automatically determined FQDN of this computer)"

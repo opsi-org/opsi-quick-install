@@ -42,6 +42,12 @@ resourcestring
   rsInstallationOf = 'Installation of ';
   rsFailed = 'failed';
   rsSuccess = 'successful';
+  rsInvalidFqdnWarning =
+    'Opsi-QuickInstall Warning:' + #10 +
+    'We could not find a valid local DNS hostname on this computer.' +
+    ' This can lead to problems during the installation! Please see' +
+    #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' + #10 +
+    'quickinstall-manual.html#opsi-quickinstall-prep' + #10 + 'for more information.';
 
   // QuickInstall:
   rsCapDistr = 'Distribution';

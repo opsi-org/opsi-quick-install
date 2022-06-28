@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, LCLtranslator, Buttons, process;
+  StdCtrls, LCLtranslator, Buttons, process,
+  osnetutil;
 
 type
 
@@ -29,6 +30,7 @@ type
     LabelSelLanguage: TLabel;
     procedure BtnNextClick(Sender: TObject);
     procedure ComboBoxLanguagesChange(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
   public
@@ -362,6 +364,14 @@ begin
     SetBtnWidth('fr');
     LabelCarryOut.Caption := rsCarryOut;
   end;
+end;
+
+procedure TQuickInstall.FormActivate(Sender: TObject);
+var
+  HostName: string;
+begin
+  if not (RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) and isValidFQDN(HostName)) then
+    ShowMessage(rsInvalidFqdnWarning);
 end;
 
 end.

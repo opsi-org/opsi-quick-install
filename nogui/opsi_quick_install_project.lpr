@@ -18,7 +18,8 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   osnetworkcalculator,
   LOpsiServerDownloader,
   opsi_quick_install_resourcestrings,
-  opsiquickinstall_data;
+  opsiquickinstall_data,
+  osnetutil;
 
 type
 
@@ -1441,6 +1442,19 @@ type
     CheckThatOqiSupportsDistribution(QuickInstall);
   end;
 
+  procedure CheckFQDN;
+  var
+    HostName: string;
+  begin
+    // Check FQDN as precondition for OQI
+    if not (RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) and
+      isValidFQDN(HostName)) then
+    begin
+      Writeln('');
+      Writeln(rsInvalidFqdnWarning);
+    end;
+  end;
+
 var
   QuickInstall: TQuickInstall;
   //r: TTranslateUnitResult;
@@ -1457,6 +1471,7 @@ begin
   QuickInstall := TQuickInstall.Create(nil);
   Data := TQuickInstallData.Create;
   QuickInstall.QuickInstallCommand := TRunCommandElevated.Create('', False);
+  CheckFQDN;
 
   UseSystemLanguageForResourcestrings;
   // do language selection here only for nogui installation
