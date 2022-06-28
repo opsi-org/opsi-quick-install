@@ -38,3 +38,5 @@ build/opsi-quickinstall/nogui/opsi_quick_install_project
 build/opsi-quickinstall/downloaded_l-opsi-server_*
 # l-opsi-server copy from submodule
 #build/opsi-quickinstall/l-opsi-server_*
+build/opsi-quickinstall/l-opsi-server_4.2.0.7-2/CLIENT_DATA/properties.conf
+build/opsi-quickinstall/l-opsi-server_4.2.0.7-2/CLIENT_DATA/result.conf
