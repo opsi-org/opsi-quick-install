@@ -360,6 +360,7 @@ type
     installationResult: string;
   begin
     LogDatei.log('Entered InstallOpsi', LLdebug);
+    writeln('');
     writeln(rsInstall + Data.opsiVersion + ':');
     addRepo;
 
