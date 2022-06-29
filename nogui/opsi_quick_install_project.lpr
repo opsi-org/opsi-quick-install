@@ -61,6 +61,7 @@ type
   procedure TQuickInstall.DoRun;
   var
     ErrorMsg: string;
+    FilePath: string;
   begin
     // quick check parameters
     ErrorMsg := CheckOptions('hgndf:', 'help gui nogui default file:');
@@ -92,6 +93,7 @@ type
     // query
     if HasOption('n', 'nogui') then
     begin
+      LogDatei.Log('Get properties from query.', LLInfo);
       NoGuiQuery;
       Terminate;
       Exit;
@@ -99,6 +101,7 @@ type
     // no query, directly use all default values for installation
     if HasOption('d', 'default') then
     begin
+      LogDatei.Log('Use default properties.', LLInfo);
       ExecuteWithDefaultValues;
       Terminate;
       Exit;
@@ -108,22 +111,28 @@ type
     begin
       // read properties from file
       PropsFile := TStringList.Create;
+      FilePath := getOptionValue('f', 'file');
+      LogDatei.Log('Get properties from file.', LLInfo);
       try
         begin
-          //writeln(getOptionValue('f', 'file'));
-          //writeln(FileExists(getOptionValue('f', 'file')).ToString(TUseBoolStrs.true));
-          PropsFile.LoadFromFile(getOptionValue('f', 'file'));
-          ReadPropsFromFile;
+          if FileExists(FilePath) then
+          begin
+            PropsFile.LoadFromFile(FilePath);
+            ReadPropsFromFile;
+          end
+          else
+          begin
+            writeln('File "' + FilePath + '" not found!');
+          end;
         end;
       except
-        writeln('Executing Opsi Quick-Install with properties file didn''t work!');
+        writeln('Executing Opsi-QuickInstall with properties from file didn''t work!');
       end;
       PropsFile.Free;
       Terminate;
       Exit;
     end;
 
-    { add your program here }
     // stop program loop
     Terminate;
     Exit;
