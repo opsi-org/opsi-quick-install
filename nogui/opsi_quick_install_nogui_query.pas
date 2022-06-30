@@ -105,10 +105,10 @@ begin
     QueryDistribution
   else
   begin
-    if (input = '') or (input = 's') then
-      Data.CustomSetup := False
+    if input = 'c' then
+      Data.CustomSetup := True
     else
-      Data.CustomSetup := True;
+      Data.CustomSetup := False;
     writeln('');
     writeln(rsCarryOut);
     writeln('');
