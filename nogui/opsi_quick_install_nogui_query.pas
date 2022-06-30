@@ -716,9 +716,14 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryIPName;
 begin
-  // fqdn:
   writeln(rsIPName);
   readln(input);
+  while not ((input = 'auto') or isValidFQDN(input) or (input = '-b')) do
+  begin
+    writeln('"', input, '"', rsNotValid);
+    readln(input);
+  end;
+
   if input = '-b' then
   begin
     if Data.adminName = '' then
