@@ -37,6 +37,7 @@ type
     procedure QueryNetworkAddress;
     function GetDomainSuggestions: string;
     procedure QueryDomain;
+    function GetNameserverSuggestions: string;
     procedure QueryNameserver;
     procedure QueryGateway;
     procedure QueryAdminName;
@@ -602,61 +603,57 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryNameserver;
+function TQuickInstallNoQuiQuery.GetNameserverSuggestions: string;
 var
-  suggestion: string;
-  index: integer;
+  Suggestions: string = '';
+  index: integer = 6;
 begin
-  suggestion := '';
   // IP4.DNS[1]
-  index := 6;
   if NetworkDetails[index] <> '' then
   begin
-    suggestion += NetworkDetails[index] + ', ';
+    Suggestions += NetworkDetails[index];
     // IP4.DNS[2]
-    index += 1;
+    Inc(index);
     if NetworkDetails[index] <> '' then
     begin
-      suggestion += NetworkDetails[index] + ', ';
+      Suggestions += ', ' + NetworkDetails[index];
       // IP4.DNS[3]
-      index += 1;
+      Inc(index);
       if NetworkDetails[index] <> '' then
-        suggestion += NetworkDetails[index] + ', ';
+        Suggestions += ', ' + NetworkDetails[index];
     end;
-    Delete(suggestion, suggestion.Length - 1, 2);
-    suggestion += ']';
+  end;
+  Result := Suggestions;
+end;
 
-    // query:
-    writeln(rsNameserver, rsSuggestion, suggestion, '*');
+procedure TQuickInstallNoQuiQuery.QueryNameserver;
+begin
+  writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions, ']*');
+  readln(input);
+  while input = '-h' do
+  begin
+    writeln(rsInfoNetwork);
     readln(input);
-    while input = '-h' do
-    begin
-      writeln(rsInfoNetwork);
-      readln(input);
-    end;
+  end;
 
-    if input = '-b' then
-      QueryDomain
-    else
-    begin
-      Data.nameserver := input;
-      QueryGateway;
-    end;
+  if input = '-b' then
+    QueryDomain
+  else
+  begin
+    Data.nameserver := input;
+    QueryGateway;
   end;
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryGateway;
 var
-  suggestion: string;
+  suggestion: string = '';
 begin
-  suggestion := '';
   // IP4.GATEWAY
   if NetworkDetails[9] <> '' then
-    suggestion += NetworkDetails[9];
-  suggestion += ']';
+    suggestion := NetworkDetails[9];
 
-  // query:
-  writeln(rsGateway, rsSuggestion, suggestion, '*');
+  writeln(rsGateway, rsSuggestion, suggestion, ']*');
   readln(input);
   while input = '-h' do
   begin
@@ -756,7 +753,6 @@ begin
   end;
 end;
 
-
 procedure TQuickInstallNoQuiQuery.JumpBackFromOverviewToQuery(QueryNumber: integer);
 begin
   if QueryNumber = 2 then
@@ -816,7 +812,6 @@ begin
   if QueryNumber = 20 then
     QueryIPNumber;
 end;
-
 
 procedure TQuickInstallNoQuiQuery.QueryOverview;
 var
