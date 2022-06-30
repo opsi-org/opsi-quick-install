@@ -742,6 +742,12 @@ procedure TQuickInstallNoQuiQuery.QueryIPNumber;
 begin
   writeln(rsIPNumber);
   readln(input);
+  while not ((input = 'auto') or isValidIP4(input) or (input = '-b')) do
+  begin
+    writeln('"', input, '"', rsNotValid);
+    readln(input);
+  end;
+
   if input = '-b' then
     QueryIPName
   else
