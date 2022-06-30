@@ -105,7 +105,7 @@ begin
     QueryDistribution
   else
   begin
-    if input = '' then
+    if (input = '') or (input = 's') then
       Data.CustomSetup := False
     else
       Data.CustomSetup := True;
