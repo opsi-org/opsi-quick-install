@@ -106,8 +106,9 @@ begin
   begin
     if input = 'c' then
       Data.CustomSetup := True
-    else
+    else // cases input = 's', input = ''
       Data.CustomSetup := False;
+
     writeln('');
     writeln(rsCarryOut);
     writeln('');
@@ -154,8 +155,9 @@ begin
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi41, ']', '*')
   else if Data.opsiVersion = 'Opsi 4.2' then
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi42, ']', '*');
+
   readln(input);
-  while ((Pos('http', input) <> 1) and (input <> '-b') and (input <> '')) do
+  while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
   begin
     if input = '-h' then
       writeln(rsInfoRepo)
@@ -163,17 +165,25 @@ begin
       writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
     //QueryOpsiVersion
     QuerySetupType
   else
-  begin
-    Data.repo := input;
-    if (input = '') and (Data.opsiVersion = 'Opsi 4.1') then
-      Data.repo := Data.baseRepoUrlOpsi41
+  begin // cases input = 'http...', input = ''
+    if input = '' then
+    begin
+      if Data.opsiVersion = 'Opsi 4.1' then
+        Data.repo := Data.baseRepoUrlOpsi41
+      else
+      if Data.opsiVersion = 'Opsi 4.2' then
+        Data.repo := Data.baseRepoUrlOpsi42;
+    end
     else
-    if (input = '') and (Data.opsiVersion = 'Opsi 4.2') then
-      Data.repo := Data.baseRepoUrlOpsi42;
+    begin
+      Data.repo := input;
+    end;
+
     QueryProxy;
   end;
 end;
@@ -187,6 +197,7 @@ begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
     QueryRepo
   else
@@ -197,8 +208,9 @@ begin
       readln(input);
       Data.proxy := input;
     end
-    else
+    else // cases input = 'n', input = ''
       Data.proxy := '';
+
     QueryRepoNoCache;
   end;
 end;
@@ -210,19 +222,23 @@ begin
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi41, ']')
   else if Data.opsiVersion = 'Opsi 4.2' then
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi42, ']');
+
   readln(input);
-  while ((Pos('http', input) <> 1) and (input <> '-b') and (input <> '')) do
+  while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
   begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
     QueryProxy
   else
-  begin
-    Data.repoNoCache := input;
+  begin // cases input = 'http...', input = ''
     if input = '' then
-      Data.repoNoCache := Data.repo;
+      Data.repoNoCache := Data.repo
+    else
+      Data.repoNoCache := input;
+
     QueryBackend;
   end;
 end;
@@ -239,6 +255,7 @@ begin
       writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
     QueryRepoNoCache
   else
@@ -247,6 +264,7 @@ begin
       Data.backend := 'mysql'
     else
       Data.backend := 'file'; // cases input = 'f', input = ''
+
     if Data.backend = 'mysql' then
       QueryModules
     else
@@ -267,6 +285,7 @@ begin
       writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
     QueryBackend
   else
@@ -275,6 +294,7 @@ begin
       Data.copyMod.SetEntries(rsYes, 'true')
     else
       Data.copyMod.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
+
     QueryRepoKind;
   end;
 end;
@@ -292,6 +312,7 @@ begin
       writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
   begin
     if Data.backend = 'mysql' then
@@ -307,6 +328,7 @@ begin
       Data.repoKind := 'testing'
     else
       Data.repoKind := 'stable'; // cases input = 's', input = ''
+
     if Data.DistrInfo.DistroName = 'Univention' then
       QueryUCS
     else
@@ -348,6 +370,7 @@ begin
       writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
   begin
     if Data.DistrInfo.DistroName = 'Univention' then
@@ -361,6 +384,7 @@ begin
       Data.reboot.SetEntries(rsYes, 'true')
     else
       Data.reboot.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
+
     QueryDhcp;
   end;
 end;
@@ -377,6 +401,7 @@ begin
       writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
+
   if input = '-b' then
   begin
     if Data.CustomSetup then
@@ -395,6 +420,7 @@ begin
       Data.dhcp.SetEntries(rsYes, 'true')
     else
       Data.dhcp.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
+
     if Data.dhcp.PropertyEntry = 'true' then
     begin
       // read in network details for dhcp queries (requires unit "osnetworkcalculator")
@@ -430,6 +456,7 @@ begin
       Data.symlink := 'default.menu'
     else
       Data.symlink := 'default.nomenu'; // cases input = 'nom', input = ''
+
     QueryNetmask;
   end;
 end;
@@ -464,6 +491,7 @@ begin
     end;
     Delete(suggestion, suggestion.Length - 1, 2);
     suggestion += ']';
+
     // query:
     writeln(rsNetmask, rsSuggestion, suggestion, '*');
     readln(input);
@@ -472,6 +500,7 @@ begin
       writeln(rsInfoNetwork);
       readln(input);
     end;
+
     if input = '-b' then
       QueryLink
     else
@@ -512,6 +541,7 @@ begin
   end;
   Delete(suggestion, suggestion.Length - 1, 2);
   suggestion += ']';
+
   // query:
   writeln(rsNetworkAddress, rsSuggestion, suggestion, '*');
   readln(input);
@@ -520,6 +550,7 @@ begin
     writeln(rsInfoNetwork);
     readln(input);
   end;
+
   if input = '-b' then
     QueryNetmask
   else
@@ -553,6 +584,7 @@ begin
   end;
   Delete(suggestion, suggestion.Length - 1, 2);
   suggestion += ']';
+
   // query:
   writeln(rsDomain, rsSuggestion, suggestion, '*');
   readln(input);
@@ -561,6 +593,7 @@ begin
     writeln(rsInfoNetwork);
     readln(input);
   end;
+
   if input = '-b' then
     QueryNetworkAddress
   else
@@ -593,6 +626,7 @@ begin
     end;
     Delete(suggestion, suggestion.Length - 1, 2);
     suggestion += ']';
+
     // query:
     writeln(rsNameserver, rsSuggestion, suggestion, '*');
     readln(input);
@@ -601,6 +635,7 @@ begin
       writeln(rsInfoNetwork);
       readln(input);
     end;
+
     if input = '-b' then
       QueryDomain
     else
@@ -620,6 +655,7 @@ begin
   if NetworkDetails[9] <> '' then
     suggestion += NetworkDetails[9];
   suggestion += ']';
+
   // query:
   writeln(rsGateway, rsSuggestion, suggestion, '*');
   readln(input);
@@ -628,6 +664,7 @@ begin
     writeln(rsInfoNetwork);
     readln(input);
   end;
+
   if input = '-b' then
     QueryNameserver
   else
@@ -646,6 +683,7 @@ begin
     writeln(rsInfoAdmin);
     readln(input);
   end;
+
   if input = '-b' then
   begin
     if Data.dhcp.PropertyEntry = 'true' then
@@ -882,7 +920,7 @@ begin
   readln(input);
   try
     QueryIndex := StrToInt(input) - 1;
-    QueryNumber :=  StrToInt(queries[QueryIndex]);
+    QueryNumber := StrToInt(queries[QueryIndex]);
     ValidQueryIndex := True;
   except
   end;
@@ -894,7 +932,7 @@ begin
     readln(input);
     try
       QueryIndex := StrToInt(input) - 1;
-      QueryNumber :=  StrToInt(queries[QueryIndex]);
+      QueryNumber := StrToInt(queries[QueryIndex]);
       ValidQueryIndex := True;
     except
     end;
