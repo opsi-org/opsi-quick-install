@@ -31,6 +31,7 @@ type
     procedure QueryReboot;
     procedure QueryDhcp;
     procedure QueryLink;
+    function GetNetmaskSuggestions: string;
     procedure QueryNetmask;
     procedure QueryNetworkAddress;
     procedure QueryDomain;
@@ -461,53 +462,52 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryNetmask;
+
+function TQuickInstallNoQuiQuery.GetNetmaskSuggestions: string;
 var
-  suggestion: string;
+  Suggestions: string = '';
   network: array of string;
-  index: integer;
+  index: integer = 0;
 begin
-  // get netmask suggestions
-  suggestion := '';
   // IP4.ADDRESS[1]
-  index := 0;
   if NetworkDetails[index] <> '' then
   begin
     network := NetworkDetails[index].Split(['/']);
-    suggestion += getNetmaskByIP4adr(network[1]) + ', ';
+    Suggestions += getNetmaskByIP4adr(network[1]);
     // IP4.ADDRESS[2]
-    index += 1;
+    Inc(index);
     if NetworkDetails[index] <> '' then
     begin
       network := NetworkDetails[index].Split(['/']);
-      suggestion += getNetmaskByIP4adr(network[1]) + ', ';
+      Suggestions += ', ' + getNetmaskByIP4adr(network[1]);
       // IP4.ADDRESS[3]
-      index += 1;
+      Inc(index);
       if NetworkDetails[index] <> '' then
       begin
         network := NetworkDetails[index].Split(['/']);
-        suggestion += getNetmaskByIP4adr(network[1]) + ', ';
+        Suggestions += ', ' + getNetmaskByIP4adr(network[1]);
       end;
     end;
-    Delete(suggestion, suggestion.Length - 1, 2);
-    suggestion += ']';
+  end;
+  Result := Suggestions;
+end;
 
-    // query:
-    writeln(rsNetmask, rsSuggestion, suggestion, '*');
+procedure TQuickInstallNoQuiQuery.QueryNetmask;
+begin
+  writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions, ']*');
+  readln(input);
+  while input = '-h' do
+  begin
+    writeln(rsInfoNetwork);
     readln(input);
-    while input = '-h' do
-    begin
-      writeln(rsInfoNetwork);
-      readln(input);
-    end;
+  end;
 
-    if input = '-b' then
-      QueryLink
-    else
-    begin
-      Data.netmask := input;
-      QueryNetworkAddress;
-    end;
+  if input = '-b' then
+    QueryLink
+  else
+  begin
+    Data.netmask := input;
+    QueryNetworkAddress;
   end;
 end;
 
