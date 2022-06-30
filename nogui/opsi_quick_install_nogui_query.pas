@@ -831,14 +831,15 @@ begin
   // (depending on setup type and distribution=Univention) by their number:
   writeln('');
   writeln(rsOverview);
-  if not Data.CustomSetup then
+  writeln(rsOpsiVersionO, Data.opsiVersion);
+  {if not Data.CustomSetup then
     writeln(rsOpsiVersionO, Data.opsiVersion)
   else
   begin
     writeln(Counter, ' ', rsOpsiVersionO, Data.opsiVersion);
     queries.Add('1');
     Inc(Counter);
-  end;
+  end;}
   {Custom installation}
   if Data.CustomSetup then
   begin
