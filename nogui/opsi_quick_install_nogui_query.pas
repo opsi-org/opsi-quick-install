@@ -115,9 +115,6 @@ begin
     else // cases input = 's', input = ''
       Data.CustomSetup := False;
 
-    writeln('');
-    writeln(rsCarryOut);
-    writeln('');
     if Data.CustomSetup then
       // following queries only for custom setup
       //QueryOpsiVersion
