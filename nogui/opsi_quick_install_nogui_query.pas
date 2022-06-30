@@ -886,7 +886,10 @@ end;
 
 function TQuickInstallNoQuiQuery.GetAskedQueries: TStringList;
 begin
+  // find the questions that were asked (depending on setup type and
+  // distribution=Univention) and return their names
   Result := TStringList.Create;
+
   {Custom installation}
   if Data.CustomSetup then
   begin
@@ -939,100 +942,6 @@ var
 begin
   PrintOverview;
   queries := GetAskedQueries;
-  (*
-  // Overview
-  // Print the overview and in 'queries' save the questions that were asked
-  // (depending on setup type and distribution=Univention) by their number:
-  writeln('');
-  writeln(rsOverview);
-  writeln(rsOpsiVersionO, Data.opsiVersion);
-  {if not Data.CustomSetup then
-    writeln(rsOpsiVersionO, Data.opsiVersion)
-  else
-  begin
-    writeln(Counter, ' ', rsOpsiVersionO, Data.opsiVersion);
-    queries.Add('1');
-    Inc(Counter);
-  end;}
-  {Custom installation}
-  if Data.CustomSetup then
-  begin
-    writeln(Counter, ' ', rsRepoO, Data.repo);
-    queries.Add('2');
-    Inc(Counter);
-    writeln(Counter, ' ', rsProxyO, Data.proxy);
-    queries.Add('3');
-    Inc(Counter);
-    writeln(Counter, ' ', rsRepoNoCacheO, Data.repoNoCache);
-    queries.Add('4');
-    Inc(Counter);
-    writeln(Counter, ' ', rsBackendO, Data.backend);
-    queries.Add('5');
-    Inc(Counter);
-    if Data.backend = 'mysql' then
-    begin
-      writeln(Counter, ' ', rsCopyModulesO, Data.copyMod.OverviewEntry);
-      queries.Add('6');
-      Inc(Counter);
-    end;
-    writeln(Counter, ' ', rsRepoKindO, Data.repoKind);
-    queries.Add('7');
-    Inc(Counter);
-  end;
-  {Both}
-  if Data.DistrInfo.DistroName = 'Univention' then
-  begin
-    writeln(Counter, ' ', rsUCSO, Data.ucsPassword);
-    queries.Add('8');
-    Inc(Counter);
-  end;
-  {Custom installation}
-  if Data.CustomSetup then
-  begin
-    writeln(Counter, ' ', rsRebootO, Data.reboot.OverviewEntry);
-    queries.Add('9');
-    Inc(Counter);
-  end;
-  {Both}
-  writeln(Counter, ' ', rsDhcpO, Data.dhcp.OverviewEntry);
-  queries.Add('10');
-  Inc(Counter);
-  if Data.dhcp.PropertyEntry = 'true' then
-  begin
-    writeln(Counter, ' ', rsTFTPROOTO, Data.symlink);
-    queries.Add('11');
-    Inc(Counter);
-    writeln(Counter, ' ', rsNetmaskO, Data.netmask);
-    queries.Add('12');
-    Inc(Counter);
-    writeln(Counter, ' ', rsNetworkO, Data.networkAddress);
-    queries.Add('13');
-    Inc(Counter);
-    writeln(Counter, ' ', rsDomainO, Data.domain);
-    queries.Add('14');
-    Inc(Counter);
-    writeln(Counter, ' ', rsNameserverO, Data.nameserver);
-    queries.Add('15');
-    Inc(Counter);
-    writeln(Counter, ' ', rsGatewayO, Data.gateway);
-    queries.Add('16');
-    Inc(Counter);
-  end;
-  writeln(Counter, ' ', rsAdminNameO, Data.adminName);
-  queries.Add('17');
-  Inc(Counter);
-  if Data.adminName <> '' then
-  begin
-    writeln(Counter, ' ', rsAdminPasswordO, Data.adminPassword);
-    queries.Add('18');
-    Inc(Counter);
-  end;
-  writeln(Counter, ' ', rsIPNameO, Data.ipName);
-  queries.Add('19');
-  Inc(Counter);
-  writeln(Counter, ' ', rsIPNumberO, Data.ipNumber);
-  queries.Add('20');
-  //writeln(queries.Text);*)
 
   writeln('');
   writeln(rsContinue);
