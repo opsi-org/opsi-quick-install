@@ -33,6 +33,7 @@ type
     procedure QueryLink;
     function GetNetmaskSuggestions: string;
     procedure QueryNetmask;
+    function GetNetworkAddressSuggestions: string;
     procedure QueryNetworkAddress;
     procedure QueryDomain;
     procedure QueryNameserver;
@@ -511,39 +512,39 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
+
+function TQuickInstallNoQuiQuery.GetNetworkAddressSuggestions: string;
 var
-  suggestion: string;
+  Suggestions: string = '';
   network: array of string;
-  index: integer;
+  index: integer = 0;
 begin
-  suggestion := '';
   // IP4.ADDRESS[1]
-  index := 0;
   if NetworkDetails[index] <> '' then
   begin
     network := NetworkDetails[index].Split(['/']);
-    suggestion += getIP4NetworkByAdrAndMask(network[0], network[1]) + ', ';
+    Suggestions += getIP4NetworkByAdrAndMask(network[0], network[1]);
     // IP4.ADDRESS[2]
-    index += 1;
+    Inc(index);
     if NetworkDetails[index] <> '' then
     begin
       network := NetworkDetails[index].Split(['/']);
-      suggestion += getIP4NetworkByAdrAndMask(network[0], network[1]) + ', ';
+      Suggestions += ', ' + getIP4NetworkByAdrAndMask(network[0], network[1]);
       // IP4.ADDRESS[3]
-      index += 1;
+      Inc(index);
       if NetworkDetails[index] <> '' then
       begin
         network := NetworkDetails[index].Split(['/']);
-        suggestion += getIP4NetworkByAdrAndMask(network[0], network[1]) + ', ';
+        Suggestions += ', ' + getIP4NetworkByAdrAndMask(network[0], network[1]);
       end;
     end;
   end;
-  Delete(suggestion, suggestion.Length - 1, 2);
-  suggestion += ']';
+  Result := Suggestions;
+end;
 
-  // query:
-  writeln(rsNetworkAddress, rsSuggestion, suggestion, '*');
+procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
+begin
+  writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions, ']*');
   readln(input);
   while input = '-h' do
   begin
