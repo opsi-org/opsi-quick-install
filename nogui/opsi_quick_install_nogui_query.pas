@@ -37,7 +37,7 @@ type
     procedure QueryNameserver;
     procedure QueryGateway;
     procedure QueryAdminName;
-    procedure QueryAdminPass;
+    procedure QueryAdminPassword;
     procedure QueryIPName;
     procedure QueryIPNumber;
     procedure JumpBackFromOverviewToQuery(QueryNumber: integer);
@@ -92,7 +92,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QuerySetupType;
 begin
-  // setup type:
   writeln(rsSetup, rsSetupOp);
   readln(input);
   while not ((input = 's') or (input = 'c') or (input = '-b') or (input = '')) do
@@ -151,7 +150,6 @@ end;}
 
 procedure TQuickInstallNoQuiQuery.QueryRepo;
 begin
-  // repo:
   if Data.opsiVersion = 'Opsi 4.1' then
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi41, ']', '*')
   else if Data.opsiVersion = 'Opsi 4.2' then
@@ -182,7 +180,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryProxy;
 begin
-  // proxy:
   writeln(rsUseProxy, rsYesNoOp);
   readln(input);
   while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
@@ -232,7 +229,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryBackend;
 begin
-  // backend:
   writeln(rsBackend, rsBackendOp, '*');
   readln(input);
   while not ((input = 'f') or (input = 'm') or (input = '-b') or (input = '')) do
@@ -285,7 +281,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryRepoKind;
 begin
-  // repo kind:
   writeln(rsRepoKind, rsRepoKindOp, '*');
   readln(input);
   while not ((input = 'e') or (input = 't') or (input = 's') or
@@ -343,7 +338,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryReboot;
 begin
-  // reboot:
   writeln(rsReboot, rsYesNoOp, '*');
   readln(input);
   while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
@@ -373,7 +367,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryDhcp;
 begin
-  // dhcp:
   writeln(rsDhcp, rsYesNoOp, '*');
   readln(input);
   while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
@@ -419,7 +412,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryLink;
 begin
-  // link:
   writeln(rsTFTPROOT, rsLinkOp, '*');
   readln(input);
   while not ((input = 'm') or (input = 'nom') or (input = '-b') or (input = '')) do
@@ -448,7 +440,6 @@ var
   network: array of string;
   index: integer;
 begin
-  // netmask:
   // get netmask suggestions
   suggestion := '';
   // IP4.ADDRESS[1]
@@ -497,7 +488,6 @@ var
   network: array of string;
   index: integer;
 begin
-  // network address:
   suggestion := '';
   // IP4.ADDRESS[1]
   index := 0;
@@ -544,7 +534,6 @@ var
   suggestion: string;
   index: integer;
 begin
-  // domain:
   suggestion := '';
   // IP4.DOMAIN[1]
   index := 3;
@@ -586,7 +575,6 @@ var
   suggestion: string;
   index: integer;
 begin
-  // nameserver:
   suggestion := '';
   // IP4.DNS[1]
   index := 6;
@@ -627,7 +615,6 @@ procedure TQuickInstallNoQuiQuery.QueryGateway;
 var
   suggestion: string;
 begin
-  // gateway:
   suggestion := '';
   // IP4.GATEWAY
   if NetworkDetails[9] <> '' then
@@ -652,7 +639,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryAdminName;
 begin
-  // admin name:
   writeln(rsAdminName, '*');
   readln(input);
   while input = '-h' do
@@ -673,13 +659,12 @@ begin
     if input = '' then
       QueryIPName
     else
-      QueryAdminPass;
+      QueryAdminPassword;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryAdminPass;
+procedure TQuickInstallNoQuiQuery.QueryAdminPassword;
 begin
-  // admin password:
   writeln(rsAdminPassword, '*');
   readln(input);
   if input = '-b' then
@@ -693,6 +678,7 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryIPName;
 begin
+  // fqdn:
   writeln(rsIPName);
   readln(input);
   if input = '-b' then
@@ -700,7 +686,7 @@ begin
     if Data.adminName = '' then
       QueryAdminName
     else
-      QueryAdminPass;
+      QueryAdminPassword;
   end
   else
   begin
@@ -711,7 +697,6 @@ end;
 
 procedure TQuickInstallNoQuiQuery.QueryIPNumber;
 begin
-  // IP number:
   writeln(rsIPNumber);
   readln(input);
   if input = '-b' then
@@ -775,7 +760,7 @@ begin
     QueryAdminName
   else
   if QueryNumber = 18 then
-    QueryAdminPass
+    QueryAdminPassword
   else
   if QueryNumber = 19 then
     QueryIPName
