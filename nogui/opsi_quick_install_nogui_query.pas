@@ -35,6 +35,7 @@ type
     procedure QueryNetmask;
     function GetNetworkAddressSuggestions: string;
     procedure QueryNetworkAddress;
+    function GetDomainSuggestions: string;
     procedure QueryDomain;
     procedure QueryNameserver;
     procedure QueryGateway;
@@ -463,7 +464,6 @@ begin
   end;
 end;
 
-
 function TQuickInstallNoQuiQuery.GetNetmaskSuggestions: string;
 var
   Suggestions: string = '';
@@ -511,7 +511,6 @@ begin
     QueryNetworkAddress;
   end;
 end;
-
 
 function TQuickInstallNoQuiQuery.GetNetworkAddressSuggestions: string;
 var
@@ -561,33 +560,32 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryDomain;
+function TQuickInstallNoQuiQuery.GetDomainSuggestions: string;
 var
-  suggestion: string;
-  index: integer;
+  Suggestions: string = '';
+  index: integer = 3;
 begin
-  suggestion := '';
   // IP4.DOMAIN[1]
-  index := 3;
   if NetworkDetails[index] <> '' then
   begin
-    suggestion += NetworkDetails[index] + ', ';
+    Suggestions += NetworkDetails[index];
     // IP4.DOMAIN[2]
-    index += 1;
+    Inc(index);
     if NetworkDetails[index] <> '' then
     begin
-      suggestion += NetworkDetails[index] + ', ';
+      Suggestions += ', ' + NetworkDetails[index];
       // IP4.DOMAIN[3]
-      index += 1;
+      Inc(index);
       if NetworkDetails[index] <> '' then
-        suggestion += NetworkDetails[index] + ', ';
+        Suggestions += ', ' + NetworkDetails[index];
     end;
   end;
-  Delete(suggestion, suggestion.Length - 1, 2);
-  suggestion += ']';
+  Result := Suggestions;
+end;
 
-  // query:
-  writeln(rsDomain, rsSuggestion, suggestion, '*');
+procedure TQuickInstallNoQuiQuery.QueryDomain;
+begin
+  writeln(rsDomain, rsSuggestion, GetDomainSuggestions, ']*');
   readln(input);
   while input = '-h' do
   begin
