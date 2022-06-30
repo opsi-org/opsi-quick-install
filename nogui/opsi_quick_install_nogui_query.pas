@@ -423,7 +423,7 @@ begin
 
     if Data.dhcp.PropertyEntry = 'true' then
     begin
-      // read in network details for dhcp queries (requires unit "osnetworkcalculator")
+      // read in network details for dhcp queries
       NetworkDetails := getNetworkDetails(['IP4.ADDRESS[1]',
         'IP4.ADDRESS[2]', 'IP4.ADDRESS[3]', 'IP4.DOMAIN[1]',
         'IP4.DOMAIN[2]', 'IP4.DOMAIN[3]', 'IP4.DNS[1]', 'IP4.DNS[2]',
