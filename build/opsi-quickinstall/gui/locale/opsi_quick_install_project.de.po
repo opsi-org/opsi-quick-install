@@ -79,6 +79,8 @@ msgid ""
 "To continue and start the installation, please press enter.\n"
 "If you like to jump back to a question, please press the number key of the respective number in the overview."
 msgstr ""
+"Um fortzufahren und die Installation zu starten, drücken Sie bitte Enter.\n"
+"Wenn Sie zu einer Frage zurückspringen möchten, geben Sie bitte die entsprechende Zahl aus der Übersicht ein."
 
 #: opsi_quick_install_resourcestrings.rscopymodules
 msgctxt "opsi_quick_install_resourcestrings.rscopymodules"
