@@ -72,8 +72,8 @@ compile opsi-quickinstall linux:
     # Save l-opsi-server version as Opsi-QuickInstall version to a file to
     # be able to easily adjust the OQI version manually for publishing (binaryindex, download.uib) in case that
     # something in OQI changed and you like to increase the version but there is no new l-opsi-server
-    - echo 'Mainversion: $MAINVERSION' > build/OpsiQuickInstall_Version
-    - echo 'Subversion: $SUBVERSION' >> build/OpsiQuickInstall_Version
+    - 'echo "Mainversion: $MAINVERSION" > build/OpsiQuickInstall_Version'
+    - 'echo "Subversion: $SUBVERSION" >> build/OpsiQuickInstall_Version'
    
   artifacts:
     name: "opsi-quickinstall $BINARY_VERSION linux"
