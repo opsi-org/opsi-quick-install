@@ -89,7 +89,7 @@ publish opsi-quick-install:
     #- MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
     #- SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
     - echo "Read Opsi-QuickInstall version from file"
-    - echo "Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!"
+    - "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
     # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
     # for publishing (binaryindex, download.uib) in case that something in OQI changed and
     # you like to increase the version but there is no new l-opsi-server)
