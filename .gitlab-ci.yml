@@ -69,6 +69,11 @@ compile opsi-quickinstall linux:
     - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
     #- cd build/opsi-quickinstall/ &&
     # - $BINARY_OUT_PATH = $PROJECT_NAME -eq "opsiscript")
+    # Save l-opsi-server version as Opsi-QuickInstall version to a file to
+    # be able to easily adjust the OQI version manually for publishing (binaryindex, download.uib) in case that
+    # something in OQI changed and you like to increase the version but there is no new l-opsi-server
+    - echo "Mainversion: $MAINVERSION" > build/OpsiQuickInstall_Version
+    - echo "Subversion: $SUBVERSION" >> build/OpsiQuickInstall_Version
    
   artifacts:
     name: "opsi-quickinstall $BINARY_VERSION linux"
@@ -88,8 +93,11 @@ publish opsi-quick-install:
   script:
     - git submodule update --init --recursive
     #- git submodule update --remote // this does not work and is not required
-    - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
-    - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    #- MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    #- SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    # Read Opsi-QuickInstall version from file
+    - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
+    - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
     - echo $MAINVERSION $SUBVERSION
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
