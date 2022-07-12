@@ -6,8 +6,10 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  MaskEdit, osRunCommandElevated, LCLType, cthreads, osLog,
-  lopsiserverdownloader, Process;
+  MaskEdit, LCLType, cthreads, Process,
+  osRunCommandElevated,
+  osLog,
+  OpsiPackageDownloader;
 
 type
 
@@ -115,7 +117,9 @@ begin
     Synchronize(@ShowMessageOnForm);
   end;}
   // try downloading latest l-opsi-server and set DirClientData for the latest version
-  if two_los_to_test and DownloadLOS(FInstallRunCommand, Data.DistrInfo) then
+  if two_los_to_test and DownloadOpsiPackage('l-opsi-server',
+      'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
+      FInstallRunCommand, Data.DistrInfo) then
   begin
     // extract and compare version numbers of default and downloaded los
     if (FindFirst('../l-opsi-server_4.*', faAnyFile and faDirectory,

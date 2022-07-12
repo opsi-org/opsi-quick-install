@@ -20,11 +20,11 @@ uses
   osLinuxRepository,
   oslog,
   osnetworkcalculator,
-  LOpsiServerDownloader,
   opsi_quick_install_resourcestrings,
   opsiquickinstall_data,
   osnetutil,
-  opsi_quick_install_nogui_query;
+  opsi_quick_install_nogui_query,
+  OpsiPackageDownloader;
 
 type
   TQuickInstall = class(TCustomApplication)
@@ -198,7 +198,9 @@ type
 
     if two_los_to_test then writeln(rsWait);
     // try downloading latest l-opsi-server and set DirClientData for the latest version
-    if two_los_to_test and DownloadLOS(QuickInstallCommand, Data.DistrInfo) then
+    if two_los_to_test and DownloadOpsiPackage('l-opsi-server',
+      'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
+      QuickInstallCommand, Data.DistrInfo) then
     begin
       // extract and compare version numbers of default and downloaded los
       if (FindFirst('../l-opsi-server_4.*', faAnyFile and faDirectory,
