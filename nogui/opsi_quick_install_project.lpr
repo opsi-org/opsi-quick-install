@@ -3,11 +3,11 @@ program opsi_quick_install_project;
 {$mode objfpc}{$H+}
 
 uses
-  {$IFDEF UNIX}
+ {$IFDEF UNIX}
   {$IFDEF UseCThreads}
   cthreads,
-  {$ENDIF}
-  {$ENDIF}
+    {$ENDIF}
+    {$ENDIF}
   Classes,
   SysUtils,
   CustApp,
@@ -315,7 +315,8 @@ type
     url := Data.repo + Data.repoKind + '/' + Data.DistrInfo.DistrRepoUrlPart;
 
     // !following lines need an existing LogDatei
-    if (Data.DistrInfo.DistroName = 'openSUSE') or (Data.DistrInfo.DistroName = 'SUSE') then
+    if (Data.DistrInfo.DistroName = 'openSUSE') or
+      (Data.DistrInfo.DistroName = 'SUSE') then
     begin
       writeln('OpenSUSE/SUSE: Add Repo');
       ReleaseKeyRepo.Add(url, 'OpsiQuickInstallRepositoryNew');
@@ -581,8 +582,8 @@ type
   begin
     Data.DistrInfo := TDistributionInfo.Create(getLinuxDistroName,
       getLinuxDistroRelease);
-    LogDatei.log(Data.DistrInfo.DistroName + ' ' +
-      Data.DistrInfo.DistroRelease, LLessential);
+    LogDatei.log(Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease,
+      LLessential);
     Data.DistrInfo.SetDistrAndUrlPart;
     CheckThatOqiSupportsDistribution(QuickInstall);
   end;
@@ -592,12 +593,16 @@ type
     HostName: string;
   begin
     // Check FQDN as precondition for OQI
-    if not (RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) and
-      isValidFQDN(HostName)) then
+    if RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) then
     begin
-      Writeln('');
-      Writeln(rsInvalidFqdnWarning);
+      Delete(HostName, HostName.Length, 1); // delete line break from end of hostname!
+      if not isValidFQDN(HostName) then
+      begin
+        Writeln('');
+        Writeln(rsInvalidFqdnWarning);
+      end;
     end;
+    Logdatei.log('Hostname: ' + HostName, LLessential);
   end;
 
 var

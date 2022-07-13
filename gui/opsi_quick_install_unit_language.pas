@@ -370,8 +370,13 @@ procedure TQuickInstall.FormActivate(Sender: TObject);
 var
   HostName: string;
 begin
-  if not (RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) and isValidFQDN(HostName)) then
-    ShowMessage(rsInvalidFqdnWarning);
+  if RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) then
+  begin
+    Delete(HostName, HostName.Length, 1); // delete line break from end of hostname!
+    if not isValidFQDN(HostName) then
+      ShowMessage(rsInvalidFqdnWarning);
+  end;
+  Logdatei.log('Hostname: ' + HostName, LLessential);
 end;
 
 end.
