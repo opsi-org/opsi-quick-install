@@ -1,4 +1,13 @@
 
+opsi-quickinstall (4.2.0.7-4) experimental; urgency=low
+  * fix reading hostname from command line and checking it for valid fqdn
+    (delete line break at end of hostname)
+  * use generalized OpsiPackageDownloader instead of LOpsiServerDownloader
+  * gui: set sudo as default in password query
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Wed,  13 Jul 2022 14:00
+
+
 opsi-quickinstall (4.2.0.7-3) experimental; urgency=low
   * openSUSE 15.3 added as supported distribution
   * warning in case of invalid local dns hostname added
