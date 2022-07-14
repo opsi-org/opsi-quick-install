@@ -53,7 +53,8 @@ compile opsi-quickinstall linux:
   script:
     - git submodule update --init --recursive
     #- git submodule update --remote // this does not work and is not required
-    - cd l-opsi-server-products && git pull origin master && cd ..
+    #- cd l-opsi-server-products && git pull origin master && cd ..
+    - cd l-opsi-server-products && git checkout 7e34d591 && cd ..
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"

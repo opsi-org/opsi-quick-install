@@ -1,5 +1,5 @@
 
-opsi-quickinstall (4.2.0.7-4) experimental; urgency=low
+opsi-quickinstall (4.2.0.7-21) experimental; urgency=low
   * fix reading hostname from command line and checking it for valid fqdn
     (delete line break at end of hostname)
   * use generalized OpsiPackageDownloader instead of LOpsiServerDownloader
