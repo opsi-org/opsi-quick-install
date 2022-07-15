@@ -1,4 +1,3 @@
-
 opsi-quickinstall (4.2.0.7-21) experimental; urgency=low
   * fix reading hostname from command line and checking it for valid fqdn
     (delete line break at end of hostname)
@@ -9,7 +8,7 @@ opsi-quickinstall (4.2.0.7-21) experimental; urgency=low
 
 
 opsi-quickinstall (4.2.0.7-3) experimental; urgency=low
-  * openSUSE 15.3 added as supported distribution
+  * openSUSE 15.4 added as supported distribution
   * warning in case of invalid local dns hostname added
   * check of ip name and ip number added in nogui query
   * nogui query code revised
