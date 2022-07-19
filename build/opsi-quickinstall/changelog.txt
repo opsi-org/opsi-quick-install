@@ -4,6 +4,7 @@ opsi-quickinstall (4.2.0.7-21) experimental; urgency=low
     (delete line break at end of hostname)
   * use generalized OpsiPackageDownloader instead of LOpsiServerDownloader
   * gui: set sudo as default in password query
+  * gui: exit Opsi-QuickInstall in case of an unsupported distribution
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Wed,  13 Jul 2022 14:00
 

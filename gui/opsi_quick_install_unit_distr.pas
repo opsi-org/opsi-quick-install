@@ -105,7 +105,7 @@ begin
     ShowMessage(rsNoSupport + #10 + #10 + Data.DistrInfo.Distribs);
     FreeAndNil(LogDatei);
     FreeAndNil(Data);
-    Close;
+    Halt(1);
   end;
 end;
 
