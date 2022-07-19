@@ -24,7 +24,8 @@ uses
   opsiquickinstall_data,
   osnetutil,
   opsi_quick_install_nogui_query,
-  OpsiPackageDownloader;
+  OpsiPackageDownloader,
+  osfuncunix;
 
 type
   TQuickInstall = class(TCustomApplication)
@@ -589,20 +590,12 @@ type
   end;
 
   procedure CheckFQDN;
-  var
-    HostName: string;
   begin
-    // Check FQDN as precondition for OQI
-    if RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) then
+    if not isValidFQDN(GetFQDNUnix) then
     begin
-      Delete(HostName, HostName.Length, 1); // delete line break from end of hostname!
-      if not isValidFQDN(HostName) then
-      begin
-        Writeln('');
-        Writeln(rsInvalidFqdnWarning);
-      end;
+      Writeln('');
+      Writeln(rsInvalidFqdnWarning);
     end;
-    Logdatei.log('Hostname: ' + HostName, LLessential);
   end;
 
 var

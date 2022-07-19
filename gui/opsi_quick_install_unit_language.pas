@@ -7,7 +7,8 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, LCLtranslator, Buttons, process,
-  osnetutil;
+  osnetutil,
+  osfuncunix;
 
 type
 
@@ -367,16 +368,9 @@ begin
 end;
 
 procedure TQuickInstall.FormActivate(Sender: TObject);
-var
-  HostName: string;
 begin
-  if RunCommand('/bin/sh', ['-c', 'hostname -f'], HostName) then
-  begin
-    Delete(HostName, HostName.Length, 1); // delete line break from end of hostname!
-    if not isValidFQDN(HostName) then
-      ShowMessage(rsInvalidFqdnWarning);
-  end;
-  Logdatei.log('Hostname: ' + HostName, LLessential);
+  if not isValidFQDN(GetFQDNUnix) then
+    ShowMessage(rsInvalidFqdnWarning);
 end;
 
 end.
