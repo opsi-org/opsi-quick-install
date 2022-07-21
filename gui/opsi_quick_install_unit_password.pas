@@ -233,7 +233,7 @@ begin
   // !following lines need an existing LogDatei
   if (Data.DistrInfo.DistroName = 'openSUSE') or (Data.DistrInfo.DistroName = 'SUSE') then
   begin
-    ReleaseKeyRepo.Add(url, 'OpsiQuickInstallRepositoryNew');
+    ReleaseKeyRepo.AddSuseRepo(url, 'OpsiQuickInstallRepositoryNew');
   end
   else
     ReleaseKeyRepo.Add(url);

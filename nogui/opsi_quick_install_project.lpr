@@ -320,7 +320,7 @@ type
       (Data.DistrInfo.DistroName = 'SUSE') then
     begin
       writeln('OpenSUSE/SUSE: Add Repo');
-      ReleaseKeyRepo.Add(url, 'OpsiQuickInstallRepositoryNew');
+      ReleaseKeyRepo.AddSuseRepo(url, 'OpsiQuickInstallRepositoryNew');
     end
     else
       ReleaseKeyRepo.Add(url);

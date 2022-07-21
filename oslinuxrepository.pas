@@ -70,7 +70,6 @@ type
     procedure CreateSourcesListAsRoot;
     procedure AddRepoToSourcesListByKey;
     procedure AddDebianRepo;
-    procedure AddSuseRepo(RepoName: string);
     procedure AddRedhatRepo;
   public
     constructor Create(Distribution: TDistribution; Password: string;
@@ -80,7 +79,7 @@ type
     function GetDefaultURL(OpsiVersion: TOpsiVersion; OpsiBranch: TOpsiBranch): string;
     { Constructs the repository URL based on distribution, opsi version and opsi branch and gives it back as result}
     procedure Add(URL: string);
-    procedure Add(URL: string; RepoName: string);
+    procedure AddSuseRepo(URL: string; RepoName: string);
     { Add repository URL to the package system of the OS }
     property URL: string read FURL;
   end;
@@ -215,19 +214,6 @@ begin
 
 end;
 
-procedure TLinuxRepository.AddSuseRepo(RepoName: string);
-var
-  Output: string;
-begin
-  // zypper addrepo <options> <URI> <alias>
-  //writeln('zypper addrepo ' + FURL + ' ' + RepoName);
-  LogDatei.log('zypper addrepo ' + FURL + ' ' + RepoName, LLInfo);
-  FRunCommandElevated.Run('zypper addrepo ' + FURL + ' ' + RepoName, Output);
-  //writeln('zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh');
-  LogDatei.log('zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh', LLInfo);
-  FRunCommandElevated.Run('zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh', Output);
-end;
-
 procedure TLinuxRepository.AddRedhatRepo;
 var
   Output: string;
@@ -261,7 +247,9 @@ begin
   end;
 end;
 
-procedure TLinuxRepository.Add(URL: string; RepoName: string);
+procedure TLinuxRepository.AddSuseRepo(URL: string; RepoName: string);
+var
+  Output: string;
 begin
   FURL := URL;
   case FDistribution of
@@ -269,7 +257,13 @@ begin
     openSUSE_Leap_15_3, openSUSE_Leap_15_4,
     SLE15_SP1, SLE15_SP2, SLE15_SP3, SLE15_SP4:
     begin
-      AddSuseRepo(RepoName);
+      // zypper addrepo <options> <URI> <alias>
+      LogDatei.log('zypper addrepo ' + FURL + ' ' + RepoName, LLInfo);
+      FRunCommandElevated.Run('zypper addrepo ' + FURL + ' ' + RepoName, Output);
+      LogDatei.log('zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh',
+        LLInfo);
+      FRunCommandElevated.Run(
+        'zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh', Output);
     end;
   end;
 end;
