@@ -69,9 +69,9 @@ type
     procedure ReadOwnerOfExistingSourcesList;
     procedure CreateSourcesListAsRoot;
     procedure AddRepoToSourcesListByKey;
-    procedure AddDebianUbuntu;
-    procedure AddOpenSuseSLES(RepoName: string);
-    procedure AddCentOSRedHat;
+    procedure AddDebianRepo;
+    procedure AddSuseRepo(RepoName: string);
+    procedure AddRedhatRepo;
   public
     constructor Create(Distribution: TDistribution; Password: string;
       Sudo: boolean = False);
@@ -204,7 +204,7 @@ begin
     FSourcesListFilePath, Output);
 end;
 
-procedure TLinuxRepository.AddDebianUbuntu;
+procedure TLinuxRepository.AddDebianRepo;
 begin
   try
     CreateKeyRingAndAddKey;
@@ -215,7 +215,7 @@ begin
 
 end;
 
-procedure TLinuxRepository.AddOpenSuseSLES(RepoName: string);
+procedure TLinuxRepository.AddSuseRepo(RepoName: string);
 var
   Output: string;
 begin
@@ -228,7 +228,7 @@ begin
   FRunCommandElevated.Run('zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh', Output);
 end;
 
-procedure TLinuxRepository.AddCentOSRedHat;
+procedure TLinuxRepository.AddRedhatRepo;
 var
   Output: string;
 begin
@@ -245,18 +245,18 @@ procedure TLinuxRepository.Add(URL: string);
 begin
   FURL := URL;
   case FDistribution of
-    {Debian and Ubuntu}
+    {Debian like}
     Debian_9, Debian_10, Debian_11,
     Univention_4_4, Univention_5_0,
     xUbuntu_18_04, xUbuntu_20_04, xUbuntu_22_04:
     begin
-      AddDebianUbuntu;
+      AddDebianRepo;
     end;
-    {CentOS and RedHat}
+    {RedHat like}
     AlmaLinux_8, AlmaLinux_9, RHEL_8, RHEL_9,
     RockyLinux_8, RockyLinux_9:
     begin
-      AddCentOSRedHat;
+      AddRedhatRepo;
     end;
   end;
 end;
@@ -265,11 +265,11 @@ procedure TLinuxRepository.Add(URL: string; RepoName: string);
 begin
   FURL := URL;
   case FDistribution of
-    {OpenSuse and SLES}
+    {Suse}
     openSUSE_Leap_15_3, openSUSE_Leap_15_4,
     SLE15_SP1, SLE15_SP2, SLE15_SP3, SLE15_SP4:
     begin
-      AddOpenSuseSLES(RepoName);
+      AddSuseRepo(RepoName);
     end;
   end;
 end;
