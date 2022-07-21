@@ -14,35 +14,21 @@ type
   TDistribution = (
     AlmaLinux_8,
     AlmaLinux_9,
-    CentOS_7,
-    CentOS_8,
-    Debian_8,
     Debian_9,
     Debian_10,
     Debian_11,
-    openSUSE_Leap_15_1,
-    openSUSE_Leap_15_2,
     openSUSE_Leap_15_3,
     openSUSE_Leap_15_4,
-    openSUSE_Leap_42_3,
-    RHEL_7,
     RHEL_8,
     RHEL_9,
     RockyLinux_8,
     RockyLinux_9,
-    SLE_12,
-    SLE12_SP1,
-    SLE12_SP2,
-    SLE12_SP3,
-    SLE12_SP4,
     SLE15_SP1,
     SLE15_SP2,
     SLE15_SP3,
     SLE15_SP4,
-    Univention_4_3,
     Univention_4_4,
     Univention_5_0,
-    xUbuntu_16_04,
     xUbuntu_18_04,
     xUbuntu_20_04,
     xUbuntu_22_04,
@@ -148,35 +134,21 @@ begin
   case FDistribution of
     AlmaLinux_8: Result := Result + 'AlmaLinux_8/';
     AlmaLinux_9: Result := Result + 'AlmaLinux_9/';
-    CentOS_7: Result := Result + 'CentOS_7/';
-    CentOS_8: Result := Result + 'CentOS_8/';
-    Debian_8: Result := Result + 'Debian_8/';
     Debian_9: Result := Result + 'Debian_9/';
     Debian_10: Result := Result + 'Debian_10/';
     Debian_11: Result := Result + 'Debian_11/';
-    openSUSE_Leap_15_1: Result := Result + 'openSUSE_Leap_15.1/';
-    openSUSE_Leap_15_2: Result := Result + 'openSUSE_Leap_15.2/';
     openSUSE_Leap_15_3: Result := Result + 'openSUSE_Leap_15.3/';
     openSUSE_Leap_15_4: Result := Result + 'openSUSE_Leap_15.4/';
-    openSUSE_Leap_42_3: Result := Result + 'openSUSE_Leap_42.3/';
-    RHEL_7: Result := Result + 'RHEL_7/';
     RHEL_8: Result := Result + 'RHEL_8/';
     RHEL_9: Result := Result + 'RHEL_9/';
     RockyLinux_8: Result := Result + 'RockyLinux_8/';
     RockyLinux_9: Result := Result + 'RockyLinux_9/';
-    SLE_12: Result := Result + 'SLE_12/';
-    SLE12_SP1: Result := Result + 'SLE12_SP1/';
-    SLE12_SP2: Result := Result + 'SLE12_SP2/';
-    SLE12_SP3: Result := Result + 'SLE12_SP3/';
-    SLE12_SP4: Result := Result + 'SLE12_SP4/';
     SLE15_SP1: Result := Result + 'SLE_15_SP1/';
     SLE15_SP2: Result := Result + 'SLE_15_SP2/';
     SLE15_SP3: Result := Result + 'SLE_15_SP3/';
     SLE15_SP4: Result := Result + 'SLE_15_SP4/';
-    Univention_4_3: Result := Result + 'Univention_4.3/';
     Univention_4_4: Result := Result + 'Univention_4.4/';
     Univention_5_0: Result := Result + 'Univention_5.0/';
-    xUbuntu_16_04: Result := Result + 'xUbuntu_16.04/';
     xUbuntu_18_04: Result := Result + 'xUbuntu_18.04/';
     xUbuntu_20_04: Result := Result + 'xUbuntu_20.04/';
     xUbuntu_22_04: Result := Result + 'xUbuntu_22.04/';
@@ -274,14 +246,14 @@ begin
   FURL := URL;
   case FDistribution of
     {Debian and Ubuntu}
-    Debian_8, Debian_9, Debian_10, Debian_11,
-    Univention_4_3, Univention_4_4, Univention_5_0,
-    xUbuntu_16_04, xUbuntu_18_04, xUbuntu_20_04, xUbuntu_22_04:
+    Debian_9, Debian_10, Debian_11,
+    Univention_4_4, Univention_5_0,
+    xUbuntu_18_04, xUbuntu_20_04, xUbuntu_22_04:
     begin
       AddDebianUbuntu;
     end;
     {CentOS and RedHat}
-    AlmaLinux_8, AlmaLinux_9, CentOS_7, CentOS_8, RHEL_7, RHEL_8, RHEL_9,
+    AlmaLinux_8, AlmaLinux_9, RHEL_8, RHEL_9,
     RockyLinux_8, RockyLinux_9:
     begin
       AddCentOSRedHat;
@@ -294,8 +266,8 @@ begin
   FURL := URL;
   case FDistribution of
     {OpenSuse and SLES}
-    openSUSE_Leap_15_1, openSUSE_Leap_15_2, openSUSE_Leap_15_3, openSUSE_Leap_15_4, openSUSE_Leap_42_3,
-    SLE_12, SLE12_SP1, SLE12_SP2, SLE12_SP3, SLE12_SP4, SLE15_SP1, SLE15_SP2, SLE15_SP3, SLE15_SP4:
+    openSUSE_Leap_15_3, openSUSE_Leap_15_4,
+    SLE15_SP1, SLE15_SP2, SLE15_SP3, SLE15_SP4:
     begin
       AddOpenSuseSLES(RepoName);
     end;
