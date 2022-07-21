@@ -42,7 +42,7 @@ uses
   opsiquickinstall_data,
   opsi_quick_install_unit_language,
   DistributionInfo,
-  osLinuxRepository;
+  LinuxRepository;
 
 {$R *.lfm}
 

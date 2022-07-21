@@ -1,4 +1,4 @@
-unit osLinuxRepository;
+unit LinuxRepository;
 
 {$mode objfpc}{$H+}
 
@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Process, osTextFileUtils, osLog,
-  osRunCommandElevated, BaseUnix;
+  osRunCommandElevated;
 
 type
 
@@ -90,9 +90,9 @@ implementation
 
 function stringToOpsiBranch(branch: string): TOpsiBranch;
 begin
-   if branch = 'experimental' then Result := experimental
-   else if branch = 'testing' then Result := testing
-   else if branch = 'stable' then Result := stable
+  if branch = 'experimental' then Result := experimental
+  else if branch = 'testing' then Result := testing
+  else if branch = 'stable' then Result := stable;
 end;
 
 constructor TLinuxRepository.Create(Distribution: TDistribution;
@@ -221,7 +221,8 @@ begin
   if SetCurrentDir('/etc/yum.repos.d/') then
   begin
     FRunCommandElevated.Run('yum install -y yum-utils', Output);
-    FRunCommandElevated.Run('yum-config-manager --add-repo ' + FURL + FRedhatRepoName, Output);
+    FRunCommandElevated.Run('yum-config-manager --add-repo ' + FURL +
+      FRedhatRepoName, Output);
   end
   else
     LogDatei.log('Could not set directory to /etc/yum.repos.d/', LLInfo);

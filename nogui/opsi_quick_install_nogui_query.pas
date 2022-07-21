@@ -9,7 +9,7 @@ uses
   opsiquickinstall_data,
   opsi_quick_install_resourcestrings,
   DistributionInfo,
-  osLinuxRepository,
+  LinuxRepository,
   osnetworkcalculator,
   osnetutil;
 

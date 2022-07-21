@@ -17,7 +17,7 @@ uses
   DistributionInfo,
   osRunCommandElevated,
   osfunclin,
-  osLinuxRepository,
+  LinuxRepository,
   oslog,
   osnetworkcalculator,
   opsi_quick_install_resourcestrings,

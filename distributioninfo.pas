@@ -5,7 +5,7 @@ unit DistributionInfo;
 interface
 
 uses
-  Classes, SysUtils, osLinuxRepository;
+  Classes, SysUtils, LinuxRepository;
 
 type
 

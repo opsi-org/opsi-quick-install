@@ -80,7 +80,7 @@ uses
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_overview,
   opsi_quick_install_unit_wait,
-  osLinuxRepository,
+  LinuxRepository,
   DistributionInfo;
 
 {$R *.lfm}
