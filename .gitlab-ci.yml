@@ -45,9 +45,9 @@ compile opsi-quickinstall linux:
     - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: $CI_COMMIT_BRANCH == "Release"
+    - if: ($CI_COMMIT_BRANCH == "Release" || $CI_COMMIT_BRANCH == "Development")
     - if: $UPDATE_SUBMODULE == "true"
-      when: always
+      #when: always
   before_script:
     - git submodule update --init
   script:
@@ -82,7 +82,7 @@ publish opsi-quick-install:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $CI_COMMIT_BRANCH == "Release"
-      when: always
+      #when: always
   before_script:
     - git submodule update --init
   script:
