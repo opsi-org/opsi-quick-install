@@ -22,8 +22,8 @@ type
   const
     Distribs = 'AlmaLinux 8,' + #10 + 'Debian 9, Debian 10, Debian 11,' +
       #10 + 'openSUSE 15.3, openSUSE 15.4,' + #10 +
-      'RedHatEnterprise 8, RockyLinux 8,' + #10 + 'SUSE 15 SP1, SUSE 15 SP2,' + #10 +
-      'Ubuntu 18.04, Ubuntu 20.04, Ubuntu 22.04,' + #10 + 'UCS 4.4, UCS 5.0';
+      'RedHatEnterprise 8, Rocky 8,' + #10 + 'SUSE 15.1, SUSE 15.2,' + #10 +
+      'Ubuntu 18.04, Ubuntu 20.04, Ubuntu 22.04,' + #10 + 'Univention 4.4, Univention 5.0';
 
     constructor Create(DistroName: string; DistroRelease: string);overload;
     procedure SetNameAndRelease(DistroName: string; DistroRelease: string);
