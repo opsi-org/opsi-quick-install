@@ -5,7 +5,7 @@ unit opsi_quick_install_unit_password;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, StrUtils,
   MaskEdit, LCLType, cthreads, Process,
   osRunCommandElevated,
   osLog,
@@ -222,21 +222,20 @@ begin
   if FileExists('/etc/apt/sources.list.d/opsi.list') then
     FInstallRunCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
   // create repository:
-  ReleaseKeyRepo := TLinuxRepository.Create(Data.DistrInfo.Distr,
-    Password.EditPassword.Text, Password.RadioBtnSudo.Checked);
+  ReleaseKeyRepo := TLinuxRepository.Create(Password.EditPassword.Text, Password.RadioBtnSudo.Checked);
   // Set OpsiVersion and OpsiBranch afterwards using GetDefaultURL
   if Data.opsiVersion = 'Opsi 4.1' then
-    url := ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind))
+    url := ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr)
   else
-    url := ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind));
+    url := ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr);
 
   // !following lines need an existing LogDatei
-  if (Data.DistrInfo.DistroName = 'openSUSE') or (Data.DistrInfo.DistroName = 'SUSE') then
+  if MatchStr(lowerCase(Data.DistrInfo.DistroName), ['opensuse', 'suse']) then
   begin
     ReleaseKeyRepo.AddSuseRepo(url, 'OpsiQuickInstallRepositoryNew');
   end
   else
-    ReleaseKeyRepo.Add(url);
+    ReleaseKeyRepo.Add(Data.DistrInfo.DistroName, url);
 
   ReleaseKeyRepo.Free;
 end;
@@ -398,7 +397,6 @@ begin
 
   btnFinishClicked := True;
   // start thread for opsi server installation while showing TWait
-  Data.DistrInfo.SetPackageManagementShellCommand;
   InstallOpsiThread := TInstallOpsiThread.Create(EditPassword.Text,
     RadioBtnSudo.Checked, Data.DistrInfo.PackageManagementShellCommand);
   with InstallOpsiThread do

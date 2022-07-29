@@ -10,6 +10,7 @@ uses
     {$ENDIF}
   Classes,
   SysUtils,
+  StrUtils,
   CustApp,
   Process,
   GetText,
@@ -25,7 +26,8 @@ uses
   osnetutil,
   opsi_quick_install_nogui_query,
   OpsiPackageDownloader,
-  osfuncunix;
+  osfuncunix,
+  SupportedOpsiServerDistributions;
 
 type
   TQuickInstall = class(TCustomApplication)
@@ -306,24 +308,21 @@ type
     if FileExists('/etc/apt/sources.list.d/opsi.list') then
       QuickInstallCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
     // create repository (no password, user is root):
-    ReleaseKeyRepo := TLinuxRepository.Create(Data.DistrInfo.Distr, '', False);
+    ReleaseKeyRepo := TLinuxRepository.Create('', False);
     // set OpsiVersion and OpsiBranch afterwards using GetDefaultURL
     if Data.opsiVersion = 'Opsi 4.1' then
-      ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind))
+      url := ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr)
     else
-      ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind));
-    // define repo url
-    url := Data.repo + Data.repoKind + '/' + Data.DistrInfo.DistrRepoUrlPart;
+      url := ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr);
 
     // !following lines need an existing LogDatei
-    if (Data.DistrInfo.DistroName = 'openSUSE') or
-      (Data.DistrInfo.DistroName = 'SUSE') then
+    if MatchStr(lowerCase(Data.DistrInfo.DistroName), ['opensuse', 'suse']) then
     begin
       writeln('OpenSUSE/SUSE: Add Repo');
-      ReleaseKeyRepo.AddSuseRepo(url, 'OpsiQuickInstallRepositoryNew');
+      ReleaseKeyRepo.AddSuseRepo(url, 'OpsiQuickInstallRepository');
     end
     else
-      ReleaseKeyRepo.Add(url);
+      ReleaseKeyRepo.Add(Data.DistrInfo.DistroName, url);
 
     ReleaseKeyRepo.Free;
   end;
@@ -341,7 +340,6 @@ type
     FileText.SaveToFile(DirClientData + 'result.conf');
     FileText.Free;
 
-    Data.DistrInfo.SetPackageManagementShellCommand;
     // !following lines need an existing LogDatei
     // if one installation failed, then opsi-script was already installed
     if not one_installation_failed then
@@ -571,22 +569,12 @@ type
     begin
       if Data.DistrInfo.Distr = other then
       begin
-        writeln(rsNoSupport + #10 + Data.DistrInfo.Distribs);
+        writeln(rsNoSupport + #10 + SupportedDistributionsInfoString);
         FreeAndNil(LogDatei);
         FreeAndNil(Data);
         Halt(1);
       end;
     end;
-  end;
-
-  procedure InitializeDistributionInfo(QuickInstall: TQuickInstall);
-  begin
-    Data.DistrInfo := TDistributionInfo.Create(getLinuxDistroName,
-      getLinuxDistroRelease);
-    LogDatei.log(Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease,
-      LLessential);
-    Data.DistrInfo.SetDistrAndUrlPart;
-    CheckThatOqiSupportsDistribution(QuickInstall);
   end;
 
   procedure CheckFQDN;
@@ -632,7 +620,7 @@ begin
     writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
   end;
 
-  InitializeDistributionInfo(QuickInstall);
+  CheckThatOqiSupportsDistribution(QuickInstall);
   QuickInstall.Run;
 
   QuickInstall.Free;

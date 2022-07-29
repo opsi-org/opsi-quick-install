@@ -5,7 +5,10 @@ unit opsiquickinstall_data;
 interface
 
 uses
-  Classes, SysUtils, DistributionInfo;
+  Classes, SysUtils,
+  DistributionInfo,
+  osfunclin,
+  oslog;
 
 type
 
@@ -74,7 +77,9 @@ end;
 
 constructor TQuickInstallData.Create;
 begin
-  DistrInfo := TDistributionInfo.Create;
+  // Following line takes time and is therefore executed only once at the
+  // beginning of oqi when Data is created.
+  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
 
   // set default values:
   opsiVersion := 'Opsi 4.2';

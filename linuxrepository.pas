@@ -5,62 +5,39 @@ unit LinuxRepository;
 interface
 
 uses
-  Classes, SysUtils, Process, osTextFileUtils, osLog,
+  Classes, SysUtils, Process, StrUtils,
+  {$IF defined(TARGETOPSISERVER)}
+  SupportedOpsiServerDistributions,
+  {$ELSEIF defined(TARGETOPSICLIENT)}
+  SupportedOpsiClientDistributions,
+  {$ENDIF}
+  osTextFileUtils,
+  osLog,
   osRunCommandElevated;
 
 type
 
-  {TDistribution: distributions which opsi-server supports, add any new supported distribution here }
-  TDistribution = (
-    AlmaLinux_8,
-    AlmaLinux_9,
-    Debian_9,
-    Debian_10,
-    Debian_11,
-    openSUSE_Leap_15_3,
-    openSUSE_Leap_15_4,
-    RHEL_8,
-    RHEL_9,
-    RockyLinux_8,
-    RockyLinux_9,
-    SLE15_SP1,
-    SLE15_SP2,
-    SLE15_SP3,
-    SLE15_SP4,
-    Univention_4_4,
-    Univention_5_0,
-    xUbuntu_18_04,
-    xUbuntu_20_04,
-    xUbuntu_22_04,
-    other
-    );
-
-  {TOpsiVersion: add any new opsi Version here}
+  // Add any new opsi Version here
   TOpsiVersion = (Opsi41, Opsi42);
 
-  {TOpsiBranch: The branches of Opsi. Are you adventurous and interested in new functionalities use the experimental branch,
-  if you are not sure what to choose or you make your first steps in Opsi then use the stable branch}
+  (* The branches of Opsi. Are you adventurous and interested in new functionalities use the experimental branch,
+  if you are not sure what to choose or you make your first steps in Opsi then use the stable branch.*)
   TOpsiBranch = (experimental, testing, stable);
-
-  { TLinuxRepository }
 
   TLinuxRepository = class(TObject)
   private
   const
-    { Maybe BaseURLOpsi42 has to be adapted in the future }
-    FBaseURLOpsi41 =
+    // Maybe BaseURLOpsi42 has to be adapted in the future
+    FDefaultBaseURLOpsi41 =
       'https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.1:/';
-    FBaseURLOpsi42 =
+    FDefaultBaseURLOpsi42 =
       'https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/';
-    FSourcesListDirectory = '/etc/apt/sources.list.d'; //Debian/Ubuntu
-    FSourcesListFilePath = FSourcesListDirectory + '/opsi.list'; //Debian/Ubuntu
-    FKeyRingPath = '/usr/local/share/keyrings'; //Debian/Ubuntu
-    FKeyPath = FKeyRingPath + '/opensuseOpsi.gpg'; //Debian/Ubuntu
-    FRedhatRepoName = 'home:uibmz:opsi:4.2:stable.repo';
+    // Required for adding repos to Debian like distributions
+    FSourcesListDirectory = '/etc/apt/sources.list.d';
+    FSourcesListFilePath = FSourcesListDirectory + '/opsi.list';
+    FKeyRingPath = '/usr/local/share/keyrings';
+    FKeyPath = FKeyRingPath + '/opensuseOpsi.gpg';
   var
-    FDistribution: TDistribution; //Linux distribution
-    FOpsiVersion: TOpsiVersion;
-    FOpsiBranch: TOpsiBranch;
     FURL: string;
     FRunCommandElevated: TRunCommandElevated;
     FOwnerOfSourcesList: string;
@@ -72,16 +49,13 @@ type
     procedure AddDebianRepo;
     procedure AddRedhatRepo;
   public
-    constructor Create(Distribution: TDistribution; Password: string;
-      Sudo: boolean = False);
-
-    destructor Destroy; override;
-    function GetDefaultURL(OpsiVersion: TOpsiVersion; OpsiBranch: TOpsiBranch): string;
-    { Constructs the repository URL based on distribution, opsi version and opsi branch and gives it back as result}
-    procedure Add(URL: string);
+    constructor Create(Password: string; Sudo: boolean = False);
+    // Constructs the repository URL based on distribution, opsi version and opsi branch and gives it back as result
+    function GetDefaultURL(OpsiVersion: TOpsiVersion; OpsiBranch: TOpsiBranch;
+      Distribution: TSupportedDistribution): string;
+    // Add repository URL to the package system of the OS
+    procedure Add(DistroName: string; URL: string);
     procedure AddSuseRepo(URL: string; RepoName: string);
-    { Add repository URL to the package system of the OS }
-    property URL: string read FURL;
   end;
 
 function stringToOpsiBranch(branch: string): TOpsiBranch;
@@ -95,66 +69,7 @@ begin
   else if branch = 'stable' then Result := stable;
 end;
 
-constructor TLinuxRepository.Create(Distribution: TDistribution;
-  Password: string; Sudo: boolean = False);
-begin
-  //LogDatei := TLogInfo.Create;
-  //LogDatei.CreateTheLogfile('opsiLinuxRepository.log');
-  //LogDatei.CreateTheLogFile(ProgramInfo.InternalName +'.log');
-  FDistribution := Distribution;
-  FOpsiVersion := Opsi41;
-  FOpsiBranch := stable;
-  FURL := GetDefaultURL(Opsi41, stable);
-  FRunCommandElevated := TRunCommandElevated.Create(Password, Sudo);
-end;
-
-destructor TLinuxRepository.Destroy;
-begin
-  FRunCommandElevated.Free;
-  //if assigned(LogDatei) then FreeAndNil(LogDatei);
-  inherited Destroy;
-end;
-
-function TLinuxRepository.GetDefaultURL(OpsiVersion: TOpsiVersion;
-  OpsiBranch: TOpsiBranch): string;
-begin
-  Result := '';
-  FOpsiVersion := OpsiVersion;
-  FOpsiBranch := OpsiBranch;
-  case FOpsiVersion of
-    Opsi41: Result := FBaseURLOpsi41;
-    Opsi42: Result := FBaseURLOpsi42;
-  end;
-  case FOpsiBranch of
-    experimental: Result := Result + 'experimental/';
-    testing: Result := Result + 'testing/';
-    stable: Result := Result + 'stable/';
-  end;
-  case FDistribution of
-    AlmaLinux_8: Result := Result + 'AlmaLinux_8/';
-    AlmaLinux_9: Result := Result + 'AlmaLinux_9/';
-    Debian_9: Result := Result + 'Debian_9/';
-    Debian_10: Result := Result + 'Debian_10/';
-    Debian_11: Result := Result + 'Debian_11/';
-    openSUSE_Leap_15_3: Result := Result + 'openSUSE_Leap_15.3/';
-    openSUSE_Leap_15_4: Result := Result + 'openSUSE_Leap_15.4/';
-    RHEL_8: Result := Result + 'RHEL_8/';
-    RHEL_9: Result := Result + 'RHEL_9/';
-    RockyLinux_8: Result := Result + 'RockyLinux_8/';
-    RockyLinux_9: Result := Result + 'RockyLinux_9/';
-    SLE15_SP1: Result := Result + 'SLE_15_SP1/';
-    SLE15_SP2: Result := Result + 'SLE_15_SP2/';
-    SLE15_SP3: Result := Result + 'SLE_15_SP3/';
-    SLE15_SP4: Result := Result + 'SLE_15_SP4/';
-    Univention_4_4: Result := Result + 'Univention_4.4/';
-    Univention_5_0: Result := Result + 'Univention_5.0/';
-    xUbuntu_18_04: Result := Result + 'xUbuntu_18.04/';
-    xUbuntu_20_04: Result := Result + 'xUbuntu_20.04/';
-    xUbuntu_22_04: Result := Result + 'xUbuntu_22.04/';
-    other: Result := '';
-  end;
-end;
-
+{private}
 procedure TLinuxRepository.CreateKeyRingAndAddKey;
 var
   Output: string;
@@ -211,7 +126,6 @@ begin
   except
     LogDatei.log('Exception while adding repository.', LLDebug);
   end;
-
 end;
 
 procedure TLinuxRepository.AddRedhatRepo;
@@ -221,52 +135,96 @@ begin
   if SetCurrentDir('/etc/yum.repos.d/') then
   begin
     FRunCommandElevated.Run('yum install -y yum-utils', Output);
-    FRunCommandElevated.Run('yum-config-manager --add-repo ' + FURL +
-      FRedhatRepoName, Output);
+    FRunCommandElevated.Run('yum-config-manager --add-repo ' + FURL, Output);
   end
   else
     LogDatei.log('Could not set directory to /etc/yum.repos.d/', LLInfo);
 end;
 
-procedure TLinuxRepository.Add(URL: string);
+{public}
+constructor TLinuxRepository.Create(Password: string; Sudo: boolean = False);
 begin
-  FURL := URL;
-  case FDistribution of
-    {Debian like}
-    Debian_9, Debian_10, Debian_11,
-    Univention_4_4, Univention_5_0,
-    xUbuntu_18_04, xUbuntu_20_04, xUbuntu_22_04:
-    begin
-      AddDebianRepo;
-    end;
-    {RedHat like}
-    AlmaLinux_8, AlmaLinux_9, RHEL_8, RHEL_9,
-    RockyLinux_8, RockyLinux_9:
-    begin
-      AddRedhatRepo;
-    end;
+  FRunCommandElevated := TRunCommandElevated.Create(Password, Sudo);
+end;
+
+// GetDefaultURL can be helpful but is not necessary
+function TLinuxRepository.GetDefaultURL(OpsiVersion: TOpsiVersion;
+  OpsiBranch: TOpsiBranch; Distribution: TSupportedDistribution): string;
+var
+  RedHatRepoName: string = 'home:uibmz:opsi:';
+begin
+  Result := '';
+
+  case OpsiVersion of
+    Opsi41: Result := FDefaultBaseURLOpsi41;
+    Opsi42: Result := FDefaultBaseURLOpsi42;
+  end;
+  case OpsiBranch of
+    experimental: Result := Result + 'experimental/';
+    testing: Result := Result + 'testing/';
+    stable: Result := Result + 'stable/';
+  end;
+
+  // For redhat compose the specific repo name of the default repo
+  case OpsiVersion of
+    Opsi41: RedHatRepoName := RedHatRepoName + '4.1:';
+    Opsi42: RedHatRepoName := RedHatRepoName + '4.2:';
+  end;
+  case OpsiBranch of
+    experimental: RedHatRepoName := RedHatRepoName + 'experimental.repo';
+    testing: RedHatRepoName := RedHatRepoName + 'testing.repo';
+    stable: RedHatRepoName := RedHatRepoName + 'stable.repo';
+  end;
+
+  case Distribution of
+    AlmaLinux_8: Result := Result + 'AlmaLinux_8/';
+    AlmaLinux_9: Result := Result + 'AlmaLinux_9/';
+    Debian_9: Result := Result + 'Debian_9/';
+    Debian_10: Result := Result + 'Debian_10/';
+    Debian_11: Result := Result + 'Debian_11/';
+    openSUSE_Leap_15_3: Result := Result + 'openSUSE_Leap_15.3/';
+    openSUSE_Leap_15_4: Result := Result + 'openSUSE_Leap_15.4/';
+    RHEL_8: Result := Result + 'RHEL_8/' + RedHatRepoName;
+    RHEL_9: Result := Result + 'RHEL_9/' + RedHatRepoName;
+    RockyLinux_8: Result := Result + 'RockyLinux_8/';
+    RockyLinux_9: Result := Result + 'RockyLinux_9/';
+    SLE15_SP1: Result := Result + 'SLE_15_SP1/';
+    SLE15_SP2: Result := Result + 'SLE_15_SP2/';
+    SLE15_SP3: Result := Result + 'SLE_15_SP3/';
+    SLE15_SP4: Result := Result + 'SLE_15_SP4/';
+    Univention_4_4: Result := Result + 'Univention_4.4/';
+    Univention_5_0: Result := Result + 'Univention_5.0/';
+    xUbuntu_18_04: Result := Result + 'xUbuntu_18.04/';
+    xUbuntu_20_04: Result := Result + 'xUbuntu_20.04/';
+    xUbuntu_22_04: Result := Result + 'xUbuntu_22.04/';
+    other: Result := '';
   end;
 end;
 
+// For suse call AddSuseRepo directly with your desired repo name
+// or call below function Add and the repo will get a default name.
 procedure TLinuxRepository.AddSuseRepo(URL: string; RepoName: string);
 var
   Output: string;
 begin
   FURL := URL;
-  case FDistribution of
-    {Suse}
-    openSUSE_Leap_15_3, openSUSE_Leap_15_4,
-    SLE15_SP1, SLE15_SP2, SLE15_SP3, SLE15_SP4:
-    begin
-      // zypper addrepo <options> <URI> <alias>
-      LogDatei.log('zypper addrepo ' + FURL + ' ' + RepoName, LLInfo);
-      FRunCommandElevated.Run('zypper addrepo ' + FURL + ' ' + RepoName, Output);
-      LogDatei.log('zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh',
-        LLInfo);
-      FRunCommandElevated.Run(
-        'zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh', Output);
-    end;
-  end;
+  // zypper addrepo <options> <URI> <alias>
+  FRunCommandElevated.Run('zypper addrepo ' + FURL + ' ' + RepoName, Output);
+  FRunCommandElevated.Run(
+    'zypper --no-gpg-checks --non-interactive --gpg-auto-import-keys refresh',
+    Output);
 end;
+
+procedure TLinuxRepository.Add(DistroName: string; URL: string);
+begin
+  FURL := URL;
+  if MatchStr(lowerCase(DistroName), ['debian', 'ubuntu', 'univention']) then
+    AddDebianRepo
+  else if MatchStr(lowerCase(DistroName), ['almalinux', 'redhatenterprise', 'rocky']) then
+    AddRedhatRepo
+  else if MatchStr(lowerCase(DistroName), ['opensuse', 'suse']) then
+    AddSuseRepo(URL, 'DefaultSuseRepoName');
+end;
+
 
 end.

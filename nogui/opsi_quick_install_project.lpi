@@ -72,7 +72,12 @@
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Other>
-      <CustomOptions Value="-dSYNAPSE"/>
+      <CustomOptions Value="-dSYNAPSE
+-dTARGETOPSISERVER"/>
+      <OtherDefines Count="2">
+        <Define0 Value="SYNAPSE"/>
+        <Define1 Value="TARGETOPSISERVER"/>
+      </OtherDefines>
     </Other>
   </CompilerOptions>
   <Debugging>
