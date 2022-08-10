@@ -1,6 +1,7 @@
 [submodule "l-opsi-server-products"]
 	path = l-opsi-server-products
 	url = ../../opsiproducts/l-opsi-server-products.git
+	branch = master
 [submodule "lazarus"]
 	path = lazarus
 	url = ../../lazarus.git
