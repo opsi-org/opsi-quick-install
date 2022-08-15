@@ -1,5 +1,14 @@
 unit LinuxRepository;
 
+(*
+Here is an example of how to use this unit in one of the easiest ways:
+
+MyRepo := TLinuxRepository.Create(MyPassword,False,'myrepos.list');
+MyRepo.Add('Ubuntu','https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/stable/xUbuntu22.04/')
+
+Done :)
+*)
+
 {$mode objfpc}{$H+}
 
 interface
