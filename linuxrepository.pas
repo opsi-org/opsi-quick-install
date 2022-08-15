@@ -39,13 +39,13 @@ type
     FDefaultBaseURLOpsi42 =
       'https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/';
     // Required for adding repos to Debian like distributions
-    FSourcesListDirectory = '/etc/apt/sources.list.d';
-    FSourcesListFilePath = FSourcesListDirectory + '/opsi.list';
+    FSourcesListDirectory = '/etc/apt/sources.list.d/';
     FKeyRingPath = '/usr/local/share/keyrings';
-    FKeyPath = FKeyRingPath + '/opensuseOpsi.gpg';
+    FKeyPath = FKeyRingPath + '/opensuseRepoDefaultKeyName.gpg';
   var
     FURL: string;
     FRunCommandElevated: TRunCommandElevated;
+    FSourcesListFilePath: string;
     FOwnerOfSourcesList: string;
 
     procedure CreateKeyRingAndAddKey;
@@ -55,7 +55,8 @@ type
     procedure AddDebianRepo;
     procedure AddRedhatRepo;
   public
-    constructor Create(Password: string; Sudo: boolean = False);
+    constructor Create(Password: string; Sudo: boolean = False;
+      RepoListFileName: string = 'opsi.list');
     // Constructs the repository URL based on distribution, opsi version and opsi branch and gives it back as result
     function GetOpsiServerRepoDefaultURL(OpsiVersion: TOpsiVersion; OpsiBranch: TOpsiBranch;
       Distribution: TSupportedDistribution): string;
@@ -148,9 +149,11 @@ begin
 end;
 
 {public}
-constructor TLinuxRepository.Create(Password: string; Sudo: boolean = False);
+constructor TLinuxRepository.Create(Password: string; Sudo: boolean = False;
+  RepoListFileName: string = 'opsi.list');
 begin
   FRunCommandElevated := TRunCommandElevated.Create(Password, Sudo);
+  FSourcesListFilePath := FSourcesListDirectory + RepoListFileName;
 end;
 
 // GetOpsiServerRepoDefaultURL can be helpful but is not necessary
