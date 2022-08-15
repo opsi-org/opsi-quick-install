@@ -5,12 +5,18 @@ unit LinuxRepository;
 interface
 
 uses
-  Classes, SysUtils, Process, StrUtils,
+  // Use e.g. the following commented code instead of the line below it if you
+  // have client specific repos and you wrote a unit SupportedOpsiClientDistributions
+  (*
   {$IF defined(TARGETOPSISERVER)}
   SupportedOpsiServerDistributions,
   {$ELSEIF defined(TARGETOPSICLIENT)}
   SupportedOpsiClientDistributions,
   {$ENDIF}
+  *)
+  SupportedOpsiServerDistributions,
+
+  Classes, SysUtils, Process, StrUtils,
   osTextFileUtils,
   osLog,
   osRunCommandElevated;
