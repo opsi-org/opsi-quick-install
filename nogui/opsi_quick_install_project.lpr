@@ -309,11 +309,11 @@ type
       QuickInstallCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
     // create repository (no password, user is root):
     ReleaseKeyRepo := TLinuxRepository.Create('', False);
-    // set OpsiVersion and OpsiBranch afterwards using GetDefaultURL
+
     if Data.opsiVersion = 'Opsi 4.1' then
-      url := ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr)
+      url := ReleaseKeyRepo.GetOpsiServerRepoDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr)
     else
-      url := ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr);
+      url := ReleaseKeyRepo.GetOpsiServerRepoDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr);
 
     // !following lines need an existing LogDatei
     if MatchStr(lowerCase(Data.DistrInfo.DistroName), ['opensuse', 'suse']) then

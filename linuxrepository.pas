@@ -57,7 +57,7 @@ type
   public
     constructor Create(Password: string; Sudo: boolean = False);
     // Constructs the repository URL based on distribution, opsi version and opsi branch and gives it back as result
-    function GetDefaultURL(OpsiVersion: TOpsiVersion; OpsiBranch: TOpsiBranch;
+    function GetOpsiServerRepoDefaultURL(OpsiVersion: TOpsiVersion; OpsiBranch: TOpsiBranch;
       Distribution: TSupportedDistribution): string;
     // Add repository URL to the package system of the OS
     procedure Add(DistroName: string; URL: string);
@@ -153,8 +153,8 @@ begin
   FRunCommandElevated := TRunCommandElevated.Create(Password, Sudo);
 end;
 
-// GetDefaultURL can be helpful but is not necessary
-function TLinuxRepository.GetDefaultURL(OpsiVersion: TOpsiVersion;
+// GetOpsiServerRepoDefaultURL can be helpful but is not necessary
+function TLinuxRepository.GetOpsiServerRepoDefaultURL(OpsiVersion: TOpsiVersion;
   OpsiBranch: TOpsiBranch; Distribution: TSupportedDistribution): string;
 var
   RedHatRepoName: string = 'home:uibmz:opsi:';
