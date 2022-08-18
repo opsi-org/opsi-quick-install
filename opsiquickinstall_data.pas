@@ -51,7 +51,7 @@ type
     adminName, adminPassword, ipName, ipNumber: string;
 
   const
-    QuickInstallVersion = '4.2.0.7';
+    QuickInstallVersion = '4.2.0.8';
     baseRepoUrlOpsi41 =
       'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.1:/';
     baseRepoUrlOpsi42 =
