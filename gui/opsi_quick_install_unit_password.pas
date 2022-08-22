@@ -119,7 +119,7 @@ begin
   // try downloading latest l-opsi-server and set DirClientData for the latest version
   if two_los_to_test and DownloadOpsiPackage('l-opsi-server',
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
-      FInstallRunCommand, Data.DistrInfo) then
+      FInstallRunCommand, Data.DistrInfo.PackageManagementShellCommand) then
   begin
     // extract and compare version numbers of default and downloaded los
     if (FindFirst('../l-opsi-server_4.*', faAnyFile and faDirectory,
