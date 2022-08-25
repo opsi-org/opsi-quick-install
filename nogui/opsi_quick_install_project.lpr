@@ -6,8 +6,8 @@ uses
  {$IFDEF UNIX}
   {$IFDEF UseCThreads}
   cthreads,
-    {$ENDIF}
-    {$ENDIF}
+      {$ENDIF}
+      {$ENDIF}
   Classes,
   SysUtils,
   StrUtils,
@@ -43,7 +43,7 @@ type
     procedure SetDefaultValues;
     procedure defineDirClientData;
     procedure writePropsToFile;
-    procedure addRepo;
+    procedure GetOpsiScript;
     procedure executeLOSscript;
     procedure installOpsi;
     procedure NoGuiQuery;
@@ -298,33 +298,21 @@ type
     FileText.Free;
   end;
 
-  procedure TQuickInstall.AddRepo;
+  procedure TQuickInstall.GetOpsiScript;
   var
-    url: string;
-    ReleaseKeyRepo: TLinuxRepository;
+    PackageManagementShellCommand: string;
   begin
-    writeln(rsCreateRepo);
-    // first remove opsi.list to have a cleared opsi repository list
-    if FileExists('/etc/apt/sources.list.d/opsi.list') then
-      QuickInstallCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
-    // create repository (no password, user is root):
-    ReleaseKeyRepo := TLinuxRepository.Create('', False);
-
-    if Data.opsiVersion = 'Opsi 4.1' then
-      url := ReleaseKeyRepo.GetOpsiServerRepoDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr)
-    else
-      url := ReleaseKeyRepo.GetOpsiServerRepoDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind), Data.DistrInfo.Distr);
-
-    // !following lines need an existing LogDatei
-    if MatchStr(lowerCase(Data.DistrInfo.DistroName), ['opensuse', 'suse']) then
-    begin
-      writeln('OpenSUSE/SUSE: Add Repo');
-      ReleaseKeyRepo.AddSuseRepo(url, 'OpsiQuickInstallRepository');
-    end
-    else
-      ReleaseKeyRepo.Add(Data.DistrInfo.DistroName, url);
-
-    ReleaseKeyRepo.Free;
+    // Get opsi-script_*.tar.gz from download.opensuse.org and extract it to the directory of the binary
+    PackageManagementShellCommand :=
+      GetPackageManagementShellCommand(Data.DistrInfo.DistroName);
+    QuickInstallCommand.Run(PackageManagementShellCommand + 'update', Output);
+    QuickInstallCommand.Run(PackageManagementShellCommand + 'install wget', Output);
+    QuickInstallCommand.Run('wget -A opsi-script_*.tar.gz -r -l 1 ' +
+      'https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/testing/xUbuntu_22.04/'
+      + ' -nd -P ../', Output);
+    QuickInstallCommand.Run('rm ../robots.*', Output);
+    QuickInstallCommand.Run('tar -xvf ../opsi-script_*.tar.gz', Output);
+    QuickInstallCommand.Run('rm ../opsi-script_*.tar.gz', Output);
   end;
 
   // install opsi-script and execute l-opsi-server script
@@ -340,28 +328,13 @@ type
     FileText.SaveToFile(DirClientData + 'result.conf');
     FileText.Free;
 
-    // !following lines need an existing LogDatei
-    // if one installation failed, then opsi-script was already installed
-    if not one_installation_failed then
-    begin
-      QuickInstallCommand.Run(Data.DistrInfo.PackageManagementShellCommand +
-        'update', Output);
-      writeln(rsInstall + 'opsi-script...');
-      QuickInstallCommand.Run(Data.DistrInfo.PackageManagementShellCommand +
-        'install opsi-script', Output);
-    end;
-    //Output := InstallOpsiCommand.Run('opsi-script -silent -version');
-    //writeln(Output);
-    // remove the QuickInstall repo entry because it was only for installing opsi-script
-    if FileExists('/etc/apt/sources.list.d/opsi.list') then
-      QuickInstallCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
-
     writeln(rsInstall + name_current_los + '... ' + rsSomeMin);
     // "opsi-script -batch" for installation with gui window,
     // "opsi-script-nogui -batch" for without?
     // new: opsi-script -silent for nogui
-    QuickInstallCommand.Run('opsi-script -silent -batch ' + DirClientData +
-      'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log', Output);
+    QuickInstallCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -silent -batch ' +
+      DirClientData + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
+      Output);
   end;
 
   // install opsi-server
@@ -370,10 +343,9 @@ type
   var
     installationResult: string;
   begin
-    LogDatei.log('Entered InstallOpsi', LLdebug);
     writeln('');
     writeln(rsInstall + Data.opsiVersion + ':');
-    addRepo;
+    GetOpsiScript;
 
     // install opsi-server
     two_los_to_test := True;
@@ -416,6 +388,8 @@ type
       FileText := TStringList.Create;
       FileText.LoadFromFile(DirClientData + 'result.conf');
     end;
+
+    QuickInstallCommand.Run('rm -r BUILD/', Output);
 
     if FileText[0] = 'failed' then
     begin
