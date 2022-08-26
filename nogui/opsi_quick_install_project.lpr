@@ -6,10 +6,11 @@ uses
  {$IFDEF UNIX}
   {$IFDEF UseCThreads}
   cthreads,
-    {$ENDIF}
-    {$ENDIF}
+      {$ENDIF}
+      {$ENDIF}
   Classes,
   SysUtils,
+  StrUtils,
   CustApp,
   Process,
   GetText,
@@ -17,7 +18,7 @@ uses
   DistributionInfo,
   osRunCommandElevated,
   osfunclin,
-  osLinuxRepository,
+  LinuxRepository,
   oslog,
   osnetworkcalculator,
   opsi_quick_install_resourcestrings,
@@ -25,7 +26,8 @@ uses
   osnetutil,
   opsi_quick_install_nogui_query,
   OpsiPackageDownloader,
-  osfuncunix;
+  osfuncunix,
+  SupportedOpsiServerDistributions;
 
 type
   TQuickInstall = class(TCustomApplication)
@@ -41,7 +43,7 @@ type
     procedure SetDefaultValues;
     procedure defineDirClientData;
     procedure writePropsToFile;
-    procedure addRepo;
+    procedure GetOpsiScript;
     procedure executeLOSscript;
     procedure installOpsi;
     procedure NoGuiQuery;
@@ -201,7 +203,7 @@ type
     // try downloading latest l-opsi-server and set DirClientData for the latest version
     if two_los_to_test and DownloadOpsiPackage('l-opsi-server',
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
-      QuickInstallCommand, Data.DistrInfo) then
+      QuickInstallCommand, Data.DistrInfo.PackageManagementShellCommand) then
     begin
       // extract and compare version numbers of default and downloaded los
       if (FindFirst('../l-opsi-server_4.*', faAnyFile and faDirectory,
@@ -296,36 +298,21 @@ type
     FileText.Free;
   end;
 
-  procedure TQuickInstall.AddRepo;
+  procedure TQuickInstall.GetOpsiScript;
   var
-    url: string;
-    ReleaseKeyRepo: TLinuxRepository;
+    PackageManagementShellCommand: string;
   begin
-    writeln(rsCreateRepo);
-    // first remove opsi.list to have a cleared opsi repository list
-    if FileExists('/etc/apt/sources.list.d/opsi.list') then
-      QuickInstallCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
-    // create repository (no password, user is root):
-    ReleaseKeyRepo := TLinuxRepository.Create(Data.DistrInfo.Distr, '', False);
-    // set OpsiVersion and OpsiBranch afterwards using GetDefaultURL
-    if Data.opsiVersion = 'Opsi 4.1' then
-      ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind))
-    else
-      ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind));
-    // define repo url
-    url := Data.repo + Data.repoKind + '/' + Data.DistrInfo.DistrRepoUrlPart;
-
-    // !following lines need an existing LogDatei
-    if (Data.DistrInfo.DistroName = 'openSUSE') or
-      (Data.DistrInfo.DistroName = 'SUSE') then
-    begin
-      writeln('OpenSUSE/SUSE: Add Repo');
-      ReleaseKeyRepo.Add(url, 'OpsiQuickInstallRepositoryNew');
-    end
-    else
-      ReleaseKeyRepo.Add(url);
-
-    ReleaseKeyRepo.Free;
+    // Get opsi-script_*.tar.gz from download.opensuse.org and extract it to the directory of the binary
+    PackageManagementShellCommand :=
+      GetPackageManagementShellCommand(Data.DistrInfo.DistroName);
+    QuickInstallCommand.Run(PackageManagementShellCommand + 'update', Output);
+    QuickInstallCommand.Run(PackageManagementShellCommand + 'install wget', Output);
+    QuickInstallCommand.Run('wget -A opsi-script_*.tar.gz -r -l 1 ' +
+      'https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/testing/xUbuntu_22.04/'
+      + ' -nd -P ../', Output);
+    QuickInstallCommand.Run('rm ../robots.*', Output);
+    QuickInstallCommand.Run('tar -xvf ../opsi-script_*.tar.gz', Output);
+    QuickInstallCommand.Run('rm ../opsi-script_*.tar.gz', Output);
   end;
 
   // install opsi-script and execute l-opsi-server script
@@ -341,29 +328,13 @@ type
     FileText.SaveToFile(DirClientData + 'result.conf');
     FileText.Free;
 
-    Data.DistrInfo.SetPackageManagementShellCommand;
-    // !following lines need an existing LogDatei
-    // if one installation failed, then opsi-script was already installed
-    if not one_installation_failed then
-    begin
-      QuickInstallCommand.Run(Data.DistrInfo.PackageManagementShellCommand +
-        'update', Output);
-      writeln(rsInstall + 'opsi-script...');
-      QuickInstallCommand.Run(Data.DistrInfo.PackageManagementShellCommand +
-        'install opsi-script', Output);
-    end;
-    //Output := InstallOpsiCommand.Run('opsi-script -silent -version');
-    //writeln(Output);
-    // remove the QuickInstall repo entry because it was only for installing opsi-script
-    if FileExists('/etc/apt/sources.list.d/opsi.list') then
-      QuickInstallCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
-
     writeln(rsInstall + name_current_los + '... ' + rsSomeMin);
     // "opsi-script -batch" for installation with gui window,
     // "opsi-script-nogui -batch" for without?
     // new: opsi-script -silent for nogui
-    QuickInstallCommand.Run('opsi-script -silent -batch ' + DirClientData +
-      'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log', Output);
+    QuickInstallCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -silent -batch ' +
+      DirClientData + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
+      Output);
   end;
 
   // install opsi-server
@@ -372,10 +343,9 @@ type
   var
     installationResult: string;
   begin
-    LogDatei.log('Entered InstallOpsi', LLdebug);
     writeln('');
     writeln(rsInstall + Data.opsiVersion + ':');
-    addRepo;
+    GetOpsiScript;
 
     // install opsi-server
     two_los_to_test := True;
@@ -418,6 +388,8 @@ type
       FileText := TStringList.Create;
       FileText.LoadFromFile(DirClientData + 'result.conf');
     end;
+
+    QuickInstallCommand.Run('rm -r BUILD/', Output);
 
     if FileText[0] = 'failed' then
     begin
@@ -571,22 +543,12 @@ type
     begin
       if Data.DistrInfo.Distr = other then
       begin
-        writeln(rsNoSupport + #10 + Data.DistrInfo.Distribs);
+        writeln(rsNoSupport + #10 + SupportedDistributionsInfoString);
         FreeAndNil(LogDatei);
         FreeAndNil(Data);
         Halt(1);
       end;
     end;
-  end;
-
-  procedure InitializeDistributionInfo(QuickInstall: TQuickInstall);
-  begin
-    Data.DistrInfo := TDistributionInfo.Create(getLinuxDistroName,
-      getLinuxDistroRelease);
-    LogDatei.log(Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease,
-      LLessential);
-    Data.DistrInfo.SetDistrAndUrlPart;
-    CheckThatOqiSupportsDistribution(QuickInstall);
   end;
 
   procedure CheckFQDN;
@@ -632,7 +594,7 @@ begin
     writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
   end;
 
-  InitializeDistributionInfo(QuickInstall);
+  CheckThatOqiSupportsDistribution(QuickInstall);
   QuickInstall.Run;
 
   QuickInstall.Free;

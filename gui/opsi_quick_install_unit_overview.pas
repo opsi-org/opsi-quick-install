@@ -83,7 +83,7 @@ begin
 
     MemoOverview.Lines.Add('');
     // UCS password
-    if Data.DistrInfo.DistroName = 'Univention' then
+    if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
       MemoOverview.Lines.Add(rsUCSO + Data.ucsPassword);
     // Reboot
     MemoOverview.Lines.Add(rsRebootO + Data.reboot.OverviewEntry);

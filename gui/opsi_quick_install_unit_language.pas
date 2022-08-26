@@ -86,7 +86,7 @@ uses
   opsi_quick_install_unit_distr,
   opsi_quick_install_unit_query,
   opsi_quick_install_unit_query4,
-  oslog, osfunclin;
+  oslog;
 
 {$R *.lfm}
 
@@ -268,9 +268,6 @@ begin
 
   // initialize data structure to store the QuickInstall data for easier access
   Data := TQuickInstallData.Create;
-  // Following two lines take time and are therefore executed only once at the
-  // beginning of this program.
-  Data.DistrInfo.SetNameAndRelease(getLinuxDistroName, getLinuxDistroRelease);
 
   // text by resourcestrings
   LabelWelcome.Caption := rsWelcome;

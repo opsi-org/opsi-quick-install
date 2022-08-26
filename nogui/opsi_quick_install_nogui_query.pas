@@ -9,9 +9,10 @@ uses
   opsiquickinstall_data,
   opsi_quick_install_resourcestrings,
   DistributionInfo,
-  osLinuxRepository,
+  LinuxRepository,
   osnetworkcalculator,
-  osnetutil;
+  osnetutil,
+  SupportedOpsiServerDistributions;
 
 type
   TQuickInstallNoQuiQuery = class(TObject)
@@ -70,7 +71,7 @@ begin
   while not ((input = 'y') or (input = 'n') or (input = '')) do
   begin
     if input = '-h' then
-      writeln(rsInfoDistribution + #10 + Data.DistrInfo.Distribs)
+      writeln(rsInfoDistribution + #10 + SupportedDistributionsInfoString)
     else
       writeln('"', input, '"', rsNotValid);
     readln(input);
@@ -83,14 +84,14 @@ begin
     UserEditedDistroName := Copy(input, 1, Pos(' ', input) - 1);
     UserEditedDistroRelease :=
       Copy(input, Pos(' ', input) + 1, Length(input) - Pos(' ', input));
-    Data.DistrInfo.CorrectDistributionNameAndRelease(UserEditedDistroName,
+    Data.DistrInfo.CorrectDistribution(UserEditedDistroName,
       UserEditedDistroRelease);
   end;
-  Data.DistrInfo.SetDistrAndUrlPart;
+
   if Data.DistrInfo.Distr = other then
   begin
     writeln('');
-    writeln(rsNoSupport + #10 + Data.DistrInfo.Distribs);
+    writeln(rsNoSupport + #10 + SupportedDistributionsInfoString);
     Exit;
   end;
   QuerySetupType;
@@ -120,7 +121,7 @@ begin
       //QueryOpsiVersion
       QueryRepo
     else
-    if Data.DistrInfo.DistroName = 'Univention' then
+    if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
       QueryUCS
     else
       QueryDhcp;
@@ -332,7 +333,7 @@ begin
     else
       Data.repoKind := 'stable'; // cases input = 's', input = ''
 
-    if Data.DistrInfo.DistroName = 'Univention' then
+    if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
       QueryUCS
     else
       QueryReboot;
@@ -376,7 +377,7 @@ begin
 
   if input = '-b' then
   begin
-    if Data.DistrInfo.DistroName = 'Univention' then
+    if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
       QueryUCS
     else
       QueryRepoKind;
@@ -411,7 +412,7 @@ begin
       QueryReboot
     else
     begin
-      if Data.DistrInfo.DistroName = 'Univention' then
+      if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
         QueryUCS
       else
         QuerySetupType;
@@ -840,7 +841,7 @@ begin
     Inc(Counter);
   end;
   {Both}
-  if Data.DistrInfo.DistroName = 'Univention' then
+  if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
   begin
     writeln(Counter, ' ', rsUCSO, Data.ucsPassword);
     Inc(Counter);
@@ -902,7 +903,7 @@ begin
   end;
 
   {Both}
-  if Data.DistrInfo.DistroName = 'Univention' then
+  if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
     Result.Add('QueryUCS');
 
   {Custom installation}

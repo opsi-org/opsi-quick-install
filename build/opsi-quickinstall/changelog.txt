@@ -1,4 +1,13 @@
-opsi-quickinstall (4.2.0.7-21) experimental; urgency=low
+opsi-quickinstall (4.2.0.8-1) experimental; urgency=low
+  * new: AlmaLinux 9, Rocky 9 and RHEL 9 added to supported distributions
+  * change: Download opsi-script now directly from download.opensuse.org as tar.gz and delete it again after the installation
+    (the way before was to add a repository from download.opensuse.org and install opsi-script on the system)
+  * fix gui: Use root rights in all parts of OpsiPackageDownloader so that downloading the latest l-opsi-server works correctly
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri, 26 Aug 2022 12:30
+
+
+opsi-quickinstall (4.2.0.7-21) stable; urgency=low
   * fix reading hostname from command line and checking it for valid fqdn
     (delete line break at end of hostname)
   * use generalized OpsiPackageDownloader instead of LOpsiServerDownloader

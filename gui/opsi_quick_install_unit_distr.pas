@@ -6,7 +6,9 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  ExtCtrls, oslog;
+  ExtCtrls,
+  oslog,
+  SupportedOpsiServerDistributions;
 
 type
 
@@ -41,8 +43,7 @@ uses
   opsi_quick_install_resourcestrings,
   opsiquickinstall_data,
   opsi_quick_install_unit_language,
-  DistributionInfo,
-  osLinuxRepository;
+  DistributionInfo;
 
 {$R *.lfm}
 
@@ -67,7 +68,7 @@ begin
   // text by resourcestrings
   Caption := rsCapDistr;
   LabelDistr.Caption := rsDistr;
-  InfoDistribution.Hint := rsInfoDistribution + #10 + Data.DistrInfo.Distribs;
+  InfoDistribution.Hint := rsInfoDistribution + #10 + SupportedDistributionsInfoString;
   LabelCorrect.Caption := rsCorrect;
   BtnBack.Caption := rsBack;
   BtnNext.Caption := rsNext;
@@ -90,19 +91,14 @@ begin
     UserEditedDistroRelease :=
       Copy(EditDistr.Text, Pos(' ', EditDistr.Text) + 1, Length(EditDistr.Text) -
       Pos(' ', EditDistr.Text));
-    Data.DistrInfo.CorrectDistributionNameAndRelease(UserEditedDistroName,
+    Data.DistrInfo.CorrectDistribution(UserEditedDistroName,
       UserEditedDistroRelease);
   end;
 
-  // set Data.DistrInfo
-  LogDatei.Log(Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease,
-    LLessential);
-  Data.DistrInfo.SetDistrAndUrlPart;
-  //ShowMessage(DistrInfo.DistrUrlPart);
   // If the distribution is not supported, show an information and close QuickInstall:
   if Data.DistrInfo.Distr = other then
   begin
-    ShowMessage(rsNoSupport + #10 + #10 + Data.DistrInfo.Distribs);
+    ShowMessage(rsNoSupport + #10 + #10 + SupportedDistributionsInfoString);
     FreeAndNil(LogDatei);
     FreeAndNil(Data);
     Halt(1);

@@ -141,7 +141,13 @@
     </Linking>
     <Other>
       <CustomOptions Value="-dSYNAPSE
--dGUI"/>
+-dGUI
+-dTARGETOPSISERVER"/>
+      <OtherDefines Count="3">
+        <Define0 Value="SYNAPSE"/>
+        <Define1 Value="GUI"/>
+        <Define2 Value="TARGETOPSISERVER"/>
+      </OtherDefines>
     </Other>
   </CompilerOptions>
   <Debugging>

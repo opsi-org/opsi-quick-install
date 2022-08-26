@@ -5,7 +5,7 @@ unit opsi_quick_install_unit_password;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls, StrUtils,
   MaskEdit, LCLType, cthreads, Process,
   osRunCommandElevated,
   osLog,
@@ -59,7 +59,7 @@ type
     procedure ShowMessageOnForm;
     procedure defineDirClientData;
     procedure writePropsToFile;
-    procedure addRepo;
+    procedure GetOpsiScript;
     procedure executeLOSscript;
     procedure installOpsi;
   protected
@@ -80,7 +80,7 @@ uses
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_overview,
   opsi_quick_install_unit_wait,
-  osLinuxRepository,
+  LinuxRepository,
   DistributionInfo;
 
 {$R *.lfm}
@@ -119,7 +119,7 @@ begin
   // try downloading latest l-opsi-server and set DirClientData for the latest version
   if two_los_to_test and DownloadOpsiPackage('l-opsi-server',
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
-      FInstallRunCommand, Data.DistrInfo) then
+      FInstallRunCommand, Data.DistrInfo.PackageManagementShellCommand) then
   begin
     // extract and compare version numbers of default and downloaded los
     if (FindFirst('../l-opsi-server_4.*', faAnyFile and faDirectory,
@@ -211,34 +211,21 @@ begin
   FileText.SaveToFile(DirClientData + 'properties.conf');
 end;
 
-procedure TInstallOpsiThread.addRepo;
+procedure TInstallOpsiThread.GetOpsiScript;
 var
-  url: string;
-  ReleaseKeyRepo: TLinuxRepository;
+  PackageManagementShellCommand: string;
 begin
-  message := rsCreateRepo;
-  Synchronize(@ShowMessageOnForm);
-  // first remove opsi.list to have a cleared opsi repository list
-  if FileExists('/etc/apt/sources.list.d/opsi.list') then
-    FInstallRunCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
-  // create repository:
-  ReleaseKeyRepo := TLinuxRepository.Create(Data.DistrInfo.Distr,
-    Password.EditPassword.Text, Password.RadioBtnSudo.Checked);
-  // Set OpsiVersion and OpsiBranch afterwards using GetDefaultURL
-  if Data.opsiVersion = 'Opsi 4.1' then
-    url := ReleaseKeyRepo.GetDefaultURL(Opsi41, stringToOpsiBranch(Data.repoKind))
-  else
-    url := ReleaseKeyRepo.GetDefaultURL(Opsi42, stringToOpsiBranch(Data.repoKind));
-
-  // !following lines need an existing LogDatei
-  if (Data.DistrInfo.DistroName = 'openSUSE') or (Data.DistrInfo.DistroName = 'SUSE') then
-  begin
-    ReleaseKeyRepo.Add(url, 'OpsiQuickInstallRepositoryNew');
-  end
-  else
-    ReleaseKeyRepo.Add(url);
-
-  ReleaseKeyRepo.Free;
+  // Get opsi-script_*.tar.gz from download.opensuse.org and extract it to the directory of the binary
+    PackageManagementShellCommand :=
+      GetPackageManagementShellCommand(Data.DistrInfo.DistroName);
+    FInstallRunCommand.Run(PackageManagementShellCommand + 'update', Output);
+    FInstallRunCommand.Run(PackageManagementShellCommand + 'install wget', Output);
+    FInstallRunCommand.Run('wget -A opsi-script_*.tar.gz -r -l 1 ' +
+      'https://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/testing/xUbuntu_22.04/'
+      + ' -nd -P ../', Output);
+    FInstallRunCommand.Run('rm ../robots.*', Output);
+    FInstallRunCommand.Run('tar -xvf ../opsi-script_*.tar.gz', Output);
+    FInstallRunCommand.Run('rm ../opsi-script_*.tar.gz', Output);
 end;
 
 procedure TInstallOpsiThread.executeLOSscript;
@@ -254,28 +241,15 @@ begin
   FInstallRunCommand.Run('chown -c $USER ' + DirClientData + 'result.conf', Output);
   FileText.SaveToFile(DirClientData + 'result.conf');
 
-  // if one installation failed, then opsi-script was already installed
-  if not one_installation_failed then
-  begin
-    FInstallRunCommand.Run(FPackageManagementShellCommand + 'update', Output);
-    message := rsInstall + 'opsi-script...';
-    Synchronize(@ShowMessageOnForm);
-    FInstallRunCommand.Run(FPackageManagementShellCommand + 'install opsi-script', Output);
-  end;
-  // remove the QuickInstall repo entry because it was only for installing opsi-script
-  if FileExists('/etc/apt/sources.list.d/opsi.list') then
-    FInstallRunCommand.Run('rm /etc/apt/sources.list.d/opsi.list', Output);
-
-  {message := rsInstall + name_current_los + '... ' + rsSomeMin;
-  Synchronize(@ShowMessageOnForm);}
-  FInstallRunCommand.Run('opsi-script -batch ' + DirClientData +
-    'setup.opsiscript  /var/log/opsi-quick-install-l-opsi-server.log', Output);
+  FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -silent -batch ' +
+      DirClientData + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
+      Output);
 end;
 
 // install opsi server with thread (only the time consuming parts of the installation)
 procedure TInstallOpsiThread.installOpsi;
 begin
-  Synchronize(@addRepo);
+  GetOpsiScript;
 
   // install opsi-server
   two_los_to_test := True;
@@ -302,6 +276,8 @@ begin
     FileText.LoadFromFile(DirClientData + 'result.conf');
   end;
 
+  FInstallRunCommand.Run('rm -r BUILD/', Output);
+
   if FileText[0] = 'failed' then
   begin
     message := rsInstallation + rsFailed + '.';
@@ -318,7 +294,7 @@ end;
 
 procedure TInstallOpsiThread.Execute;
 begin
-  // sleep to ensure that TWait is shown before addRepo is executed and blocks TWait
+  // sleep to ensure that TWait is shown before GetOpsiScript is executed and blocks TWait
   Sleep(100);
   FileText := TStringList.Create;
   one_installation_failed := False;
@@ -398,7 +374,6 @@ begin
 
   btnFinishClicked := True;
   // start thread for opsi server installation while showing TWait
-  Data.DistrInfo.SetPackageManagementShellCommand;
   InstallOpsiThread := TInstallOpsiThread.Create(EditPassword.Text,
     RadioBtnSudo.Checked, Data.DistrInfo.PackageManagementShellCommand);
   with InstallOpsiThread do
