@@ -38,7 +38,7 @@ resourcestring
   rsOverview = 'Overview';
   rsFinish = ' finish ';
   rsInstallation = 'Installation ';
-  rsTryOlderLOS = 'Try older version of l-opsi-server';
+  rsTryOlderVersion = 'Try older version of l-opsi-server';
   rsInstallationOf = 'Installation of ';
   rsFailed = 'failed';
   rsSuccess = 'successful';
@@ -46,8 +46,9 @@ resourcestring
     'Opsi-QuickInstall Warning:' + #10 +
     'We could not find a valid local DNS hostname on this computer.' +
     ' This can lead to problems during the installation! Please see' +
-    #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' + #10 +
-    'quickinstall-manual.html#opsi-quickinstall-prep' + #10 + 'for more information.';
+    #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' +
+    #10 + 'quickinstall-manual.html#opsi-quickinstall-prep' + #10 +
+    'for more information.';
 
   // QuickInstall:
   rsCapDistr = 'Distribution';
@@ -171,6 +172,9 @@ resourcestring
   rsPassword = 'Password';
   rsShowPassword = 'Show password';
   rsWait = 'Please wait for the installation to start...';
+  rsDownloadLatestLOpsiServer =
+    'Downloading latest l-opsi-server...';
+
   rsLog = 'You can find the log files here:';
   rsWrongPassword = 'Authentication failed. Please check your password!';
 

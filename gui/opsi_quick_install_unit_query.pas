@@ -6,16 +6,13 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls;
+  StdCtrls,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions;
 
 type
 
-  { TQuery }
-
-  TQuery = class(TForm)
-    BackgrImage: TImage;
-    BtnNext: TButton;
-    BtnBack: TButton;
+  TQuery = class(TOpsiLinuxInstallerQueryForm)
     EditDefaultRepoNoCache: TEdit;
     EditDefaultRepo: TEdit;
     EditProxy: TEdit;
@@ -40,13 +37,11 @@ type
     RadioBtnMyProxy: TRadioButton;
     RadioBtnOpsi41: TRadioButton;
     RadioBtnOpsi42: TRadioButton;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
     procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     procedure RadioBtnOpsi41Change(Sender: TObject);
-  private
-  public
   end;
 
 var
@@ -101,15 +96,14 @@ end;
 
 procedure TQuery.FormActivate(Sender: TObject);
 begin
-  // bring all panels to the same position (QuickInstall.panelLeft)
-  SetBasics(self);
+  inherited FormActivate(Sender);
 
   // default opsi version is 4.2
   // set default repo depending on default opsi version
   if self.RadioBtnOpsi41.Checked then
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi41
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi41
   else
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi42;
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi42;
   // same repo for no cache proxy
   EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
 
@@ -141,12 +135,12 @@ begin
   // when opsi version changes, adjust default repos
   if RadioBtnOpsi41.Checked then
   begin
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi41;
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi41;
     EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
   end
   else
   begin
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi42;
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi42;
     EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
   end;
 end;

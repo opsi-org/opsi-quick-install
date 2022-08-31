@@ -8,8 +8,8 @@ object Query: TQuery
   ClientWidth = 730
   OnActivate = FormActivate
   OnClose = FormClose
-  LCLVersion = '2.2.0.1'
-  object BackgrImage: TImage
+  LCLVersion = '2.2.0.4'
+  object BackgroundImage: TImage
     Left = 0
     Height = 450
     Top = 0
@@ -20,9 +20,9 @@ object Query: TQuery
   end
   object BtnNext: TButton
     Left = 664
-    Height = 25
+    Height = 33
     Top = 416
-    Width = 51
+    Width = 56
     AutoSize = True
     Caption = ' next > '
     OnClick = BtnNextClick
@@ -31,9 +31,9 @@ object Query: TQuery
   end
   object BtnBack: TButton
     Left = 16
-    Height = 25
+    Height = 33
     Top = 416
-    Width = 51
+    Width = 57
     AutoSize = True
     Caption = ' < back '
     OnClick = BtnBackClick
@@ -158,7 +158,7 @@ object Query: TQuery
       AnchorSideTop.Control = LabelRepo
       AnchorSideTop.Side = asrBottom
       Left = 24
-      Height = 25
+      Height = 30
       Top = 19
       Width = 360
       ParentFont = False
@@ -172,8 +172,8 @@ object Query: TQuery
       AnchorSideTop.Control = EditDefaultRepo
       AnchorSideTop.Side = asrBottom
       Left = 75
-      Height = 25
-      Top = 44
+      Height = 30
+      Top = 49
       Width = 309
       BorderSpacing.Left = 10
       ParentFont = False
@@ -184,7 +184,7 @@ object Query: TQuery
       AnchorSideTop.Side = asrBottom
       Left = 0
       Height = 21
-      Top = 44
+      Top = 49
       Width = 65
       Caption = 'Other:'
       ParentFont = False
@@ -242,7 +242,7 @@ object Query: TQuery
       AnchorSideTop.Control = RadioBtnMyProxy
       AnchorSideTop.Side = asrBottom
       Left = 75
-      Height = 25
+      Height = 30
       Top = 61
       Width = 309
       BorderSpacing.Left = 10
@@ -301,7 +301,7 @@ object Query: TQuery
       AnchorSideTop.Control = LabelNoCache
       AnchorSideTop.Side = asrBottom
       Left = 24
-      Height = 25
+      Height = 30
       Top = 36
       Width = 360
       ParentFont = False
@@ -314,7 +314,7 @@ object Query: TQuery
       AnchorSideTop.Side = asrBottom
       Left = 0
       Height = 21
-      Top = 61
+      Top = 66
       Width = 65
       Caption = 'Other:'
       ParentFont = False
@@ -326,8 +326,8 @@ object Query: TQuery
       AnchorSideTop.Control = EditDefaultRepoNoCache
       AnchorSideTop.Side = asrBottom
       Left = 75
-      Height = 25
-      Top = 61
+      Height = 30
+      Top = 66
       Width = 309
       BorderSpacing.Left = 10
       ParentFont = False

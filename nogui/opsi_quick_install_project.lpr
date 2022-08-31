@@ -368,7 +368,7 @@ type
     if (FileText[0] = 'failed') and two_los_to_test then
     begin
       // if installation of latest l-opsi-server failed, try the older version:
-      writeln(rsInstallation + rsFailed + '. ' + rsTryOlderLOS + '.');
+      writeln(rsInstallation + rsFailed + '. ' + rsTryOlderVersion + '.');
       Sleep(1000);
       LogDatei.log('Installation failed: ' + name_current_los, LLessential);
       LogDatei.log('Try older version of l-opsi-server:', LLnotice);

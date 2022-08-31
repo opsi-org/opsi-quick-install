@@ -6,14 +6,15 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  MaskEdit;
+  MaskEdit,
+  OpsiLinuxInstaller_BaseForm,
+  FormAppearanceFunctions;
 
 type
 
   { TOverview }
 
-  TOverview = class(TForm)
-    BackgrImage: TImage;
+  TOverview = class(TOpsiLinuxInstallerBaseForm)
     BtnBack: TButton;
     BtnFinish: TButton;
     LabelFinish: TLabel;
@@ -43,18 +44,16 @@ uses
 
 {$R *.lfm}
 
-{ TOverview }
-
 procedure TOverview.BtnFinishClick(Sender: TObject);
 begin
-  Overview.Enabled:=False;
-  Password.Visible:=True;
+  Overview.Enabled := False;
+  Password.Visible := True;
 end;
 
 procedure TOverview.FormActivate(Sender: TObject);
 begin
-  //ShowMessage(IntToStr(BtnFinish.Width));
-  SetBasics(self);
+  inherited FormActivate(Sender);
+
   MemoOverview.Left := QuickInstall.panelLeft;
   PanelFinish.Width := 400;
 

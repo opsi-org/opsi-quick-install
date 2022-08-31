@@ -8,72 +8,39 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   StdCtrls, LCLtranslator, Buttons, process,
   osnetutil,
-  osfuncunix;
+  osfuncunix,
+  OpsiLinuxInstaller_WelcomeForm,
+  FormAppearanceFunctions,
+  LogFileFunctions,
+  oslog;
 
 type
 
-  { TQuickInstall }
-
-  TQuickInstall = class(TForm)
-    BackgrImage: TImage;
-    BtnBack: TButton;
-    BtnFinish: TButton;
-    BtnNext: TButton;
-    BtnOverview: TButton;
-    ComboBoxLanguages: TComboBox;
+  TQuickInstall = class(TOpsiLinuxInstallerWelcomeForm)
     LabelSetup: TLabel;
-    WelcomePanel: TPanel;
     QuickInstallPanel: TPanel;
     RadioBtnDefault: TRadioButton;
     RadioBtnCustom: TRadioButton;
-    LabelCarryOut: TLabel;
-    LabelWelcome: TLabel;
-    LabelSelLanguage: TLabel;
-    procedure BtnNextClick(Sender: TObject);
+    procedure RemoveFuzziesFromLocaleFiles;
+    procedure SetDefaultLanguage(const Languages: TStringList);
+    procedure FillLanguageSelection;
+    procedure GetBtnFinishWidth;
+    procedure BtnNextClick(Sender: TObject); override;
     procedure ComboBoxLanguagesChange(Sender: TObject);
     procedure FormActivate(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-  private
+    procedure FormCreate(Sender: TObject); override;
   public
   const
-    // same width for all panels
-    panelWidth = 460;
-    // same size for all info images (squares)
-    infoSize = 22;
-    // same background image for all forms
-    BackgrImageFileName = 'opsi.png';
-    // same image for all infos
-    InfoImageFileName = 'dialog-information.png';
-    // base urls for opsi 4.1 and 4.2
-    baseURLOpsi41 =
-      'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.1:/';
-    baseURLOpsi42 =
-      'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/';
-    // more constants in FormCreate below
+    LogFileName = 'opsi_quickinstall.log';
   var
-    // same position for all panels
-    panelLeft: integer;
     // same position for all buttons
-    BtnNextWidth, BtnOverviewWidth, BtnFinishWidth: integer;
-    // name for log file of QuickInstall
-    logFileName: string;
+    BtnNextWidth, BtnFinishWidth: integer;
     // Set position for BtnNext on first form !manually! for right position
     // after language change.
     // needs to be done for each language!
     procedure SetBtnWidth(Language: string);
-    // show hint on click of InfoImage
-    // (used with '@' and therefore must be defined in TQuickInstall)
-    procedure ShowHintOnClick(Sender: TObject);
   end;
 
-
-// For constant layout (and less code):
-// switch to the next form (set position of new form and adjust visibilities)
-procedure showForm(newForm: TForm; Sender: TForm);
-// make InfoImage settings
-procedure setInfoBasics(InfoImage: TImage);
-// make Panel settings and load background and info images
-procedure SetBasics(Sender: TForm);
 
 var
   QuickInstall: TQuickInstall;
@@ -85,92 +52,28 @@ uses
   opsiquickinstall_data,
   opsi_quick_install_unit_distr,
   opsi_quick_install_unit_query,
-  opsi_quick_install_unit_query4,
-  oslog;
+  opsi_quick_install_unit_query4;
 
 {$R *.lfm}
 
-// For constant layout (and less code):
-// switch to the next form (set position of new form and adjust visibilities)
-procedure showForm(newForm: TForm; Sender: TForm);
-begin
-  newForm.Visible := True;
-
-  newForm.Height := Sender.Height;
-  newForm.Left := Sender.Left;
-  newForm.Top := Sender.Top;
-  newForm.Width := Sender.Width;
-
-  Sender.Visible := False;
-end;
-// make InfoImage settings
-procedure setInfoBasics(InfoImage: TImage);
-begin
-  InfoImage.Width := QuickInstall.infoSize;
-  InfoImage.Height := QuickInstall.infoSize;
-  // set info image
-  InfoImage.Picture.LoadFromFile(
-    ExtractFilePath(ParamStr(0)) + QuickInstall.InfoImageFileName);
-  InfoImage.BorderSpacing.Left := 5;
-  // Show info hints also on click of image
-  InfoImage.OnClick := @QuickInstall.ShowHintOnClick;
-end;
-// make Panel settings and load background and info images
-procedure SetBasics(Sender: TForm);
+procedure TQuickInstall.RemoveFuzziesFromLocaleFiles;
 var
-  compIndex: integer;
-  PanelBigLine, PanelSmallLine: TPanel;
+  removeFuzzys: string;
 begin
-  for compIndex := 0 to Sender.ComponentCount - 1 do
-  begin
-    if (Sender.Components[compIndex].ClassName = 'TPanel') then
-    begin
-      (Sender.Components[compIndex] as TPanel).Left := QuickInstall.panelLeft;
-      (Sender.Components[compIndex] as TPanel).Width := QuickInstall.panelWidth;
-      (Sender.Components[compIndex] as TPanel).Color := clForm;
-    end
-    else
-    if (Sender.Components[compIndex].ClassName = 'TImage') and
-      // load info icon
-      (Pos('Info', Sender.Components[compIndex].Name) = 1) then
-      setInfoBasics(Sender.Components[compIndex] as TImage)
-    else if (Sender.Components[compIndex].Name = 'BackgrImage') then
-    begin
-      // set background image
-      (Sender.Components[compIndex] as TImage).Picture.LoadFromFile(
-        ExtractFilePath(ParamStr(0)) + QuickInstall.BackgrImageFileName);
-      (Sender.Components[compIndex] as TImage).BorderSpacing.Top := 10;
-    end;
-  end;
-
-  // big decoration line at bottom in opsi-blue
-  PanelBigLine := TPanel.Create(Sender);
-  PanelBigLine.Parent := Sender;
-  PanelBigLine.ParentColor := False;
-  PanelBigLine.BevelOuter := bvNone;
-  PanelBigLine.Height := 5;
-  PanelBigLine.Top := Sender.Height - PanelBigLine.Height;
-  PanelBigLine.Left := 0;
-  PanelBigLine.Width := Sender.Width;
-  // Opsi-Blau: #006599
-  PanelBigLine.Color := TColor($00996500);
-  PanelBigLine.BevelColor := TColor($00996500);
-
-  // thin decoration line above the big one in opsi-red
-  PanelSmallLine := TPanel.Create(Sender);
-  PanelSmallLine.Parent := Sender;
-  PanelSmallLine.ParentColor := False;
-  PanelSmallLine.BevelOuter := bvNone;
-  PanelSmallLine.Height := 3;
-  PanelSmallLine.Top := Sender.Height - 11;
-  PanelSmallLine.Left := 0;
-  PanelSmallLine.Width := Sender.Width;
-  // Opsi-Rot: #B42554
-  PanelSmallLine.Color := TColor($005425B4);
-  PanelSmallLine.BevelColor := TColor($005425B4);
+  // from all po files remove all fuzzys that might have been introduced by the nogui version
+  RunCommand('/bin/sh', ['-c',
+    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.de.po ../gui/locale/opsi_quick_install_project.de.po'],
+    removeFuzzys);
+  RunCommand('/bin/sh', ['-c',
+    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.en.po ../gui/locale/opsi_quick_install_project.en.po'],
+    removeFuzzys);
+  RunCommand('/bin/sh', ['-c',
+    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.es.po ../gui/locale/opsi_quick_install_project.es.po'],
+    removeFuzzys);
+  RunCommand('/bin/sh', ['-c',
+    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.fr.po ../gui/locale/opsi_quick_install_project.fr.po'],
+    removeFuzzys);
 end;
-
-{ TQuickInstall }
 
 // Set position for BtnNext on first form !manually! for right position after
 // language change.
@@ -190,41 +93,35 @@ begin
   //BtnNext.Left := Width - BtnNext.Width - BtnBack.Left; doesn't help either
   BtnNext.Left := Width - BtnBack.Left - BtnNextWidth;
 end;
-// show hint on click of InfoImage
-// (used with '@' and therefore must be defined in TQuickInstall)
-procedure TQuickInstall.ShowHintOnClick(Sender: TObject);
+
+procedure TQuickInstall.SetDefaultLanguage(const Languages: TStringList);
 begin
-  Application.ActivateHint(TWinControl(Sender).ClientToScreen(Point(1, 1)), True);
+  // let the combo box show the system language at the beginning
+  ComboBoxLanguages.ItemIndex := Languages.IndexOf(GetDefaultLang);
+  // now set position of BtnNext for the default language
+  SetBtnWidth(GetDefaultLang);
+end;
+
+procedure TQuickInstall.FillLanguageSelection;
+var
+  Languages: TStringList;
+begin
+  ComboBoxLanguages.Left := Round((WelcomePanel.Width - ComboBoxLanguages.Width) / 2);
+  Languages := TStringList.Create;
+  Languages.Add('de');
+  Languages.Add('en');
+  Languages.Add('es');
+  Languages.Add('fr');
+  SetDefaultLanguage(Languages);
 end;
 
 procedure TQuickInstall.FormCreate(Sender: TObject);
-var
-  Languages: TStringList;
-  removeFuzzys: string;
 begin
-  // from all po files remove all fuzzys that might have been introduced by the nogui version
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.de.po ../gui/locale/opsi_quick_install_project.de.po'],
-    removeFuzzys);
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.en.po ../gui/locale/opsi_quick_install_project.en.po'],
-    removeFuzzys);
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.es.po ../gui/locale/opsi_quick_install_project.es.po'],
-    removeFuzzys);
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.fr.po ../gui/locale/opsi_quick_install_project.fr.po'],
-    removeFuzzys);
+  inherited FormCreate(Sender);
+  CenterFormOnScreen(Sender as TForm);
 
-  // set constant form size
-  Height := 450;
-  //Width := 730;
-  Width := 675;
-  // center form nicely on screen
-  Left := Round((Screen.Width - Width) / 2);
-  Top := Round((Screen.Height - Height) / 2);
-  // position Panels with twice as much space to the left than to the right of the form
-  panelLeft := Round((Width - panelWidth) * 2 / 3);
+  RemoveFuzziesFromLocaleFiles;
+
   // set constant button positions:
   BtnBack.Left := 20;
   //note that BtnNext.Width = width for english caption
@@ -233,9 +130,6 @@ begin
   BtnBack.Top := Height - 50;
   BtnNext.Top := BtnBack.Top;
 
-  SetBasics(self);
-
-  ComboBoxLanguages.Left := Round((WelcomePanel.Width - ComboBoxLanguages.Width) / 2);
   with ComboBoxLanguages.Items do
   begin
     Add('Deutsch');
@@ -243,28 +137,12 @@ begin
     Add('Español');
     Add('Français');
   end;
-  Languages := TStringList.Create;
-  Languages.Add('de');
-  Languages.Add('en');
-  Languages.Add('es');
-  Languages.Add('fr');
-  // let the combo box show the system language at the beginning
-  ComboBoxLanguages.ItemIndex := Languages.IndexOf(GetDefaultLang);
-  // now set position of BtnNext for the default language
-  SetBtnWidth(GetDefaultLang);
+  FillLanguageSelection;
 
-  // initialize log file:
-  logFileName := 'opsi_quickinstall.log';
-  LogDatei := TLogInfo.Create;
-  LogDatei.CreateTheLogfile(logFileName);
-  LogDatei.log('Log file created', LLdebug);
-  SetCurrentDir(ExtractFilePath(ParamStr(0)));
-  LogDatei.log('Working directory: ' + GetCurrentDir, LLessential);
-  LogDatei.log('', LLessential);
+  InitializeLogFile(LogFileName);
+  LogDatei.log('', LLnothing);
   LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
-  LogDatei.log('', LLessential);
-  // log file will be saved in /tmp/opsi_quickinstall.log
-  logFileName := LogDatei.StandardMainLogPath + logFileName;
+  LogDatei.log('', LLnothing);
 
   // initialize data structure to store the QuickInstall data for easier access
   Data := TQuickInstallData.Create;
@@ -279,6 +157,23 @@ begin
   BtnNext.Caption := rsNext;
 end;
 
+procedure TQuickInstall.GetBtnFinishWidth;
+begin
+  // Get width of BtnFinish for TPassword
+  // through invisible buttons in WelcomeForm:
+  // This is necessary because the positioning of the buttons does not work
+  // properly on FormActivate in the respective forms (same problem as
+  // here in TQuickInstall with BtnNext).
+  // Btn.Caption:=rsString and Btn.Width only work properly when Btn.Visible=True
+  BtnFinish.Visible := True;
+  BtnFinish.Caption := rsFinish;
+  BtnFinishWidth := BtnFinish.Width;
+  BtnFinish.Visible := False;
+
+  // Get width of BtnNext here once for procedure SetBtnWidth
+  //ShowMessage(BtnNext.Width.ToString);
+end;
+
 procedure TQuickInstall.BtnNextClick(Sender: TObject);
 begin
   // store in Data whether we are in custom installation or not
@@ -290,22 +185,7 @@ begin
   // before going on, let the user check the distribution
   Distribution.ShowModal;
 
-  // Get width of BtnOverview(TQuery6) and BtnFinish(TOverview, TPassword)
-  // through invisible buttons in TQuickInstall:
-  // This is necessary because the positioning of the buttons does not work
-  // properly on FormActivate in the respective forms (same problem as
-  // here in TQuickInstall with BtnNext).
-  // Btn.Caption:=rsString and Btn.Width only work properly when Btn.Visible=True
-  BtnOverview.Visible := True;
-  BtnFinish.Visible := True;
-  BtnOverview.Caption := rsOverviewBtn;
-  BtnFinish.Caption := rsFinish;
-  BtnOverviewWidth := BtnOverview.Width;
-  BtnFinishWidth := BtnFinish.Width;
-  BtnOverview.Visible := False;
-  BtnFinish.Visible := False;
-  // Get width of BtnNext here once for procedure SetBtnWidth
-  //ShowMessage(BtnNext.Width.ToString);
+  GetBtnFinishWidth;
 
   // Distribution.GoOn tells TQuickInstall whether in TDistribution the next or
   // the back button was clicked, i.e. whether to go on to the next form or to
@@ -366,6 +246,7 @@ end;
 
 procedure TQuickInstall.FormActivate(Sender: TObject);
 begin
+  inherited FormActivate(Sender);
   if not isValidFQDN(GetFQDNUnix) then
     ShowMessage(rsInvalidFqdnWarning);
 end;

@@ -9,5 +9,5 @@
 {"hash":429231,"name":"tquery6.editnameip.text","sourcebytes":[97,117,116,111],"value":"auto"},
 {"hash":97963033,"name":"tquery6.labelnumberip.caption","sourcebytes":[83,101,116,32,97,32,100,105,102,102,101,114,101,110,116,32,73,80,32,110,117,109,98,101,114,32,40,39,97,117,116,111,39,32,61,32,117,115,101,32,115,116,97,110,100,97,114,100,41],"value":"Set a different IP number ('auto' = use standard)"},
 {"hash":429231,"name":"tquery6.editnumberip.text","sourcebytes":[97,117,116,111],"value":"auto"},
-{"hash":211716688,"name":"tquery6.btnoverview.caption","sourcebytes":[32,111,118,101,114,118,105,101,119,32],"value":" overview "}
+{"hash":211716688,"name":"tquery6.btnnext.caption","sourcebytes":[32,111,118,101,114,118,105,101,119,32],"value":" overview "}
 ]}

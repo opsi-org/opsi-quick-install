@@ -143,6 +143,10 @@ msgctxt "opsi_quick_install_resourcestrings.rsdomainother"
 msgid "Other:"
 msgstr "Otro:"
 
+#: opsi_quick_install_resourcestrings.rsdownloadlatestlopsiserver
+msgid "Downloading latest l-opsi-server..."
+msgstr "Descargando el último l-opsi-server..."
+
 #: opsi_quick_install_resourcestrings.rsfailed
 msgid "failed"
 msgstr "fallida"
@@ -493,7 +497,7 @@ msgstr "Standard"
 #: opsi_quick_install_resourcestrings.rsstartinstallation
 msgctxt "opsi_quick_install_resourcestrings.rsstartinstallation"
 msgid "Finally click \"finish\" to start the installation of opsi-server."
-msgstr "Finalmente presione \"finalizar\" para comenzar la instalación del servidor opsi."
+msgstr "Finalmente presione \"terminar\" para comenzar la instalación del servidor opsi."
 
 #: opsi_quick_install_resourcestrings.rssuccess
 msgid "successful"
@@ -513,7 +517,8 @@ msgctxt "opsi_quick_install_resourcestrings.rstftprooto"
 msgid "TFTPROOT symlink points to: "
 msgstr "TFTROOT symlink hace referencia a:"
 
-#: opsi_quick_install_resourcestrings.rstryolderlos
+#: opsi_quick_install_resourcestrings.rstryolderversion
+msgctxt "opsi_quick_install_resourcestrings.rstryolderversion"
 msgid "Try older version of l-opsi-server"
 msgstr "Prueba la versión anterior de l-opsi-server"
 
@@ -1011,9 +1016,9 @@ msgctxt "tquery6.btnback.caption"
 msgid " < back "
 msgstr " < volver "
 
-#: tquery6.btnoverview.caption
+#: tquery6.btnnext.caption
 #, fuzzy
-msgctxt "tquery6.btnoverview.caption"
+msgctxt "tquery6.btnnext.caption"
 msgid " overview "
 msgstr " visión general "
 
@@ -1071,10 +1076,6 @@ msgstr ""
 msgctxt "tquickinstall.btnnext.caption"
 msgid " next > "
 msgstr " siguiente > "
-
-#: tquickinstall.btnoverview.caption
-msgid "BtnOverview"
-msgstr ""
 
 #: tquickinstall.caption
 msgid "Opsi Quick Install"
