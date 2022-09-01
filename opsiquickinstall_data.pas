@@ -8,7 +8,8 @@ uses
   Classes, SysUtils,
   DistributionInfo,
   osfunclin,
-  oslog;
+  oslog,
+  opsi_quick_install_resourcestrings;
 
 type
 
@@ -93,14 +94,14 @@ begin
 
   backend := 'file';
   copyMod := TSplitData.Create;
-  copyMod.SetEntries('', 'false');
+  copyMod.SetEntries(rsNo, 'false');
   repoKind := 'stable';
 
   ucsPassword := '';
   reboot := TSplitData.Create;
-  reboot.SetEntries('', 'false');
+  reboot.SetEntries(rsNo, 'false');
   dhcp := TSplitData.Create;
-  dhcp.SetEntries('', 'false');
+  dhcp.SetEntries(rsNo, 'false');
   symlink := 'default.nomenu';
 
   netmask := '255.255.0.0';

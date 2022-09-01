@@ -40,7 +40,6 @@ type
     name_los_default, name_los_downloaded, name_current_los: string;
     version_los_default, version_los_downloaded: string;
   const
-    procedure SetDefaultValues;
     procedure defineDirClientData;
     procedure writePropsToFile;
     procedure GetOpsiScript;
@@ -161,34 +160,6 @@ type
     writeln('-n [-nogui]       : Start a setup program, in which you can set the values for the installation seperately');
   end;
 
-  // set default values for all variables that are required for the installation
-  procedure TQuickInstall.SetDefaultValues;
-  begin
-    LogDatei.log('Set default values', LLdebug);
-    Data.opsiVersion := 'Opsi 4.2';
-    if Data.opsiVersion = 'Opsi 4.1' then
-      Data.repo := Data.baseRepoUrlOpsi41
-    else
-      Data.repo := Data.baseRepoUrlOpsi42;
-    Data.proxy := '';
-    Data.repoNoCache := Data.repo;
-    Data.backend := 'file';
-    Data.copyMod.SetEntries(rsNo, 'false');
-    Data.repoKind := 'stable';
-    Data.ucsPassword := '';
-    Data.reboot.SetEntries(rsNo, 'false');
-    Data.dhcp.SetEntries(rsNo, 'false');
-    Data.symlink := 'default.nomenu';
-    Data.netmask := '255.255.0.0';
-    Data.networkAddress := '192.168.0.0';
-    Data.domain := 'uib.local';
-    Data.nameserver := '192.168.1.245';
-    Data.gateway := '192.168.1.245';
-    Data.adminName := 'adminuser';
-    Data.adminPassword := 'linux123';
-    Data.ipName := 'auto';
-    Data.ipNumber := 'auto';
-  end;
 
   procedure TQuickInstall.DefineDirClientData;
   var
@@ -422,8 +393,6 @@ type
   var
     QuickInstallNoQuiQuery: TQuickInstallNoQuiQuery;
   begin
-    SetDefaultValues;
-
     QuickInstallNoQuiQuery := TQuickInstallNoQuiQuery.Create;
     // Start the series of queries and fill Data:
     QuickInstallNoQuiQuery.QueryDistribution;
@@ -442,7 +411,6 @@ type
   procedure TQuickInstall.ExecuteWithDefaultValues;
   begin
     LogDatei.log('Execute with default values:', LLdebug);
-    SetDefaultValues;
     InstallOpsi;
   end;
 
