@@ -176,7 +176,7 @@ resourcestring
     'Downloading latest l-opsi-server...';
 
   rsLog = 'You can find the log files here:';
-  rsWrongPassword = 'Authentication failed. Please check your password!';
+  rsWrongPassword = 'Authentication failed.' + #10 + 'Please check your password!';
 
 const
   LogOpsiServer = '/var/log/opsi-quick-install-l-opsi-server.log';

@@ -486,7 +486,9 @@ msgid "Welcome to the installation of opsi-server on this computer!"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rswrongpassword
-msgid "Authentication failed. Please check your password!"
+msgid ""
+"Authentication failed.\n"
+"Please check your password!"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rsyes
