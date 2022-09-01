@@ -68,7 +68,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common;.."/>
+      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common;..;../lazarus/common/OpsiLinuxInstaller"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Other>

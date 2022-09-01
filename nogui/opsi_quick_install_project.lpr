@@ -27,7 +27,8 @@ uses
   opsi_quick_install_nogui_query,
   OpsiPackageDownloader,
   osfuncunix,
-  SupportedOpsiServerDistributions;
+  SupportedOpsiServerDistributions,
+  LogFileFunctions;
 
 type
   TQuickInstall = class(TCustomApplication)
@@ -451,14 +452,8 @@ type
     end;
   end;
 
-  procedure InitializeLogfile(LogfileName: string);
+  procedure LogQuickInstallVersion;
   begin
-    // log file will be created in /tmp/opsi_quickinstall.log
-    LogDatei := TLogInfo.Create;
-    LogDatei.CreateTheLogfile(LogfileName);
-    LogDatei.log('Log file created', LLdebug);
-    SetCurrentDir(ExtractFilePath(ParamStr(0)));
-    LogDatei.log('Working directory: ' + GetCurrentDir, LLessential);
     LogDatei.log('', LLessential);
     LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
     LogDatei.log('', LLessential);
@@ -539,7 +534,8 @@ const
 begin
   // Only execute Opsi-QuickInstall(oqi) if user is root
   CheckThatUserIsRoot;
-  InitializeLogfile(LogfileName);
+  InitializeLogFile(LogfileName);
+  LogQuickInstallVersion;
 
   QuickInstall := TQuickInstall.Create(nil);
   Data := TQuickInstallData.Create;
