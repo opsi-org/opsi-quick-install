@@ -33,8 +33,6 @@ uses
 
 {$R *.lfm}
 
-{ TDistribution }
-
 procedure TDistribution.FormActivate(Sender: TObject);
 begin
   // centering TDistribution nicely on TQuickInstall
@@ -46,6 +44,9 @@ begin
   // position buttons here because of different layout (size of TDistribution)
   BtnBack.Left := QuickInstall.BtnBack.Left;
   BtnNext.Left := Width - BtnBack.Left - QuickInstall.BtnNextWidth;
+
+  QuickInstall.SetInfoImageLayout(InfoDistribution);
+
   // show distribution suggestion
   EditDistr.Text := Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease;
 
