@@ -3,11 +3,6 @@ program opsi_quick_install_project;
 {$mode objfpc}{$H+}
 
 uses
- {$IFDEF UNIX}
-  {$IFDEF UseCThreads}
-  cthreads,
-      {$ENDIF}
-      {$ENDIF}
   Classes,
   SysUtils,
   StrUtils,
