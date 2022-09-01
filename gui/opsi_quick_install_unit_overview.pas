@@ -12,8 +12,6 @@ uses
 
 type
 
-  { TOverview }
-
   TOverview = class(TOpsiLinuxInstallerBaseForm)
     BtnBack: TButton;
     BtnFinish: TButton;
@@ -22,12 +20,8 @@ type
     PanelFinish: TPanel;
     procedure BtnBackClick(Sender: TObject);
     procedure BtnFinishClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+    procedure FormActivate(Sender: TObject); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-  private
-
-  public
-    stringProducts: string;
   end;
 
 var

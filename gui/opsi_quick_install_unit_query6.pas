@@ -28,12 +28,8 @@ type
     procedure BtnBackClick(Sender: TObject); override;
     procedure BtnNextClick(Sender: TObject); override;
     procedure EditNameAdminChange(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+    procedure FormActivate(Sender: TObject); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
-  private
-
-  public
-
   end;
 
 var

@@ -35,7 +35,7 @@ type
     RadioBtnYes: TRadioButton;
     procedure BtnBackClick(Sender: TObject); override;
     procedure BtnNextClick(Sender: TObject); override;
-    procedure FormActivate(Sender: TObject);
+    procedure FormActivate(Sender: TObject); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     procedure RadioBtnDhcpYesChange(Sender: TObject);
   end;

@@ -27,7 +27,7 @@ type
     procedure GetBtnFinishWidth;
     procedure BtnNextClick(Sender: TObject); override;
     procedure ComboBoxLanguagesChange(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+    procedure FormActivate(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
   public
   const
