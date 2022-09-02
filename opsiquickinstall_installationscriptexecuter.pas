@@ -9,14 +9,13 @@ uses
   oslog,
   opsi_quick_install_resourcestrings,
   OpsiLinuxInstaller_InstallationScriptExecuter,
-  opsi_quick_install_unit_wait,
-  opsiquickinstall_data;
+  opsiquickinstall_data,
+  IndependentMessageDisplayer;
 
 type
 
   TLOpsiServerInstallationScriptExecuter = class(TInstallationScriptExecuter)
   protected
-    procedure ShowMessageOnForm; override;
     procedure WritePropertiesToFile; override;
     procedure ExecuteInstallationScript; override;
     function DidNewerVersionOfTwoVersionsFail: boolean; override;
@@ -27,19 +26,10 @@ type
 
 implementation
 
-uses
-  opsi_quick_install_unit_password;
-
-procedure TLOpsiServerInstallationScriptExecuter.ShowMessageOnForm;
-begin
-  Wait.LabelWait.Caption := FMessage;
-end;
-
 // get properties from query and write them to file properties.conf
 procedure TLOpsiServerInstallationScriptExecuter.WritePropertiesToFile;
 begin
-  FMessage := rsDownloadLatestLOpsiServer + #10 + rsSomeMin;
-  //Synchronize(@ShowMessageOnForm);
+  FMessageDisplayer.DisplayMessage(rsDownloadLatestLOpsiServer + ' ' + rsSomeMin, True);
   inherited WritePropertiesToFile;
 
   // Write user input in properties.conf file:
@@ -65,8 +55,6 @@ begin
   // update_test shall always be false
   FFileText.Add('update_test=false');
 
-  Password.clientDataDir := FClientDataDir;
-
   if not FileExists(FClientDataDir + 'properties.conf') then
     FInstallRunCommand.Run('touch ' + FClientDataDir + 'properties.conf', Output);
   FInstallRunCommand.Run('chown -c $USER ' + FClientDataDir +
@@ -76,6 +64,8 @@ end;
 
 procedure TLOpsiServerInstallationScriptExecuter.ExecuteInstallationScript;
 begin
+  FMessageDisplayer.DisplayMessage(rsInstall + FCurrentVersionName + '... ' + rsSomeMin, True);
+
   // Important for getting the result 'failed' in case of a wrong password
   // because in this case the RunCommands below aren't executed and therefore
   // setup.opsiscript, that usually does it, isn't too:
@@ -87,17 +77,25 @@ begin
   FInstallRunCommand.Run('chown -c $USER ' + FClientDataDir + 'result.conf', Output);
   FFileText.SaveToFile(FClientDataDir + 'result.conf');
 
+  {$IFDEF GUI}
   FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -batch ' +
     FClientDataDir + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
     Output);
+  {$ENDIF GUI}
+
+  {$IFDEF NOGUI}
+  FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -silent -batch ' +
+    FClientDataDir + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
+    Output);
+  {$ENDIF NOGUI}
 end;
 
-function TLOpsiServerInstallationScriptExecuter.DidNewerVersionOfTwoVersionsFail: boolean;
+function TLOpsiServerInstallationScriptExecuter.DidNewerVersionOfTwoVersionsFail:
+boolean;
 begin
   // get installation result from result.conf which is filled by the l-opsi-server
   FFileText.Clear;
   FFileText.LoadFromFile(FClientDataDir + 'result.conf');
-
   if (FFileText[0] = 'failed') and FTwoVersionsToTest then
     Result := True
   else
@@ -106,25 +104,40 @@ end;
 
 procedure TLOpsiServerInstallationScriptExecuter.TryOlderVersion;
 begin
-  //FMessage := rsInstallation + rsFailed + '.' + #10 + rsTryOlderVersion + '.';
-  //Synchronize(@ShowMessageOnForm);
-  Sleep(1000);
+  FMessageDisplayer.DisplayMessage(rsInstallation + rsFailed + '.' +
+    #10 + rsTryOlderVersion + '.', True);
   LogDatei.log('Installation failed: ' + FCurrentVersionName, LLessential);
   LogDatei.log('Try older version of l-opsi-server:', LLnotice);
   FTwoVersionsToTest := False;
   FOneInstallationFailed := True;
   WritePropertiesToFile;
-
   ExecuteInstallationScript;
-  FFileText.LoadFromFile(FClientDataDir + 'result.conf');
 end;
 
 procedure TLOpsiServerInstallationScriptExecuter.LogResultOfLastInstallationAttempt;
+var
+  ResultOfWholeInstallationProcess: string = '';
 begin
+  FFileText.Clear;
+  FFileText.LoadFromFile(FClientDataDir + 'result.conf');
   if FFileText[0] = 'failed' then
-    LogDatei.log('Installation failed: ' + FCurrentVersionName, LLessential)
+  begin
+    ResultOfWholeInstallationProcess := rsFailed;
+    FMessageDisplayer.DisplayMessage(rsInstallation + rsFailed + '.', True);
+    LogDatei.log('Installation failed: ' + FCurrentVersionName, LLessential);
+    LogDatei.log(Data.opsiVersion + ' installation failed', LLessential);
+    ExitCode := 1;
+  end
   else
+  begin
+    ResultOfWholeInstallationProcess := rsSuccess;
     LogDatei.log('Installation successful: ' + FCurrentVersionName, LLessential);
+    LogDatei.log(Data.opsiVersion + ' installation successful', LLessential);
+  end;
+
+  FMessageDisplayer.DisplayMessage(rsInstallationOf + Data.opsiVersion +
+    ' ' + ResultOfWholeInstallationProcess + '!' + #10 + #10 + rsLog +
+    #10 + LogOpsiServer + #10 + LogDatei.FileName);
 end;
 
 end.

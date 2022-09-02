@@ -10,7 +10,8 @@ uses
   osLog,
   FormAppearanceFunctions,
   OpsiLinuxInstaller_PasswordForm,
-  opsiquickinstall_InstallationScriptExecuter;
+  opsiquickinstall_InstallationScriptExecuter,
+  IndependentMessageDisplayer;
 
 type
 
@@ -24,11 +25,13 @@ type
   end;
 
   // Thread for showing infos on a form while installation runs in the background.
-  TInstallOpsiThread = class(TThread)
+  TInstallOpsiThread = class(TMessageThread)
     LOpsiServerInstallationScriptExecuter: TLOpsiServerInstallationScriptExecuter;
   public
     constructor Create(password: string; sudo: boolean;
       PackageManagementShellCommand: string; ProductID: string; DownloadPath: string);
+    procedure DisplayMessageOnForm; override;
+    procedure DisplayMessageDialog; override;
     procedure Execute; override;
   end;
 
@@ -52,11 +55,24 @@ uses
 
 constructor TInstallOpsiThread.Create(password: string; sudo: boolean;
   PackageManagementShellCommand: string; ProductID: string; DownloadPath: string);
+var
+  MessageDisplayer: TIndependentMessageDisplayer;
 begin
   inherited Create(True);
   FreeOnTerminate := True;
+  MessageDisplayer := TIndependentMessageDisplayer.Create(self);
   LOpsiServerInstallationScriptExecuter := TLOpsiServerInstallationScriptExecuter.Create(password, sudo,
-    PackageManagementShellCommand, ProductID, DownloadPath);
+    PackageManagementShellCommand, ProductID, DownloadPath, MessageDisplayer);
+end;
+
+procedure TInstallOpsiThread.DisplayMessageOnForm;
+begin
+  Wait.LabelWait.Caption := FMessage;
+end;
+
+procedure TInstallOpsiThread.DisplayMessageDialog;
+begin
+  ShowMessage(FMessage);
 end;
 
 procedure TInstallOpsiThread.Execute;
@@ -145,7 +161,7 @@ procedure TPassword.FormClose(Sender: TObject);
 begin
   if btnFinishClicked then
   begin
-    ShowResultOfWholeInstallationProcess;
+    //ShowResultOfWholeInstallationProcess;
     Data.DistrInfo.Free;
     FreeAndNil(Data);
     CloseProject;
