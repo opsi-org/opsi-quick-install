@@ -241,7 +241,7 @@ begin
   FInstallRunCommand.Run('chown -c $USER ' + DirClientData + 'result.conf', Output);
   FileText.SaveToFile(DirClientData + 'result.conf');
 
-  FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -silent -batch ' +
+  FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -batch ' +
       DirClientData + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
       Output);
 end;
