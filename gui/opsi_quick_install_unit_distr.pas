@@ -9,7 +9,10 @@ uses
   ExtCtrls,
   oslog,
   SupportedOpsiServerDistributions,
-  OpsiLinuxInstaller_DistributionForm;
+  OpsiLinuxInstaller_DistributionForm,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data,
+  DistributionInfo;
 
 type
 
@@ -26,10 +29,7 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
-  opsi_quick_install_unit_language,
-  DistributionInfo;
+  opsi_quick_install_unit_language;
 
 {$R *.lfm}
 

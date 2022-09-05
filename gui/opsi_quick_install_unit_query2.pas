@@ -7,7 +7,9 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   OpsiLinuxInstaller_QueryForm,
-  FormAppearanceFunctions;
+  FormAppearanceFunctions,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
@@ -44,8 +46,6 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_query,
   opsi_quick_install_unit_query4;
 

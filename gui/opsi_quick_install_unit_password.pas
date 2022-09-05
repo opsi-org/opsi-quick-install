@@ -11,7 +11,10 @@ uses
   FormAppearanceFunctions,
   OpsiLinuxInstaller_PasswordForm,
   opsiquickinstall_InstallationScriptExecuter,
-  IndependentMessageDisplayer;
+  IndependentMessageDisplayer,
+  DistributionInfo,
+  opsiquickinstall_data,
+  opsi_quick_install_resourcestrings;
 
 type
 
@@ -42,12 +45,9 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_overview,
-  opsi_quick_install_unit_wait,
-  DistributionInfo;
+  opsi_quick_install_unit_wait;
 
 {$R *.lfm}
 

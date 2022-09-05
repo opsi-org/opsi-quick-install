@@ -8,7 +8,9 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
   MaskEdit,
   OpsiLinuxInstaller_BaseForm,
-  FormAppearanceFunctions;
+  FormAppearanceFunctions,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
@@ -30,8 +32,6 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_query6,
   opsi_quick_install_unit_password;

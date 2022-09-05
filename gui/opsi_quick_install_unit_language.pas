@@ -12,7 +12,9 @@ uses
   OpsiLinuxInstaller_WelcomeForm,
   FormAppearanceFunctions,
   LogFileFunctions,
-  oslog;
+  oslog,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
@@ -48,8 +50,6 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_distr,
   opsi_quick_install_unit_query,
   opsi_quick_install_unit_query4;
