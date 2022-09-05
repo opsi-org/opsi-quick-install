@@ -266,6 +266,7 @@ end;
 
 procedure TQuery5_dhcp.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query4.Close;
 end;
 

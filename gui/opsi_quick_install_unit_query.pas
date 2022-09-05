@@ -127,6 +127,7 @@ end;
 
 procedure TQuery.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   QuickInstall.Close;
 end;
 

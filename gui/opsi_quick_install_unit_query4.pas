@@ -144,6 +144,7 @@ end;
 
 procedure TQuery4.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query2.Close;
 end;
 

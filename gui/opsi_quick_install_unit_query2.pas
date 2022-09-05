@@ -106,6 +106,7 @@ end;
 
 procedure TQuery2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query.Close;
 end;
 

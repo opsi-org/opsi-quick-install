@@ -121,6 +121,7 @@ end;
 
 procedure TOverview.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query6.Close;
 end;
 
