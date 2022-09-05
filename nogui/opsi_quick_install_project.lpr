@@ -32,7 +32,7 @@ type
   private
     PropsFile: TStringList;
     QuickInstallCommand: TRunCommandElevated;
-    procedure installOpsi;
+    procedure InstallOpsiServer;
     procedure NoGuiQuery;
     procedure ExecuteWithDefaultValues;
     procedure ReadPropertiesFromFile;
@@ -148,7 +148,7 @@ type
   end;
 
 
-  procedure TQuickInstall.InstallOpsi;
+  procedure TQuickInstall.InstallOpsiServer;
   var
     LOpsiServerInstallationScriptExecuter: TLOpsiServerInstallationScriptExecuter;
     MessageDisplayer: TIndependentMessageDisplayer;
@@ -177,14 +177,14 @@ type
     begin
       FreeAndNil(QuickInstallNoQuiQuery);
       // After query:
-      InstallOpsi;
+      InstallOpsiServer;
     end;
   end;
 
   procedure TQuickInstall.ExecuteWithDefaultValues;
   begin
     LogDatei.log('Execute with default values:', LLdebug);
-    InstallOpsi;
+    InstallOpsiServer;
   end;
 
   procedure TQuickInstall.ReadPropertiesFromFile;
@@ -200,7 +200,7 @@ type
     else
       Data.opsiVersion := 'Opsi 4.2';
 
-    InstallOpsi;
+    InstallOpsiServer;
   end;
 
 
