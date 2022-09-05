@@ -35,7 +35,7 @@ type
     procedure installOpsi;
     procedure NoGuiQuery;
     procedure ExecuteWithDefaultValues;
-    procedure ReadPropsFromFile;
+    procedure ReadPropertiesFromFile;
   protected
     procedure DoRun; override;
   public
@@ -107,7 +107,7 @@ type
           if FileExists(FilePath) then
           begin
             PropsFile.LoadFromFile(FilePath);
-            ReadPropsFromFile;
+            ReadPropertiesFromFile;
           end
           else
           begin
@@ -148,8 +148,6 @@ type
   end;
 
 
-  // install opsi-server
-  // requires: opsiVersion, repoKind, distroName, DistrInfo, existing LogDatei
   procedure TQuickInstall.InstallOpsi;
   var
     LOpsiServerInstallationScriptExecuter: TLOpsiServerInstallationScriptExecuter;
@@ -165,6 +163,7 @@ type
     writeln(rsInstall + Data.opsiVersion + ':' + #10 + rsWait);
     LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
   end;
+
 
   procedure TQuickInstall.NoGuiQuery;
   var
@@ -182,16 +181,13 @@ type
     end;
   end;
 
-
-  // no query options:
-
   procedure TQuickInstall.ExecuteWithDefaultValues;
   begin
     LogDatei.log('Execute with default values:', LLdebug);
     InstallOpsi;
   end;
 
-  procedure TQuickInstall.ReadPropsFromFile;
+  procedure TQuickInstall.ReadPropertiesFromFile;
   begin
     LogDatei.log('Read properties from file:', LLdebug);
     // Read from file what is required for adding the repo
@@ -206,6 +202,7 @@ type
 
     InstallOpsi;
   end;
+
 
   {Program}
 
