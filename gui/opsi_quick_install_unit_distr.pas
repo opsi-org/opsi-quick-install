@@ -12,11 +12,10 @@ uses
   OpsiLinuxInstaller_DistributionForm,
   opsi_quick_install_resourcestrings,
   opsiquickinstall_data,
-  DistributionInfo;
+  DistributionInfo,
+  FormAppearanceFunctions;
 
 type
-
-  { TDistribution }
 
   TDistribution = class(TOpsiLinuxInstallerDistributionForm)
     procedure BtnNextClick(Sender: TObject); override;
@@ -35,11 +34,7 @@ uses
 
 procedure TDistribution.FormActivate(Sender: TObject);
 begin
-  // centering TDistribution nicely on TQuickInstall
-  Distribution.Left := QuickInstall.Left + Round(QuickInstall.Width / 2) -
-    Round(Width / 2);
-  Distribution.Top := QuickInstall.Top + Round(QuickInstall.Height / 2) -
-    Round(Height / 2);
+  CenterFormOnForm(self, QuickInstall);
 
   // position buttons here because of different layout (size of TDistribution)
   BtnBack.Left := QuickInstall.BtnBack.Left;
