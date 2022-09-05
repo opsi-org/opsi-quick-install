@@ -29,7 +29,8 @@ implementation
 // get properties from query and write them to file properties.conf
 procedure TLOpsiServerInstallationScriptExecuter.WritePropertiesToFile;
 begin
-  FMessageDisplayer.DisplayMessage(rsDownloadLatestLOpsiServer + ' ' + rsSomeMin, True);
+  FMessageDisplayer.DisplayMessage(rsDownloadLatestLOpsiServer +
+    LongMessageSeperator + rsSomeMin, True);
   inherited WritePropertiesToFile;
 
   // Write user input in properties.conf file:
@@ -64,7 +65,8 @@ end;
 
 procedure TLOpsiServerInstallationScriptExecuter.ExecuteInstallationScript;
 begin
-  FMessageDisplayer.DisplayMessage(rsInstall + FCurrentVersionName + '... ' + rsSomeMin, True);
+  FMessageDisplayer.DisplayMessage(rsInstall + FCurrentVersionName +
+    '... ' + LongMessageSeperator + rsSomeMin, True);
 
   // Important for getting the result 'failed' in case of a wrong password
   // because in this case the RunCommands below aren't executed and therefore
@@ -137,7 +139,8 @@ begin
 
   FMessageDisplayer.DisplayMessage(rsInstallationOf + Data.opsiVersion +
     ' ' + ResultOfWholeInstallationProcess + '!' + #10 + #10 + rsLog +
-    #10 + LogOpsiServer + #10 + LogDatei.FileName);
+    #10 + LogOpsiServer + #10 +
+    StringReplace(LogDatei.FileName, '//', '/', [rfReplaceAll]));
 end;
 
 end.

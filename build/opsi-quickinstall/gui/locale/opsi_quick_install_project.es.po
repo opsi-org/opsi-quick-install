@@ -144,8 +144,8 @@ msgid "Other:"
 msgstr "Otro:"
 
 #: opsi_quick_install_resourcestrings.rsdownloadlatestlopsiserver
-msgid "Downloading latest l-opsi-server..."
-msgstr "Descargando el último l-opsi-server..."
+msgid "Downloading latest l-opsi-server... "
+msgstr "Descargando el último l-opsi-server... "
 
 #: opsi_quick_install_resourcestrings.rsfailed
 msgid "failed"
@@ -538,8 +538,8 @@ msgstr "Le gustaría utilizar un proxy?"
 
 #: opsi_quick_install_resourcestrings.rswait
 msgctxt "opsi_quick_install_resourcestrings.rswait"
-msgid "Please wait for the installation to start..."
-msgstr "Por favor aguarde para que la instalación se inicie..."
+msgid "Please wait for the installation to start... "
+msgstr "Por favor aguarde para que la instalación se inicie... "
 
 #: opsi_quick_install_resourcestrings.rswelcome
 msgctxt "opsi_quick_install_resourcestrings.rswelcome"

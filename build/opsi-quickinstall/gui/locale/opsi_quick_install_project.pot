@@ -118,7 +118,7 @@ msgid "Other:"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rsdownloadlatestlopsiserver
-msgid "Downloading latest l-opsi-server..."
+msgid "Downloading latest l-opsi-server... "
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rsfailed
@@ -477,7 +477,7 @@ msgid "Would you like to use a proxy?"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rswait
-msgid "Please wait for the installation to start..."
+msgid "Please wait for the installation to start... "
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rswelcome
