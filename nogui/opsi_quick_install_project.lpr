@@ -13,9 +13,7 @@ uses
   DistributionInfo,
   osRunCommandElevated,
   osfunclin,
-  LinuxRepository,
   oslog,
-  osnetworkcalculator,
   opsi_quick_install_resourcestrings,
   opsiquickinstall_data,
   osnetutil,
@@ -45,7 +43,7 @@ type
   end;
 
 
-  { TQuickInstall }
+  {TQuickInstall}
 
   procedure TQuickInstall.DoRun;
   var
@@ -305,7 +303,6 @@ const
 {$R *.res}
 
 begin
-  // Only execute Opsi-QuickInstall(oqi) if user is root
   CheckThatUserIsRoot;
   InitializeLogFile(LogfileName);
   LogQuickInstallVersion;
