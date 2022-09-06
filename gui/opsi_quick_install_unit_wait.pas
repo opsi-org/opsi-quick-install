@@ -5,11 +5,10 @@ unit opsi_quick_install_unit_wait;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  opsi_quick_install_resourcestrings;
 
 type
-
-  { TWait }
 
   TWait = class(TForm)
     LabelWait: TLabel;
@@ -22,19 +21,16 @@ var
 implementation
 
 uses
-  opsi_quick_install_unit_overview,
-  opsi_quick_install_resourcestrings;
+  opsi_quick_install_unit_overview;
 
 {$R *.lfm}
-
-{ TWait }
 
 procedure TWait.FormActivate(Sender: TObject);
 begin
   Left := Overview.Left + Round(Overview.Width / 2) - Round(Width / 2);
   Top := Overview.Top + Round(Overview.Height / 2) - Round(Height / 2);
   // text by resourcestrings
-  LabelWait.Caption := rsWait + #10 + ' ';
+  LabelWait.Caption := rsWait + LongMessageSeperator + rsSomeMin;
 end;
 
 end.

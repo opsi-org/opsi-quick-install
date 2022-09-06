@@ -68,15 +68,17 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common;.."/>
+      <OtherUnitFiles Value="../lazarus/external_libraries/synapse;../lazarus/external_libraries/misc;../lazarus/common;..;../lazarus/common/OpsiLinuxInstaller"/>
       <UnitOutputDirectory Value="lib/$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Other>
       <CustomOptions Value="-dSYNAPSE
--dTARGETOPSISERVER"/>
-      <OtherDefines Count="2">
+-dTARGETOPSISERVER
+-dNOGUI"/>
+      <OtherDefines Count="3">
         <Define0 Value="SYNAPSE"/>
         <Define1 Value="TARGETOPSISERVER"/>
+        <Define2 Value="NOGUI"/>
       </OtherDefines>
     </Other>
   </CompilerOptions>

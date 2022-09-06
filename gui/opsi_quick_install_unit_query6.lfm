@@ -8,8 +8,8 @@ object Query6: TQuery6
   ClientWidth = 730
   OnActivate = FormActivate
   OnClose = FormClose
-  LCLVersion = '2.0.10.0'
-  object BackgrImage: TImage
+  LCLVersion = '2.2.0.4'
+  object BackgroundImage: TImage
     Left = 0
     Height = 450
     Top = 0
@@ -18,9 +18,9 @@ object Query6: TQuery6
   end
   object BtnBack: TButton
     Left = 16
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 51
+    Width = 57
     AutoSize = True
     Caption = ' < back '
     OnClick = BtnBackClick
@@ -47,7 +47,6 @@ object Query6: TQuery6
       Width = 440
       Align = alTop
       Caption = 'What is the name of the opsi_admin_user to create? (empty = nothing created)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -85,7 +84,6 @@ object Query6: TQuery6
       Width = 450
       Align = alTop
       Caption = 'What is the password of the opsi_admin_user to create? (empty = nothing created)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -121,7 +119,6 @@ object Query6: TQuery6
       Width = 440
       Align = alTop
       Caption = 'Set a different IP name (FQDN) (''auto'' = use standard)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -157,7 +154,6 @@ object Query6: TQuery6
       Width = 440
       Align = alTop
       Caption = 'Set a different IP number (''auto'' = use standard)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -173,15 +169,15 @@ object Query6: TQuery6
       Text = 'auto'
     end
   end
-  object BtnOverview: TButton
+  object BtnNext: TButton
     Left = 640
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 69
+    Width = 74
     AutoSize = True
     Caption = ' overview '
     ParentBidiMode = False
-    OnClick = BtnOverviewClick
+    OnClick = BtnNextClick
     ParentFont = False
     TabOrder = 5
   end

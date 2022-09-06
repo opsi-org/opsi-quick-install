@@ -9,7 +9,6 @@ uses
   opsiquickinstall_data,
   opsi_quick_install_resourcestrings,
   DistributionInfo,
-  LinuxRepository,
   osnetworkcalculator,
   osnetutil,
   SupportedOpsiServerDistributions;

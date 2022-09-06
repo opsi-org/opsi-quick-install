@@ -8,8 +8,8 @@ object Query2: TQuery2
   ClientWidth = 730
   OnActivate = FormActivate
   OnClose = FormClose
-  LCLVersion = '2.0.12.0'
-  object BackgrImage: TImage
+  LCLVersion = '2.2.0.4'
+  object BackgroundImage: TImage
     Left = 0
     Height = 450
     Top = 0
@@ -19,9 +19,9 @@ object Query2: TQuery2
   end
   object BtnNext: TButton
     Left = 672
-    Height = 25
+    Height = 33
     Top = 416
-    Width = 51
+    Width = 56
     AutoSize = True
     Caption = ' next > '
     OnClick = BtnNextClick
@@ -30,9 +30,9 @@ object Query2: TQuery2
   end
   object BtnBack: TButton
     Left = 8
-    Height = 25
+    Height = 33
     Top = 416
-    Width = 51
+    Width = 57
     AutoSize = True
     Caption = ' < back '
     OnClick = BtnBackClick
@@ -58,7 +58,6 @@ object Query2: TQuery2
       Width = 351
       Align = alTop
       Caption = 'Which backend should be installed?'#10'(mysql needs valid activation file)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -120,7 +119,6 @@ object Query2: TQuery2
       Width = 351
       Align = alTop
       Caption = 'From which repo kind should be installed?'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -164,7 +162,7 @@ object Query2: TQuery2
         Left = 228
         Height = 21
         Top = 0
-        Width = 107
+        Width = 106
         Align = alLeft
         BorderSpacing.Left = 50
         Caption = 'experimental'
@@ -195,7 +193,6 @@ object Query2: TQuery2
       Width = 450
       Align = alTop
       Caption = 'Should we copy modules even if /etc/opsi/modules still exists?'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end

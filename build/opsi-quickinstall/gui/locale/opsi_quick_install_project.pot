@@ -117,6 +117,10 @@ msgctxt "opsi_quick_install_resourcestrings.rsdomainother"
 msgid "Other:"
 msgstr ""
 
+#: opsi_quick_install_resourcestrings.rsdownloadlatestlopsiserver
+msgid "Downloading latest l-opsi-server... "
+msgstr ""
+
 #: opsi_quick_install_resourcestrings.rsfailed
 msgid "failed"
 msgstr ""
@@ -455,7 +459,8 @@ msgstr ""
 msgid "TFTPROOT symlink points to: "
 msgstr ""
 
-#: opsi_quick_install_resourcestrings.rstryolderlos
+#: opsi_quick_install_resourcestrings.rstryolderversion
+msgctxt "opsi_quick_install_resourcestrings.rstryolderversion"
 msgid "Try older version of l-opsi-server"
 msgstr ""
 
@@ -472,7 +477,7 @@ msgid "Would you like to use a proxy?"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rswait
-msgid "Please wait for the installation to start..."
+msgid "Please wait for the installation to start... "
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rswelcome
@@ -481,7 +486,9 @@ msgid "Welcome to the installation of opsi-server on this computer!"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rswrongpassword
-msgid "Authentication failed. Please check your password!"
+msgid ""
+"Authentication failed.\n"
+"Please check your password!"
 msgstr ""
 
 #: opsi_quick_install_resourcestrings.rsyes
@@ -908,8 +915,8 @@ msgctxt "tquery6.btnback.caption"
 msgid " < back "
 msgstr ""
 
-#: tquery6.btnoverview.caption
-msgctxt "tquery6.btnoverview.caption"
+#: tquery6.btnnext.caption
+msgctxt "tquery6.btnnext.caption"
 msgid " overview "
 msgstr ""
 
@@ -964,10 +971,6 @@ msgstr ""
 #: tquickinstall.btnnext.caption
 msgctxt "tquickinstall.btnnext.caption"
 msgid " next > "
-msgstr ""
-
-#: tquickinstall.btnoverview.caption
-msgid "BtnOverview"
 msgstr ""
 
 #: tquickinstall.caption

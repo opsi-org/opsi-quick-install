@@ -5,16 +5,15 @@ unit opsi_quick_install_unit_query2;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
-  { TQuery2 }
-
-  TQuery2 = class(TForm)
-    BackgrImage: TImage;
-    BtnBack: TButton;
-    BtnNext: TButton;
+  TQuery2 = class(TOpsiLinuxInstallerQueryForm)
     InfoBackend: TImage;
     InfoModules: TImage;
     InfoRepoKind: TImage;
@@ -34,15 +33,11 @@ type
     RadioBtnStable: TRadioButton;
     RadioBtnTesting: TRadioButton;
     RadioBtnYesCopy: TRadioButton;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
+    procedure FormActivate(Sender: TObject); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     procedure RadioBtnFileChange(Sender: TObject);
-  private
-
-  public
-
   end;
 
 var
@@ -51,15 +46,10 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
-  opsi_quick_install_unit_language, // needed for procedures like showForm
   opsi_quick_install_unit_query,
   opsi_quick_install_unit_query4;
 
 {$R *.lfm}
-
-{ TQuery2 }
 
 procedure TQuery2.BtnNextClick(Sender: TObject);
 begin
@@ -92,12 +82,14 @@ end;
 
 procedure TQuery2.FormActivate(Sender: TObject);
 begin
+  inherited FormActivate(Sender);
+
   PanelCopyModules.AutoSize := False;
-  SetBasics(self);
   PanelCopyModules.AutoSize := True;
   // so far opsi 4.2 only has the branches experimental and testing
   if RadioBtnStable.Visible = False then
     RadioBtnTesting.BorderSpacing.Left := 0;
+
   // text by resourcestrings
   Caption := 'Opsi Quick Install - ' + rsCapQuery2;
   LabelBackend.Caption := rsBackend;
@@ -114,6 +106,7 @@ end;
 
 procedure TQuery2.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query.Close;
 end;
 
@@ -138,4 +131,3 @@ begin
 end;
 
 end.
-

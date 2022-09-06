@@ -5,9 +5,16 @@ unit opsi_quick_install_resourcestrings;
 interface
 
 uses
-  {$IFDEF GUI}
-  {$ENDIF GUI}
   Classes, SysUtils;
+
+const
+  LogOpsiServer = '/var/log/opsi-quick-install-l-opsi-server.log';
+  {$IFDEF GUI}
+  LongMessageSeperator = #10;
+  {$ENDIF GUI}
+  {$IFDEF NOGUI}
+  LongMessageSeperator = '';
+  {$ENDIF NOGUI}
 
 resourcestring
   {nogui}
@@ -28,7 +35,6 @@ resourcestring
     #10 + 'If you like to jump back to a question, please press the number key of the respective number in the overview.';
   rsInstall = 'Installing ';
   rsCreateRepo = 'Creating repository...';
-  rsSomeMin = '(This may take some minutes)';
 
   {universal}
   rsYes = 'Yes';
@@ -38,7 +44,7 @@ resourcestring
   rsOverview = 'Overview';
   rsFinish = ' finish ';
   rsInstallation = 'Installation ';
-  rsTryOlderLOS = 'Try older version of l-opsi-server';
+  rsTryOlderVersion = 'Try older version of l-opsi-server';
   rsInstallationOf = 'Installation of ';
   rsFailed = 'failed';
   rsSuccess = 'successful';
@@ -46,8 +52,14 @@ resourcestring
     'Opsi-QuickInstall Warning:' + #10 +
     'We could not find a valid local DNS hostname on this computer.' +
     ' This can lead to problems during the installation! Please see' +
-    #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' + #10 +
-    'quickinstall-manual.html#opsi-quickinstall-prep' + #10 + 'for more information.';
+    #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' +
+    LongMessageSeperator + 'quickinstall-manual.html#opsi-quickinstall-prep' +
+    #10 + 'for more information.';
+  rsSomeMin = '(This may take some minutes)';
+  rsWait = 'Please wait for the installation to start... ';
+  rsDownloadLatestLOpsiServer =
+    'Downloading latest l-opsi-server... ';
+  rsLog = 'You can find the log files here:';
 
   // QuickInstall:
   rsCapDistr = 'Distribution';
@@ -170,12 +182,7 @@ resourcestring
   rsRights = 'Authentication is required to install opsi-server. Who are you logged in as?';
   rsPassword = 'Password';
   rsShowPassword = 'Show password';
-  rsWait = 'Please wait for the installation to start...';
-  rsLog = 'You can find the log files here:';
-  rsWrongPassword = 'Authentication failed. Please check your password!';
-
-const
-  LogOpsiServer = '/var/log/opsi-quick-install-l-opsi-server.log';
+  rsWrongPassword = 'Authentication failed.' + #10 + 'Please check your password!';
 
 implementation
 

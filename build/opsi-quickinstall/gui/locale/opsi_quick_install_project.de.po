@@ -135,6 +135,10 @@ msgctxt "opsi_quick_install_resourcestrings.rsdomainother"
 msgid "Other:"
 msgstr "Andere:"
 
+#: opsi_quick_install_resourcestrings.rsdownloadlatestlopsiserver
+msgid "Downloading latest l-opsi-server... "
+msgstr "Lade neuesten l-opsi-server herunter... "
+
 #: opsi_quick_install_resourcestrings.rsfailed
 msgid "failed"
 msgstr "fehlgeschlagen"
@@ -505,7 +509,8 @@ msgctxt "opsi_quick_install_resourcestrings.rstftprooto"
 msgid "TFTPROOT symlink points to: "
 msgstr "TFTPROOT-Symlink zeigt auf: "
 
-#: opsi_quick_install_resourcestrings.rstryolderlos
+#: opsi_quick_install_resourcestrings.rstryolderversion
+msgctxt "opsi_quick_install_resourcestrings.rstryolderversion"
 msgid "Try older version of l-opsi-server"
 msgstr "Versuche, ältere Version von l-opsi-server zu installieren"
 
@@ -524,8 +529,8 @@ msgid "Would you like to use a proxy?"
 msgstr "Möchten Sie einen Proxy verwenden?"
 
 #: opsi_quick_install_resourcestrings.rswait
-msgid "Please wait for the installation to start..."
-msgstr "Bitte warten Sie, bis die Installation beginnt..."
+msgid "Please wait for the installation to start... "
+msgstr "Bitte warten Sie, bis die Installation beginnt... "
 
 #: opsi_quick_install_resourcestrings.rswelcome
 msgctxt "opsi_quick_install_resourcestrings.rswelcome"
@@ -533,8 +538,12 @@ msgid "Welcome to the installation of opsi-server on this computer!"
 msgstr "Willkommen zur Installation von Opsi-Server auf diesem Computer!"
 
 #: opsi_quick_install_resourcestrings.rswrongpassword
-msgid "Authentication failed. Please check your password!"
-msgstr "Authentifizierung fehlgeschlagen. Bitte überprüfen Sie ihr Passwort!"
+msgid ""
+"Authentication failed.\n"
+"Please check your password!"
+msgstr ""
+"Authentifizierung fehlgeschlagen.\n"
+"Bitte überprüfen Sie Ihr Passwort!"
 
 #: opsi_quick_install_resourcestrings.rsyes
 msgctxt "opsi_quick_install_resourcestrings.rsyes"
@@ -1002,9 +1011,9 @@ msgctxt "tquery6.btnback.caption"
 msgid " < back "
 msgstr " < zurück "
 
-#: tquery6.btnoverview.caption
+#: tquery6.btnnext.caption
 #, fuzzy
-msgctxt "tquery6.btnoverview.caption"
+msgctxt "tquery6.btnnext.caption"
 msgid " overview "
 msgstr " Übersicht "
 
@@ -1062,10 +1071,6 @@ msgstr ""
 msgctxt "tquickinstall.btnnext.caption"
 msgid " next > "
 msgstr " weiter > "
-
-#: tquickinstall.btnoverview.caption
-msgid "BtnOverview"
-msgstr ""
 
 #: tquickinstall.caption
 msgid "Opsi Quick Install"

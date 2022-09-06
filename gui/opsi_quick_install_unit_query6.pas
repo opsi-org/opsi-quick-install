@@ -5,16 +5,15 @@ unit opsi_quick_install_unit_query6;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
-  { TQuery6 }
-
-  TQuery6 = class(TForm)
-    BackgrImage: TImage;
-    BtnBack: TButton;
-    BtnOverview: TButton;
+  TQuery6 = class(TOpsiLinuxInstallerQueryForm)
     EditNameAdmin: TEdit;
     EditNameIP: TEdit;
     EditNumberIP: TEdit;
@@ -28,15 +27,11 @@ type
     PanelNameIP: TPanel;
     PanelNumberIP: TPanel;
     PanelPasswordAdmin: TPanel;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnOverviewClick(Sender: TObject);
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
     procedure EditNameAdminChange(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-  private
-
-  public
-
+    procedure FormActivate(Sender: TObject); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
   end;
 
 var
@@ -45,8 +40,6 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_query4,
   opsi_quick_install_unit_query5_dhcp,
@@ -54,18 +47,12 @@ uses
 
 {$R *.lfm}
 
-{ TQuery6 }
-
-procedure TQuery6.BtnOverviewClick(Sender: TObject);
+procedure TQuery6.BtnNextClick(Sender: TObject);
 begin
   // Make Data Entries
-  // Admin name
   Data.adminName := EditNameAdmin.Text;
-  // Admin password
   Data.adminPassword := EditPasswordAdmin.Text;
-  // IP name
   Data.ipName := EditNameIP.Text;
-  // IP number
   Data.ipNumber := EditNumberIP.Text;
 
   showForm(Overview, self);
@@ -73,7 +60,7 @@ begin
   Overview.BtnBack.Top := BtnBack.Top;
   Overview.BtnFinish.Left := Overview.Width - Overview.BtnBack.Left -
     QuickInstall.BtnFinishWidth;
-  Overview.BtnFinish.Top := BtnOverview.Top;
+  Overview.BtnFinish.Top := BtnNext.Top;
 end;
 
 procedure TQuery6.EditNameAdminChange(Sender: TObject);
@@ -87,9 +74,10 @@ end;
 
 procedure TQuery6.FormActivate(Sender: TObject);
 begin
-  PanelPasswordAdmin.AutoSize:=False;
-  SetBasics(self);
-  PanelPasswordAdmin.AutoSize:=True;
+  inherited FormActivate(Sender);
+
+  PanelPasswordAdmin.AutoSize := False;
+  PanelPasswordAdmin.AutoSize := True;
   // text by resourcestrings
   Caption := 'Opsi Quick Install - ' + rsCapQueryUserInfo;
   LabelNameAdmin.Caption := rsAdminName;
@@ -98,11 +86,12 @@ begin
   LabelNameIP.Caption := rsIPName;
   LabelNumberIP.Caption := rsIPNumber;
   BtnBack.Caption := rsBack;
-  BtnOverview.Caption := rsOverviewBtn;
+  BtnNext.Caption := rsNext;
 end;
 
 procedure TQuery6.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query5_dhcp.Close;
 end;
 

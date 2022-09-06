@@ -8,12 +8,12 @@ uses
   Classes, SysUtils,
   DistributionInfo,
   osfunclin,
-  oslog;
+  oslog,
+  opsi_quick_install_resourcestrings;
 
 type
 
   {TSplitData}
-
   // For data that appears in the overview and the file properties.conf in different ways,
   // e.g. OverviewEntry = 'Yes' or 'Ja' or 'Oui' or ... and PropertyEntry = 'true'
   TSplitData = class(TObject)
@@ -26,11 +26,10 @@ type
     property PropertyEntry: string read FPropertyEntry;
   end;
 
-type
-
   {TQuickInstallData}
-
   TQuickInstallData = class(TObject)
+  private
+    procedure SetDefaultValues;
   public
   var
     CustomSetup: boolean;
@@ -49,7 +48,6 @@ type
 
     netmask, networkAddress, domain, nameserver, gateway: string;
     adminName, adminPassword, ipName, ipNumber: string;
-
   const
     QuickInstallVersion = '4.2.0.8';
     baseRepoUrlOpsi41 =
@@ -73,15 +71,11 @@ begin
   FPropertyEntry := SetPropertyEntry;
 end;
 
+
 {TQuickInstallData}
 
-constructor TQuickInstallData.Create;
+procedure TQuickInstallData.SetDefaultValues;
 begin
-  // Following line takes time and is therefore executed only once at the
-  // beginning of oqi when Data is created.
-  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
-
-  // set default values:
   opsiVersion := 'Opsi 4.2';
   // automatically adjust repo to opsiVersion
   if opsiVersion = 'Opsi 4.2' then
@@ -93,14 +87,14 @@ begin
 
   backend := 'file';
   copyMod := TSplitData.Create;
-  copyMod.SetEntries('', 'false');
+  copyMod.SetEntries(rsNo, 'false');
   repoKind := 'stable';
 
   ucsPassword := '';
   reboot := TSplitData.Create;
-  reboot.SetEntries('', 'false');
+  reboot.SetEntries(rsNo, 'false');
   dhcp := TSplitData.Create;
-  dhcp.SetEntries('', 'false');
+  dhcp.SetEntries(rsNo, 'false');
   symlink := 'default.nomenu';
 
   netmask := '255.255.0.0';
@@ -113,6 +107,15 @@ begin
   adminPassword := 'linux123';
   ipName := 'auto';
   ipNumber := 'auto';
+end;
+
+constructor TQuickInstallData.Create;
+begin
+  // Following line takes time and is therefore executed only once at the
+  // beginning of oqi when Data is created.
+  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
+
+  SetDefaultValues;
 end;
 
 end.

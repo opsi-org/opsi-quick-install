@@ -6,16 +6,15 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  Process, osnetworkcalculator;
+  Process, osnetworkcalculator,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
-  { TQuery5_dhcp }
-
-  TQuery5_dhcp = class(TForm)
-    BackgrImage: TImage;
-    BtnBack: TButton;
-    BtnNext: TButton;
+  TQuery5_dhcp = class(TOpsiLinuxInstallerQueryForm)
     EditNetmask: TEdit;
     EditAddress: TEdit;
     EditDomain: TEdit;
@@ -52,14 +51,10 @@ type
     RadioBtnDomain2: TRadioButton;
     RadioBtnDomain3: TRadioButton;
     RadioBtnOtherDomain: TRadioButton;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-  private
-
-  public
-
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
+    procedure FormActivate(Sender: TObject); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
   end;
 
 var
@@ -68,15 +63,10 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
-  opsi_quick_install_unit_language,
   opsi_quick_install_unit_query4,
   opsi_quick_install_unit_query6;
 
 {$R *.lfm}
-
-{ TQuery5_dhcp }
 
 procedure TQuery5_dhcp.BtnNextClick(Sender: TObject);
 begin
@@ -128,9 +118,8 @@ begin
   showForm(Query6, self);
   Query6.BtnBack.Left := BtnBack.Left;
   Query6.BtnBack.Top := BtnBack.Top;
-  Query6.BtnOverview.Left :=
-    Query6.Width - Query6.BtnBack.Left - QuickInstall.BtnOverviewWidth;
-  Query6.BtnOverview.Top := BtnNext.Top;
+  Query6.BtnNext.Left := BtnNext.Left;
+  Query6.BtnNext.Top := BtnNext.Top;
 end;
 
 procedure TQuery5_dhcp.FormActivate(Sender: TObject);
@@ -138,7 +127,7 @@ var
   NetworkDetails, network: array of string;
   index: integer;
 begin
-  SetBasics(self);
+  inherited FormActivate(Sender);
 
   // Make automatic suggestions on network details for the dhcp:
   // get details
@@ -277,6 +266,7 @@ end;
 
 procedure TQuery5_dhcp.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query4.Close;
 end;
 

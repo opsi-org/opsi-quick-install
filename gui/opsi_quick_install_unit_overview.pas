@@ -6,14 +6,15 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
-  MaskEdit;
+  MaskEdit,
+  OpsiLinuxInstaller_BaseForm,
+  FormAppearanceFunctions,
+  opsi_quick_install_resourcestrings,
+  opsiquickinstall_data;
 
 type
 
-  { TOverview }
-
-  TOverview = class(TForm)
-    BackgrImage: TImage;
+  TOverview = class(TOpsiLinuxInstallerBaseForm)
     BtnBack: TButton;
     BtnFinish: TButton;
     LabelFinish: TLabel;
@@ -21,12 +22,8 @@ type
     PanelFinish: TPanel;
     procedure BtnBackClick(Sender: TObject);
     procedure BtnFinishClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
+    procedure FormActivate(Sender: TObject); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-  private
-
-  public
-    stringProducts: string;
   end;
 
 var
@@ -35,26 +32,22 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_query6,
   opsi_quick_install_unit_password;
 
 {$R *.lfm}
 
-{ TOverview }
-
 procedure TOverview.BtnFinishClick(Sender: TObject);
 begin
-  Overview.Enabled:=False;
-  Password.Visible:=True;
+  Overview.Enabled := False;
+  Password.Visible := True;
 end;
 
 procedure TOverview.FormActivate(Sender: TObject);
 begin
-  //ShowMessage(IntToStr(BtnFinish.Width));
-  SetBasics(self);
+  inherited FormActivate(Sender);
+
   MemoOverview.Left := QuickInstall.panelLeft;
   PanelFinish.Width := 400;
 
@@ -128,6 +121,7 @@ end;
 
 procedure TOverview.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query6.Close;
 end;
 
