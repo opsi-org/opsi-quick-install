@@ -22,7 +22,6 @@ type
     procedure BtnBackClick(Sender: TObject); override;
     procedure BtnFinishClick(Sender: TObject); override;
     procedure FormActivate(Sender: TObject); override;
-    procedure ShowResultOfWholeInstallationProcess; override;
     procedure CloseProject; override;
     procedure FormClose(Sender: TObject); override;
   end;
@@ -80,39 +79,10 @@ begin
   // sleep to ensure that TWait is shown before GetOpsiScript is executed and blocks TWait
   Sleep(100);
   LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
-  //FFileText.Free;
-  //FInstallRunCommand.Free;
   FreeAndNil(LOpsiServerInstallationScriptExecuter);
 end;
 
 { TPassword }
-
-procedure TPassword.ShowResultOfWholeInstallationProcess;
-var
-  FileText: TStringList;
-  InstallationResult: string;
-begin
-  FileText := TStringList.Create;
-  FileText.LoadFromFile(clientDataDir + 'result.conf');
-
-  // adjust quick-install ExitCode
-  if FileText[0] = 'failed' then
-  begin
-    InstallationResult := rsFailed;
-    LogDatei.log(Data.opsiVersion + ' installation failed', LLessential);
-    ExitCode := 1;
-  end
-  else
-  begin
-    InstallationResult := rsSuccess;
-    LogDatei.log(Data.opsiVersion + ' installation successful', LLessential);
-  end;
-
-  ShowMessage(rsInstallationOf + Data.opsiVersion + ' ' + installationResult +
-    '!' + #10 + #10 + rsLog + #10 + LogOpsiServer + #10 +
-    LogDatei.StandardMainLogPath + QuickInstall.LogFileName);
-  FreeAndNil(FileText);
-end;
 
 procedure TPassword.FormActivate(Sender: TObject);
 begin
@@ -161,7 +131,6 @@ procedure TPassword.FormClose(Sender: TObject);
 begin
   if btnFinishClicked then
   begin
-    //ShowResultOfWholeInstallationProcess;
     Data.DistrInfo.Free;
     FreeAndNil(Data);
     CloseProject;
