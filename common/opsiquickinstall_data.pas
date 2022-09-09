@@ -9,7 +9,8 @@ uses
   DistributionInfo,
   osfunclin,
   oslog,
-  opsi_quick_install_resourcestrings;
+  opsi_quick_install_resourcestrings,
+  OpsiLinuxInstaller_Data;
 
 type
 
@@ -27,13 +28,12 @@ type
   end;
 
   {TQuickInstallData}
-  TQuickInstallData = class(TObject)
+  TQuickInstallData = class(TOpsiLinuxInstallerData)
   private
     procedure SetDefaultValues;
   public
   var
     CustomSetup: boolean;
-    DistrInfo: TDistributionInfo;
 
     opsiVersion, repo, proxy, repoNoCache: string;
 
@@ -56,6 +56,7 @@ type
       'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/';
 
     constructor Create;
+    destructor Destroy; override;
   end;
 
 var
@@ -111,11 +112,21 @@ end;
 
 constructor TQuickInstallData.Create;
 begin
+  inherited Create;
+
   // Following line takes time and is therefore executed only once at the
   // beginning of oqi when Data is created.
   DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
 
   SetDefaultValues;
+end;
+
+destructor TQuickInstallData.Destroy;
+begin
+  if Assigned(copyMod) then FreeAndNil(copyMod);
+  if Assigned(reboot) then FreeAndNil(reboot);
+  if Assigned(dhcp) then FreeAndNil(dhcp);
+  inherited Destroy;
 end;
 
 end.
