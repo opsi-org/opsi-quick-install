@@ -19,6 +19,7 @@ type
     input: string;
     NetworkDetails: array of string;
 
+    procedure QueryDistribution;
     procedure QuerySetupType;
     //procedure QueryOpsiVersion;
     procedure QueryRepo;
@@ -50,15 +51,20 @@ type
     procedure QueryOverview;
   public
     QueryFinished: boolean;
-    procedure QueryDistribution;
+    procedure StartQuery;
   end;
 
-
+ TMyProcedure = procedure of object;
 
 implementation
 
 // Input variables not set by resourcestrings but by characters for no
 // requirement of a mouse.
+
+procedure TQuickInstallNoQuiQuery.StartQuery;
+begin
+  QueryDistribution;
+end;
 
 procedure TQuickInstallNoQuiQuery.QueryDistribution;
 var

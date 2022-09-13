@@ -169,7 +169,7 @@ type
   begin
     QuickInstallNoQuiQuery := TQuickInstallNoQuiQuery.Create;
     // Start the series of queries and fill Data:
-    QuickInstallNoQuiQuery.QueryDistribution;
+    QuickInstallNoQuiQuery.StartQuery;
 
     if QuickInstallNoQuiQuery.QueryFinished then
     begin
