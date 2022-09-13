@@ -1,5 +1,5 @@
 opsi-quickinstall (4.2.0.8-1) experimental; urgency=low
-  * new: AlmaLinux 9, Rocky 9 and RHEL 9 added to supported distributions
+  * new: AlmaLinux 9, Rocky 9, RHEL 9, SUSE 15.3 and SUSE 15.4 added to supported distributions
   * change: Download opsi-script now directly from download.opensuse.org as tar.gz and delete it again after the installation
     (the way before was to add a repository from download.opensuse.org and install opsi-script on the system)
   * fix gui: Use root rights in all parts of OpsiPackageDownloader so that downloading the latest l-opsi-server works correctly
