@@ -58,7 +58,7 @@ If opsi supports a new linux distribution and you want to add it to Opsi-QuickIn
 1. Check that the distribution is available on http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/stable/ .
 
 2. In the Lazarus-Repo in SupportedOpsiServerDistributions:
-	+ Add the distriution to TSupportedDistribution with exactly the same name (except "." and "_") that the folder on download.opensuse.org has.
+	+ Add the distriution to TSupportedDistribution with exactly the same name (replace "." with "_") that the folder on download.opensuse.org has.
 	+ Add the distriution in the function GetSupportedDistribution.
 	
 3. Don't forget to add the distribution after tests are done to
