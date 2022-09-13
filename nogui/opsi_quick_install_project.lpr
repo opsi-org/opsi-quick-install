@@ -32,7 +32,6 @@ type
     QuickInstallCommand: TRunCommandElevated;
     procedure InstallOpsiServer;
     procedure NoGuiQuery;
-    procedure ExecuteWithDefaultValues;
     procedure ReadPropertiesFromFile;
   protected
     procedure DoRun; override;
@@ -88,8 +87,8 @@ type
     // no query, directly use all default values for installation
     if HasOption('d', 'default') then
     begin
-      LogDatei.Log('Use default properties.', LLInfo);
-      ExecuteWithDefaultValues;
+      LogDatei.Log('Use default property values.', LLInfo);
+      InstallOpsiServer;
       Terminate;
       Exit;
     end;
@@ -174,15 +173,8 @@ type
     if QuickInstallNoQuiQuery.QueryFinished then
     begin
       FreeAndNil(QuickInstallNoQuiQuery);
-      // After query:
       InstallOpsiServer;
     end;
-  end;
-
-  procedure TQuickInstall.ExecuteWithDefaultValues;
-  begin
-    LogDatei.log('Execute with default values:', LLdebug);
-    InstallOpsiServer;
   end;
 
   procedure TQuickInstall.ReadPropertiesFromFile;
