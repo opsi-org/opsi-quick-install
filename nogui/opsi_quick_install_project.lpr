@@ -42,6 +42,33 @@ type
   end;
 
 
+  procedure WelcomeUser;
+  begin
+    writeln('');
+    writeln(rsWelcome);
+  end;
+
+  procedure UseUserDefinedLanguage;
+  var
+    UserDefinedLang: string;
+  begin
+    writeln(rsSelLanguage, rsLangOp);
+    readln(UserDefinedLang);
+    // check for right input
+    while not ((UserDefinedLang = 'de') or (UserDefinedLang = 'en') or
+        (UserDefinedLang = 'fr') or (UserDefinedLang = 'es')) do
+    begin
+      writeln('"', UserDefinedLang, '"', rsNotValid);
+      readln(UserDefinedLang);
+    end;
+    TranslateUnitResourceStrings('opsi_quick_install_resourcestrings',
+      '../gui/locale/opsi_quick_install_project.' + UserDefinedLang + '.po');
+
+    writeln(rsCarryOut);
+    sleep(50);
+  end;
+
+
   {TQuickInstall}
 
   procedure TQuickInstall.DoRun;
@@ -80,6 +107,8 @@ type
     if HasOption('n', 'nogui') then
     begin
       LogDatei.Log('Get properties from query.', LLInfo);
+      WelcomeUser;
+      UseUserDefinedLanguage;
       NoGuiQuery;
       Terminate;
       Exit;
@@ -88,6 +117,8 @@ type
     if HasOption('d', 'default') then
     begin
       LogDatei.Log('Use default property values.', LLInfo);
+      writeln('');
+      writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
       InstallOpsiServer;
       Terminate;
       Exit;
@@ -157,7 +188,8 @@ type
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/', MessageDisplayer);
 
     writeln('');
-    writeln(rsInstall + Data.opsiVersion + ':' + #10 + rsWait + LongMessageSeperator + rsSomeMin);
+    writeln(rsInstall + Data.opsiVersion + ':' + #10 + rsWait +
+      LongMessageSeperator + rsSomeMin);
     LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
   end;
 
@@ -235,32 +267,6 @@ type
       '../gui/locale/opsi_quick_install_project.%s.po', Lang, DefLang);
   end;
 
-  procedure WelcomeUser;
-  begin
-    writeln('');
-    writeln(rsWelcome);
-  end;
-
-  procedure UseUserDefinedLanguage;
-  var
-    UserDefinedLang: string;
-  begin
-    writeln(rsSelLanguage, rsLangOp);
-    readln(UserDefinedLang);
-    // check for right input
-    while not ((UserDefinedLang = 'de') or (UserDefinedLang = 'en') or
-        (UserDefinedLang = 'fr') or (UserDefinedLang = 'es')) do
-    begin
-      writeln('"', UserDefinedLang, '"', rsNotValid);
-      readln(UserDefinedLang);
-    end;
-    TranslateUnitResourceStrings('opsi_quick_install_resourcestrings',
-      '../gui/locale/opsi_quick_install_project.' + UserDefinedLang + '.po');
-
-    writeln(rsCarryOut);
-    sleep(50);
-  end;
-
   procedure CheckThatOqiSupportsDistribution(QuickInstall: TQuickInstall);
   begin
     // In the nogui query the checking of the distribution will be done later to
@@ -305,20 +311,6 @@ begin
   CheckFQDN;
 
   UseSystemLanguageForResourcestrings;
-  // do language selection here only for nogui installation
-  if QuickInstall.HasOption('n', 'nogui') then
-  begin
-    WelcomeUser;
-    UseUserDefinedLanguage;
-  end;
-
-  // Indicate start of program for default installation (also good
-  // for test environment log to identify start of QuickInstall).
-  if QuickInstall.HasOption('d', 'default') then
-  begin
-    writeln('');
-    writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
-  end;
 
   CheckThatOqiSupportsDistribution(QuickInstall);
   QuickInstall.Run;
