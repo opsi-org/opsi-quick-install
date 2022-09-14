@@ -10,9 +10,6 @@ uses
   osLog,
   FormAppearanceFunctions,
   OpsiLinuxInstaller_PasswordForm,
-  opsiquickinstall_InstallationScriptExecuter,
-  IndependentMessageDisplayer,
-  DistributionInfo,
   opsiquickinstall_QueryData,
   opsi_quick_install_resourcestrings;
 
@@ -22,24 +19,11 @@ type
     procedure BtnBackClick(Sender: TObject); override;
     procedure BtnFinishClick(Sender: TObject); override;
     procedure FormActivate(Sender: TObject); override;
-    procedure CloseProject; override;
     procedure FormClose(Sender: TObject); override;
-  end;
-
-  // Thread for showing infos on a form while installation runs in the background.
-  TInstallOpsiThread = class(TMessageThread)
-    LOpsiServerInstallationScriptExecuter: TLOpsiServerInstallationScriptExecuter;
-  public
-    constructor Create(password: string; sudo: boolean;
-      PackageManagementShellCommand: string; ProductID: string; DownloadPath: string);
-    procedure DisplayMessageOnForm; override;
-    procedure DisplayMessageDialog; override;
-    procedure Execute; override;
   end;
 
 var
   Password: TPassword;
-  InstallOpsiThread: TInstallOpsiThread;
 
 implementation
 
@@ -49,40 +33,6 @@ uses
   opsi_quick_install_unit_wait;
 
 {$R *.lfm}
-
-{InstallOpsiThread}
-
-constructor TInstallOpsiThread.Create(password: string; sudo: boolean;
-  PackageManagementShellCommand: string; ProductID: string; DownloadPath: string);
-var
-  MessageDisplayer: TIndependentMessageDisplayer;
-begin
-  inherited Create(True);
-  FreeOnTerminate := True;
-  MessageDisplayer := TIndependentMessageDisplayer.Create(self);
-  LOpsiServerInstallationScriptExecuter := TLOpsiServerInstallationScriptExecuter.Create(password, sudo,
-    PackageManagementShellCommand, ProductID, DownloadPath, MessageDisplayer);
-end;
-
-procedure TInstallOpsiThread.DisplayMessageOnForm;
-begin
-  Wait.LabelWait.Caption := FMessage;
-end;
-
-procedure TInstallOpsiThread.DisplayMessageDialog;
-begin
-  ShowMessage(FMessage);
-end;
-
-procedure TInstallOpsiThread.Execute;
-begin
-  // sleep to ensure that TWait is shown before GetOpsiScript is executed and blocks TWait
-  Sleep(100);
-  LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
-  FreeAndNil(LOpsiServerInstallationScriptExecuter);
-end;
-
-{ TPassword }
 
 procedure TPassword.FormActivate(Sender: TObject);
 begin
@@ -111,29 +61,15 @@ begin
   if not IsPasswordCorrect(rsWrongPassword) then Exit;
 
   btnFinishClicked := True;
-
-  // start thread for opsi server installation while showing TWait
-  InstallOpsiThread := TInstallOpsiThread.Create(EditPassword.Text,
-    RadioBtnSudo.Checked, Data.DistrInfo.PackageManagementShellCommand,
-    'l-opsi-server', 'download.uib.de/opsi4.2/testing/packages/linux/localboot/');
-  InstallOpsiThread.OnTerminate := @FormClose;
-  InstallOpsiThread.Start;
   Wait.Visible := True;
-end;
-
-procedure TPassword.CloseProject;
-begin
-  Overview.Close;
-  Wait.Close;
 end;
 
 procedure TPassword.FormClose(Sender: TObject);
 begin
   if btnFinishClicked then
   begin
-    Data.DistrInfo.Free;
-    FreeAndNil(Data);
-    CloseProject;
+    if Assigned(Data) then FreeAndNil(Data);
+    Overview.Close;
   end
   else
     Overview.Enabled := True;
