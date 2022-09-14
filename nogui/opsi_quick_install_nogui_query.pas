@@ -25,6 +25,8 @@ type
     procedure CheckInput(ValidOptions: string; EmptyInputAllowed: boolean;
       HelpInfo: string);
     procedure CheckHelp(HelpInfo: string);
+    function JumpBackToQuery(QueryProcedure: TQueryProcedure): boolean;
+
     procedure QueryDistribution;
     procedure QuerySetupType;
     //procedure QueryOpsiVersion;
@@ -97,6 +99,13 @@ begin
   end;
 end;
 
+function TQuickInstallNoQuiQuery.JumpBackToQuery(QueryProcedure:
+  TQueryProcedure): boolean;
+begin
+  Result := (input = '-b');
+  if Result then QueryProcedure;
+end;
+
 
 // Input variables not set by resourcestrings but by characters for no
 // requirement of a mouse.
@@ -141,9 +150,7 @@ begin
   CheckInput('s,c,-b', True, '');
 
   // if input = -b then go back to the previous query
-  if input = '-b' then
-    QueryDistribution
-  else
+  if not JumpBackToQuery(@QueryDistribution) then
   begin
     if input = 'c' then
       Data.CustomSetup := True
@@ -204,10 +211,7 @@ begin
     readln(input);
   end;
 
-  if input = '-b' then
-    //QueryOpsiVersion
-    QuerySetupType
-  else
+  if not JumpBackToQuery(@QuerySetupType) then
   begin // cases input = 'http...', input = ''
     if input = '' then
     begin
@@ -231,9 +235,7 @@ begin
   writeln(rsUseProxy, rsYesNoOp);
   CheckInput('y,n,-b', True, '');
 
-  if input = '-b' then
-    QueryRepo
-  else
+  if not JumpBackToQuery(@QueryRepo) then
   begin
     if input = 'y' then
     begin
@@ -263,9 +265,7 @@ begin
     readln(input);
   end;
 
-  if input = '-b' then
-    QueryProxy
-  else
+  if not JumpBackToQuery(@QueryProxy) then
   begin // cases input = 'http...', input = ''
     if input = '' then
       Data.repoNoCache := Data.repo
@@ -281,9 +281,7 @@ begin
   writeln(rsBackend, rsBackendOp, '*');
   CheckInput('f,m,-b', True, rsInfoBackend);
 
-  if input = '-b' then
-    QueryRepoNoCache
-  else
+  if not JumpBackToQuery(@QueryRepoNoCache) then
   begin
     if input = 'm' then
       Data.backend := 'mysql'
@@ -303,9 +301,7 @@ begin
   writeln(rsCopyModules, rsYesNoOp, '*');
   CheckInput('y,n,-b', True, rsInfoModules);
 
-  if input = '-b' then
-    QueryBackend
-  else
+  if not JumpBackToQuery(@QueryBackend) then
   begin
     if input = 'y' then
       Data.copyMod.SetEntries(rsYes, 'true')
@@ -433,9 +429,7 @@ begin
   writeln(rsTFTPROOT, rsLinkOp, '*');
   CheckInput('m,nom,-b', True, rsInfoTFTPROOT);
 
-  if input = '-b' then
-    QueryDhcp
-  else
+  if not JumpBackToQuery(@QueryDhcp) then
   begin
     if input = 'm' then
       Data.symlink := 'default.menu'
@@ -480,9 +474,7 @@ begin
   writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions, ']*');
   CheckHelp(rsInfoNetwork);
 
-  if input = '-b' then
-    QueryLink
-  else
+  if not JumpBackToQuery(@QueryLink) then
   begin
     Data.netmask := input;
     QueryNetworkAddress;
@@ -523,9 +515,7 @@ begin
   writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions, ']*');
   CheckHelp(rsInfoNetwork);
 
-  if input = '-b' then
-    QueryNetmask
-  else
+  if not JumpBackToQuery(@QueryNetmask) then
   begin
     Data.networkAddress := input;
     QueryDomain;
@@ -560,9 +550,7 @@ begin
   writeln(rsDomain, rsSuggestion, GetDomainSuggestions, ']*');
   CheckHelp(rsInfoNetwork);
 
-  if input = '-b' then
-    QueryNetworkAddress
-  else
+  if not JumpBackToQuery(@QueryNetworkAddress) then
   begin
     Data.domain := input;
     QueryNameserver;
@@ -597,9 +585,7 @@ begin
   writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions, ']*');
   CheckHelp(rsInfoNetwork);
 
-  if input = '-b' then
-    QueryDomain
-  else
+  if not JumpBackToQuery(@QueryDomain) then
   begin
     Data.nameserver := input;
     QueryGateway;
@@ -622,9 +608,7 @@ begin
     readln(input);
   end;
 
-  if input = '-b' then
-    QueryNameserver
-  else
+  if not JumpBackToQuery(@QueryNameserver) then
   begin
     Data.gateway := input;
     QueryAdminName;
@@ -657,9 +641,7 @@ procedure TQuickInstallNoQuiQuery.QueryAdminPassword;
 begin
   writeln(rsAdminPassword, '*');
   readln(input);
-  if input = '-b' then
-    QueryAdminName
-  else
+  if not JumpBackToQuery(@QueryAdminName) then
   begin
     Data.adminPassword := input;
     QueryIPName;
@@ -700,9 +682,7 @@ begin
     readln(input);
   end;
 
-  if input = '-b' then
-    QueryIPName
-  else
+  if not JumpBackToQuery(@QueryIPName) then
   begin
     Data.ipNumber := input;
     QueryOverview;
