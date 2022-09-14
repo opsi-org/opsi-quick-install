@@ -14,6 +14,9 @@ uses
   SupportedOpsiServerDistributions;
 
 type
+  TQueryProcedure = procedure of object;
+  TQueryProceduresList = array of TQueryProcedure;
+
   TQuickInstallNoQuiQuery = class(TObject)
   private
     input: string;
@@ -45,16 +48,16 @@ type
     procedure QueryAdminPassword;
     procedure QueryIPName;
     procedure QueryIPNumber;
-    procedure JumpBackFromOverviewToQuery(QueryName: string);
+    procedure JumpBackFromOverviewToQuery(QueryProcedure: TQueryProcedure);
     procedure PrintOverview;
-    function GetAskedQueries: TStringList;
+    function GetAskedQueries: TQueryProceduresList;
     procedure QueryOverview;
   public
     QueryFinished: boolean;
     procedure StartQuery;
   end;
 
- TMyProcedure = procedure of object;
+
 
 implementation
 
@@ -758,64 +761,10 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.JumpBackFromOverviewToQuery(QueryName: string);
+procedure TQuickInstallNoQuiQuery.JumpBackFromOverviewToQuery(
+  QueryProcedure: TQueryProcedure);
 begin
-  if QueryName = 'QueryRepo' then
-    QueryRepo
-  else
-  if QueryName = 'QueryProxy' then
-    QueryProxy
-  else
-  if QueryName = 'QueryRepoNoCache' then
-    QueryRepoNoCache
-  else
-  if QueryName = 'QueryBackend' then
-    QueryBackend
-  else
-  if QueryName = 'QueryModules' then
-    QueryModules
-  else
-  if QueryName = 'QueryRepoKind' then
-    QueryRepoKind
-  else
-  if QueryName = 'QueryUCS' then
-    QueryUCS
-  else
-  if QueryName = 'QueryReboot' then
-    QueryReboot
-  else
-  if QueryName = 'QueryDhcp' then
-    QueryDhcp
-  else
-  if QueryName = 'QueryLink' then
-    QueryLink
-  else
-  if QueryName = 'QueryNetmask' then
-    QueryNetmask
-  else
-  if QueryName = 'QueryNetworkAddress' then
-    QueryNetworkAddress
-  else
-  if QueryName = 'QueryDomain' then
-    QueryDomain
-  else
-  if QueryName = 'QueryNameserver' then
-    QueryNameserver
-  else
-  if QueryName = 'QueryGateway' then
-    QueryGateway
-  else
-  if QueryName = 'QueryAdminName' then
-    QueryAdminName
-  else
-  if QueryName = 'QueryAdminPassword' then
-    QueryAdminPassword
-  else
-  if QueryName = 'QueryIPName' then
-    QueryIPName
-  else
-  if QueryName = 'QueryIPNumber' then
-    QueryIPNumber;
+  QueryProcedure;
 end;
 
 procedure TQuickInstallNoQuiQuery.PrintOverview;
@@ -887,75 +836,89 @@ begin
   writeln(Counter, ' ', rsIPNumberO, Data.ipNumber);
 end;
 
-function TQuickInstallNoQuiQuery.GetAskedQueries: TStringList;
+procedure AddQueryProcedureToList(QueryProcedure: TQueryProcedure;
+  var QueryProceduresList: TQueryProceduresList);
+begin
+  SetLength(QueryProceduresList, Length(QueryProceduresList) + 1);
+  QueryProceduresList[Length(QueryProceduresList) - 1] := QueryProcedure;
+end;
+
+function TQuickInstallNoQuiQuery.GetAskedQueries: TQueryProceduresList;
+var
+  QueryProceduresList: TQueryProceduresList;
 begin
   // find the questions that were asked (depending on setup type and
   // distribution=Univention) and return their names
-  Result := TStringList.Create;
+  //Result := TStringList.Create;
+  QueryProceduresList := TQueryProceduresList.Create;
+  SetLength(QueryProceduresList, 0);
 
   {Custom installation}
   if Data.CustomSetup then
   begin
-    Result.Add('QueryRepo');
-    Result.Add('QueryProxy');
-    Result.Add('QueryRepoNoCache');
-    Result.Add('QueryBackend');
+    AddQueryProcedureToList(@QueryRepo, QueryProceduresList);
+    AddQueryProcedureToList(@QueryProxy, QueryProceduresList);
+    AddQueryProcedureToList(@QueryRepoNoCache, QueryProceduresList);
+    AddQueryProcedureToList(@QueryBackend, QueryProceduresList);
 
     if Data.backend = 'mysql' then
-      Result.Add('QueryModules');
+      AddQueryProcedureToList(@QueryModules, QueryProceduresList);
 
-    Result.Add('QueryRepoKind');
+    AddQueryProcedureToList(@QueryRepoKind, QueryProceduresList);
   end;
 
   {Both}
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-    Result.Add('QueryUCS');
+    AddQueryProcedureToList(@QueryUCS, QueryProceduresList);
 
   {Custom installation}
   if Data.CustomSetup then
-    Result.Add('QueryReboot');
+    AddQueryProcedureToList(@QueryReboot, QueryProceduresList);
 
   {Both}
-  Result.Add('QueryDhcp');
+  AddQueryProcedureToList(@QueryDhcp, QueryProceduresList);
   if Data.dhcp.PropertyEntry = 'true' then
   begin
-    Result.Add('QueryLink');
-    Result.Add('QueryNetmask');
-    Result.Add('QueryNetworkAddress');
-    Result.Add('QueryDomain');
-    Result.Add('QueryNameserver');
-    Result.Add('QueryGateway');
+    AddQueryProcedureToList(@QueryLink, QueryProceduresList);
+    AddQueryProcedureToList(@QueryNetmask, QueryProceduresList);
+    AddQueryProcedureToList(@QueryNetworkAddress, QueryProceduresList);
+    AddQueryProcedureToList(@QueryDomain, QueryProceduresList);
+    AddQueryProcedureToList(@QueryNameserver, QueryProceduresList);
+    AddQueryProcedureToList(@QueryGateway, QueryProceduresList);
   end;
 
-  Result.Add('QueryAdminName');
+  AddQueryProcedureToList(@QueryAdminName, QueryProceduresList);
   if Data.adminName <> '' then
-    Result.Add('QueryAdminPassword');
+    AddQueryProcedureToList(@QueryAdminPassword, QueryProceduresList);
 
-  Result.Add('QueryIPName');
-  Result.Add('QueryIPNumber');
+  AddQueryProcedureToList(@QueryIPName, QueryProceduresList);
+  AddQueryProcedureToList(@QueryIPNumber, QueryProceduresList);
   //writeln(Result.Text);
+
+  Result := QueryProceduresList;
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryOverview;
 var
   // list of the asked questions by numbers
-  queries: TStringList;
+  QueryProceduresList: TQueryProceduresList;
   QueryIndex: integer;
   ValidQueryIndex: boolean = False;
 begin
   PrintOverview;
-  queries := GetAskedQueries;
+  QueryProceduresList := GetAskedQueries;
 
   writeln('');
   writeln(rsContinue);
   // Jumping back to a query by the number in the overview:
   readln(input);
   try
-    QueryIndex := StrToInt(input);
-    if (QueryIndex > 0) and (QueryIndex <= queries.Count) then
+    QueryIndex := StrToInt(input) - 1;
+    if (QueryIndex >= 0) and (QueryIndex < Length(QueryProceduresList)) then
       ValidQueryIndex := True;
   except
   end;
+
   // only elements of 'queries' (jumping back) or '' (start installation) are valid inputs
   while not (ValidQueryIndex or (input = '')) do
   begin
@@ -963,15 +926,15 @@ begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
     try
-      QueryIndex := StrToInt(input);
-      if (QueryIndex > 0) and (QueryIndex <= queries.Count) then
+      QueryIndex := StrToInt(input) - 1;
+      if (QueryIndex >= 0) and (QueryIndex < Length(QueryProceduresList)) then
         ValidQueryIndex := True;
     except
     end;
   end;
   // jump back to the respective question
   if input <> '' then
-    JumpBackFromOverviewToQuery(queries[QueryIndex-1])
+    JumpBackFromOverviewToQuery(QueryProceduresList[QueryIndex])
   else
     QueryFinished := True;
 end;
