@@ -152,10 +152,11 @@ begin
   // if input = -b then go back to the previous query
   if not JumpBackToQuery(@QueryDistribution) then
   begin
-    if input = 'c' then
-      Data.CustomSetup := True
-    else // cases input = 's', input = ''
-      Data.CustomSetup := False;
+    case input of
+      'c': Data.CustomSetup := True;
+      's': Data.CustomSetup := False;
+      '': Data.CustomSetup := False;
+    end;
 
     if Data.CustomSetup then
       // following queries only for custom setup
@@ -215,16 +216,13 @@ begin
   begin // cases input = 'http...', input = ''
     if input = '' then
     begin
-      if Data.opsiVersion = 'Opsi 4.1' then
-        Data.repo := Data.baseRepoUrlOpsi41
-      else
-      if Data.opsiVersion = 'Opsi 4.2' then
-        Data.repo := Data.baseRepoUrlOpsi42;
+      case Data.opsiVersion of
+        'Opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
+        'Opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
+      end
     end
     else
-    begin
       Data.repo := input;
-    end;
 
     QueryProxy;
   end;
@@ -237,15 +235,16 @@ begin
 
   if not JumpBackToQuery(@QueryRepo) then
   begin
-    if input = 'y' then
-    begin
-      writeln('Which Proxy would you like to use? [Example: "http://myproxy.dom.org:8080"]');
-      readln(input);
-      Data.proxy := input;
-    end
-    else // cases input = 'n', input = ''
-      Data.proxy := '';
-
+    case input of
+      '': Data.proxy := '';
+      'n': Data.proxy := '';
+      'y':
+      begin
+        writeln('Which Proxy would you like to use? [Example: "http://myproxy.dom.org:8080"]');
+        readln(input);
+        Data.proxy := input;
+      end;
+    end;
     QueryRepoNoCache;
   end;
 end;
@@ -283,10 +282,11 @@ begin
 
   if not JumpBackToQuery(@QueryRepoNoCache) then
   begin
-    if input = 'm' then
-      Data.backend := 'mysql'
-    else
-      Data.backend := 'file'; // cases input = 'f', input = ''
+    case input of
+      'm': Data.backend := 'mysql';
+      'f': Data.backend := 'file';
+      '': Data.backend := 'file';
+    end;
 
     if Data.backend = 'mysql' then
       QueryModules
@@ -303,11 +303,11 @@ begin
 
   if not JumpBackToQuery(@QueryBackend) then
   begin
-    if input = 'y' then
-      Data.copyMod.SetEntries(rsYes, 'true')
-    else
-      Data.copyMod.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
-
+    case input of
+      'y': Data.copyMod.SetEntries(rsYes, 'true');
+      'n': Data.copyMod.SetEntries(rsNo, 'false');
+      '': Data.copyMod.SetEntries(rsNo, 'false');
+    end;
     QueryRepoKind;
   end;
 end;
@@ -326,12 +326,12 @@ begin
   end
   else
   begin
-    if input = 'e' then
-      Data.repoKind := 'experimental'
-    else if input = 't' then
-      Data.repoKind := 'testing'
-    else
-      Data.repoKind := 'stable'; // cases input = 's', input = ''
+    case input of
+      'e': Data.repoKind := 'experimental';
+      't': Data.repoKind := 'testing';
+      's': Data.repoKind := 'stable';
+      '': Data.repoKind := 'stable';
+    end;
 
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
       QueryUCS
@@ -376,11 +376,11 @@ begin
   end
   else
   begin
-    if input = 'y' then
-      Data.reboot.SetEntries(rsYes, 'true')
-    else
-      Data.reboot.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
-
+    case input of
+      'y': Data.reboot.SetEntries(rsYes, 'true');
+      'n': Data.reboot.SetEntries(rsNo, 'false');
+      '': Data.reboot.SetEntries(rsNo, 'false');
+    end;
     QueryDhcp;
   end;
 end;
@@ -404,10 +404,11 @@ begin
   end
   else
   begin
-    if input = 'y' then
-      Data.dhcp.SetEntries(rsYes, 'true')
-    else
-      Data.dhcp.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
+    case input of
+      'y': Data.dhcp.SetEntries(rsYes, 'true');
+      'n': Data.dhcp.SetEntries(rsNo, 'false');
+      '': Data.dhcp.SetEntries(rsNo, 'false');
+    end;
 
     if Data.dhcp.PropertyEntry = 'true' then
     begin
@@ -431,11 +432,11 @@ begin
 
   if not JumpBackToQuery(@QueryDhcp) then
   begin
-    if input = 'm' then
-      Data.symlink := 'default.menu'
-    else
-      Data.symlink := 'default.nomenu'; // cases input = 'nom', input = ''
-
+    case input of
+      'm': Data.symlink := 'default.menu';
+      'nom': Data.symlink := 'default.nomenu';
+      '': Data.symlink := 'default.nomenu';
+    end;
     QueryNetmask;
   end;
 end;
