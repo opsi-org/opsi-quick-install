@@ -46,7 +46,7 @@
         <PackageName Value="LazUtils"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="4">
       <Unit0>
         <Filename Value="opsi_quick_install_project.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -59,6 +59,11 @@
         <Filename Value="opsi_quick_install_nogui_query.pas"/>
         <IsPartOfProject Value="True"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="opsi_quick_install_nogui_networksuggestions.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="opsi_quick_install_nogui_NetworkSuggestions"/>
+      </Unit3>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

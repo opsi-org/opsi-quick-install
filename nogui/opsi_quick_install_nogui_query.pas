@@ -11,7 +11,8 @@ uses
   DistributionInfo,
   osnetworkcalculator,
   osnetutil,
-  SupportedOpsiServerDistributions;
+  SupportedOpsiServerDistributions,
+  opsi_quick_install_nogui_NetworkSuggestions;
 
 type
   TQueryProcedure = procedure of object;
@@ -40,13 +41,9 @@ type
     procedure QueryReboot;
     procedure QueryDhcp;
     procedure QueryLink;
-    function GetNetmaskSuggestions: string;
     procedure QueryNetmask;
-    function GetNetworkAddressSuggestions: string;
     procedure QueryNetworkAddress;
-    function GetDomainSuggestions: string;
     procedure QueryDomain;
-    function GetNameserverSuggestions: string;
     procedure QueryNameserver;
     procedure QueryGateway;
     procedure QueryAdminName;
@@ -439,38 +436,9 @@ begin
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetNetmaskSuggestions: string;
-var
-  Suggestions: string = '';
-  network: array of string;
-  index: integer = 0;
-begin
-  // IP4.ADDRESS[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    network := NetworkDetails[index].Split(['/']);
-    Suggestions += getNetmaskByIP4adr(network[1]);
-    // IP4.ADDRESS[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      network := NetworkDetails[index].Split(['/']);
-      Suggestions += ', ' + getNetmaskByIP4adr(network[1]);
-      // IP4.ADDRESS[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-      begin
-        network := NetworkDetails[index].Split(['/']);
-        Suggestions += ', ' + getNetmaskByIP4adr(network[1]);
-      end;
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryNetmask;
 begin
-  writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions, ']*');
+  writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions(NetworkDetails), ']*');
   CheckHelp(rsInfoNetwork);
 
   if not JumpBackToQuery(@QueryLink) then
@@ -480,38 +448,9 @@ begin
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetNetworkAddressSuggestions: string;
-var
-  Suggestions: string = '';
-  network: array of string;
-  index: integer = 0;
-begin
-  // IP4.ADDRESS[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    network := NetworkDetails[index].Split(['/']);
-    Suggestions += getIP4NetworkByAdrAndMask(network[0], network[1]);
-    // IP4.ADDRESS[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      network := NetworkDetails[index].Split(['/']);
-      Suggestions += ', ' + getIP4NetworkByAdrAndMask(network[0], network[1]);
-      // IP4.ADDRESS[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-      begin
-        network := NetworkDetails[index].Split(['/']);
-        Suggestions += ', ' + getIP4NetworkByAdrAndMask(network[0], network[1]);
-      end;
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
 begin
-  writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions, ']*');
+  writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions(NetworkDetails), ']*');
   CheckHelp(rsInfoNetwork);
 
   if not JumpBackToQuery(@QueryNetmask) then
@@ -521,32 +460,9 @@ begin
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetDomainSuggestions: string;
-var
-  Suggestions: string = '';
-  index: integer = 3;
-begin
-  // IP4.DOMAIN[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    Suggestions += NetworkDetails[index];
-    // IP4.DOMAIN[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      Suggestions += ', ' + NetworkDetails[index];
-      // IP4.DOMAIN[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-        Suggestions += ', ' + NetworkDetails[index];
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryDomain;
 begin
-  writeln(rsDomain, rsSuggestion, GetDomainSuggestions, ']*');
+  writeln(rsDomain, rsSuggestion, GetDomainSuggestions(NetworkDetails), ']*');
   CheckHelp(rsInfoNetwork);
 
   if not JumpBackToQuery(@QueryNetworkAddress) then
@@ -556,32 +472,9 @@ begin
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetNameserverSuggestions: string;
-var
-  Suggestions: string = '';
-  index: integer = 6;
-begin
-  // IP4.DNS[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    Suggestions += NetworkDetails[index];
-    // IP4.DNS[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      Suggestions += ', ' + NetworkDetails[index];
-      // IP4.DNS[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-        Suggestions += ', ' + NetworkDetails[index];
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryNameserver;
 begin
-  writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions, ']*');
+  writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions(NetworkDetails), ']*');
   CheckHelp(rsInfoNetwork);
 
   if not JumpBackToQuery(@QueryDomain) then
