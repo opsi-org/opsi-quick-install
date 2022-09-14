@@ -13,7 +13,7 @@ uses
   opsiquickinstall_InstallationScriptExecuter,
   IndependentMessageDisplayer,
   DistributionInfo,
-  opsiquickinstall_data,
+  opsiquickinstall_QueryData,
   opsi_quick_install_resourcestrings;
 
 type

@@ -9,7 +9,7 @@ uses
   OpsiLinuxInstaller_QueryForm,
   FormAppearanceFunctions,
   opsi_quick_install_resourcestrings,
-  opsiquickinstall_data;
+  opsiquickinstall_QueryData;
 
 type
 

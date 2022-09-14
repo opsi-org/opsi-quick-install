@@ -14,7 +14,7 @@ uses
   LogFileFunctions,
   oslog,
   opsi_quick_install_resourcestrings,
-  opsiquickinstall_data;
+  opsiquickinstall_QueryData;
 
 type
 

@@ -15,7 +15,7 @@ uses
   osfunclin,
   oslog,
   opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
+  opsiquickinstall_QueryData,
   osnetutil,
   opsi_quick_install_nogui_query,
   OpsiPackageDownloader,

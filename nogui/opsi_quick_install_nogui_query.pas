@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils,
-  opsiquickinstall_data,
+  opsiquickinstall_QueryData,
   opsi_quick_install_resourcestrings,
   DistributionInfo,
   osnetworkcalculator,
