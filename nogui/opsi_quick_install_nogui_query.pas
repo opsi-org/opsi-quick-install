@@ -36,7 +36,7 @@ type
     procedure QueryBackend;
     procedure QueryCopyModules;
     procedure QueryRepoKind;
-    procedure QueryUCS;
+    procedure QueryUCSPassword;
     procedure QueryReboot;
     procedure QueryDhcp;
     procedure QueryLink;
@@ -164,7 +164,7 @@ begin
       QueryRepo
     else
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      QueryUCS
+      QueryUCSPassword
     else
       QueryDhcp;
   end;
@@ -333,15 +333,14 @@ begin
     end;
 
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      QueryUCS
+      QueryUCSPassword
     else
       QueryReboot;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryUCS;
+procedure TQuickInstallNoQuiQuery.QueryUCSPassword;
 begin
-  // ucs password:
   writeln(rsUCS);
   readln(input);
   if input = '-b' then // go back
@@ -369,7 +368,7 @@ begin
   if input = '-b' then
   begin
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      QueryUCS
+      QueryUCSPassword
     else
       QueryRepoKind;
   end
@@ -396,7 +395,7 @@ begin
     else
     begin
       if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-        QueryUCS
+        QueryUCSPassword
       else
         QuerySetupType;
     end;
@@ -797,7 +796,7 @@ begin
 
   {Both}
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-    AddQueryToList(@QueryUCS, QueryProceduresList);
+    AddQueryToList(@QueryUCSPassword, QueryProceduresList);
 
   {Custom installation}
   if Data.CustomSetup then
