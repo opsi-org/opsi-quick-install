@@ -61,9 +61,9 @@ begin
     Data.backend := RadioBtnMySql.Caption;
   // Copy modules
   if RadioBtnYesCopy.Checked then
-    Data.copyMod.SetEntries(RadioBtnYesCopy.Caption, 'true')
+    Data.copyMod.SetEntries('true')
   else
-    Data.copyMod.SetEntries(RadioBtnNoCopy.Caption, 'false');
+    Data.copyMod.SetEntries('false');
   // Repo kind
   if RadioBtnStable.Checked then
     Data.repoKind := RadioBtnStable.Caption

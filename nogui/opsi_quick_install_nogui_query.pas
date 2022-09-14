@@ -304,9 +304,9 @@ begin
   if not JumpBackToQuery(@QueryBackend) then
   begin
     case input of
-      'y': Data.copyMod.SetEntries(rsYes, 'true');
-      'n': Data.copyMod.SetEntries(rsNo, 'false');
-      '': Data.copyMod.SetEntries(rsNo, 'false');
+      'y': Data.copyMod.SetEntries('true');
+      'n': Data.copyMod.SetEntries('false');
+      '': Data.copyMod.SetEntries('false');
     end;
     QueryRepoKind;
   end;
@@ -377,9 +377,9 @@ begin
   else
   begin
     case input of
-      'y': Data.reboot.SetEntries(rsYes, 'true');
-      'n': Data.reboot.SetEntries(rsNo, 'false');
-      '': Data.reboot.SetEntries(rsNo, 'false');
+      'y': Data.reboot.SetEntries('true');
+      'n': Data.reboot.SetEntries('false');
+      '': Data.reboot.SetEntries('false');
     end;
     QueryDhcp;
   end;
@@ -405,9 +405,9 @@ begin
   else
   begin
     case input of
-      'y': Data.dhcp.SetEntries(rsYes, 'true');
-      'n': Data.dhcp.SetEntries(rsNo, 'false');
-      '': Data.dhcp.SetEntries(rsNo, 'false');
+      'y': Data.dhcp.SetEntries('true');
+      'n': Data.dhcp.SetEntries('false');
+      '': Data.dhcp.SetEntries('false');
     end;
 
     if Data.dhcp.PropertyEntry = 'true' then

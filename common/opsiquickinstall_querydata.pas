@@ -22,7 +22,7 @@ type
     FOverviewEntry: string;
     FPropertyEntry: string; // mostly gets boolean value
   public
-    procedure SetEntries(SetOverviewEntry: string; SetPropertyEntry: string);
+    procedure SetEntries(PropertyEntry: string);
     property OverviewEntry: string read FOverviewEntry;
     property PropertyEntry: string read FPropertyEntry;
   end;
@@ -66,10 +66,13 @@ implementation
 
 {TSplitData}
 
-procedure TSplitData.SetEntries(SetOverviewEntry: string; SetPropertyEntry: string);
+procedure TSplitData.SetEntries(PropertyEntry: string);
 begin
-  FOverviewEntry := SetOverviewEntry;
-  FPropertyEntry := SetPropertyEntry;
+  FPropertyEntry := PropertyEntry;
+  if PropertyEntry = 'true' then
+    FOverviewEntry := rsYes
+  else
+    FOverviewEntry := rsNo;
 end;
 
 
@@ -88,14 +91,14 @@ begin
 
   backend := 'file';
   copyMod := TSplitData.Create;
-  copyMod.SetEntries(rsNo, 'false');
+  copyMod.SetEntries('false');
   repoKind := 'stable';
 
   ucsPassword := '';
   reboot := TSplitData.Create;
-  reboot.SetEntries(rsNo, 'false');
+  reboot.SetEntries('false');
   dhcp := TSplitData.Create;
-  dhcp.SetEntries(rsNo, 'false');
+  dhcp.SetEntries('false');
   symlink := 'default.nomenu';
 
   netmask := '255.255.0.0';

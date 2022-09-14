@@ -62,14 +62,14 @@ begin
   Data.ucsPassword := EditPasswordUCS.Text;
   // Reboot
   if RadioBtnYes.Checked then
-    Data.reboot.SetEntries(RadioBtnYes.Caption, 'true')
+    Data.reboot.SetEntries('true')
   else
-    Data.reboot.SetEntries(RadioBtnNo.Caption, 'false');
+    Data.reboot.SetEntries('false');
   // Dhcp
   if RadioBtnDhcpYes.Checked then
-    Data.dhcp.SetEntries(RadioBtnDhcpYes.Caption, 'true')
+    Data.dhcp.SetEntries('true')
   else
-    Data.dhcp.SetEntries(RadioBtnDhcpNo.Caption, 'false');
+    Data.dhcp.SetEntries('false');
   // TFTPROOT
   if RadioBtnMenu.Checked then
     Data.symlink := RadioBtnMenu.Caption
