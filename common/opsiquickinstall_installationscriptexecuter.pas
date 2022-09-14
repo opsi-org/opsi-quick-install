@@ -9,7 +9,7 @@ uses
   oslog,
   opsi_quick_install_resourcestrings,
   OpsiLinuxInstaller_InstallationScriptExecuter,
-  opsiquickinstall_data,
+  opsiquickinstall_QueryData,
   IndependentMessageDisplayer;
 
 type
