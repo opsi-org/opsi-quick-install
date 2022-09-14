@@ -22,6 +22,9 @@ type
     input: string;
     NetworkDetails: array of string;
 
+    procedure CheckInput(ValidOptions: string; EmptyInputAllowed: boolean;
+      HelpInfo: string);
+    procedure CheckHelp(HelpInfo: string);
     procedure QueryDistribution;
     procedure QuerySetupType;
     //procedure QueryOpsiVersion;
@@ -61,6 +64,40 @@ type
 
 implementation
 
+procedure TQuickInstallNoQuiQuery.CheckInput(ValidOptions: string;
+  EmptyInputAllowed: boolean; HelpInfo: string);
+var
+  ListOfValidOptions: TStringList;
+begin
+  ListOfValidOptions := TStringList.Create;
+  ListOfValidOptions.AddCommaText(ValidOptions);
+  if EmptyInputAllowed then ListOfValidOptions.add('');
+
+  readln(input);
+  while (ListOfValidOptions.IndexOf(input) = -1) do
+  begin
+    if (input = '-h') and (HelpInfo <> '') then
+      writeln(HelpInfo)
+    else
+      writeln('"', input, '"', rsNotValid);
+
+    readln(input);
+  end;
+
+  if Assigned(ListOfValidOptions) then FreeAndNil(ListOfValidOptions);
+end;
+
+procedure TQuickInstallNoQuiQuery.CheckHelp(HelpInfo: string);
+begin
+  readln(input);
+  while input = '-h' do
+  begin
+    writeln(HelpInfo);
+    readln(input);
+  end;
+end;
+
+
 // Input variables not set by resourcestrings but by characters for no
 // requirement of a mouse.
 
@@ -75,15 +112,8 @@ var
 begin
   writeln(rsDistr, ' ', Data.DistrInfo.DistroName, ' ', Data.DistrInfo.DistroRelease);
   writeln(rsIsCorrect, rsYesNoOp, '*');
-  readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoDistribution + #10 + SupportedDistributionsInfoString)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('y,n', True, rsInfoDistribution + #10 + SupportedDistributionsInfoString);
+
   // if distribution isn't correct, read the correct one
   if input = 'n' then
   begin
@@ -108,12 +138,8 @@ end;
 procedure TQuickInstallNoQuiQuery.QuerySetupType;
 begin
   writeln(rsSetup, rsSetupOp);
-  readln(input);
-  while not ((input = 's') or (input = 'c') or (input = '-b') or (input = '')) do
-  begin
-    writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('s,c,-b', True, '');
+
   // if input = -b then go back to the previous query
   if input = '-b' then
     QueryDistribution
@@ -203,12 +229,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryProxy;
 begin
   writeln(rsUseProxy, rsYesNoOp);
-  readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('y,n,-b', True, '');
 
   if input = '-b' then
     QueryRepo
@@ -258,15 +279,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryBackend;
 begin
   writeln(rsBackend, rsBackendOp, '*');
-  readln(input);
-  while not ((input = 'f') or (input = 'm') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoBackend)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('f,m,-b', True, rsInfoBackend);
 
   if input = '-b' then
     QueryRepoNoCache
@@ -288,15 +301,7 @@ procedure TQuickInstallNoQuiQuery.QueryModules;
 begin
   // copy modules:
   writeln(rsCopyModules, rsYesNoOp, '*');
-  readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoModules)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('y,n,-b', True, rsInfoModules);
 
   if input = '-b' then
     QueryBackend
@@ -314,16 +319,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryRepoKind;
 begin
   writeln(rsRepoKind, rsRepoKindOp, '*');
-  readln(input);
-  while not ((input = 'e') or (input = 't') or (input = 's') or
-      (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoRepoKind)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('e,t,s,-b', True, rsInfoRepoKind);
 
   if input = '-b' then
   begin
@@ -373,15 +369,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryReboot;
 begin
   writeln(rsReboot, rsYesNoOp, '*');
-  readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoReboot)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('y,n,-b', True, rsInfoReboot);
 
   if input = '-b' then
   begin
@@ -404,15 +392,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryDhcp;
 begin
   writeln(rsDhcp, rsYesNoOp, '*');
-  readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoDhcp)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('y,n,-b', True, rsInfoDhcp);
 
   if input = '-b' then
   begin
@@ -451,15 +431,8 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryLink;
 begin
   writeln(rsTFTPROOT, rsLinkOp, '*');
-  readln(input);
-  while not ((input = 'm') or (input = 'nom') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoTFTPROOT)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('m,nom,-b', True, rsInfoTFTPROOT);
+
   if input = '-b' then
     QueryDhcp
   else
@@ -505,12 +478,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryNetmask;
 begin
   writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  CheckHelp(rsInfoNetwork);
 
   if input = '-b' then
     QueryLink
@@ -553,12 +521,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
 begin
   writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  CheckHelp(rsInfoNetwork);
 
   if input = '-b' then
     QueryNetmask
@@ -595,12 +558,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryDomain;
 begin
   writeln(rsDomain, rsSuggestion, GetDomainSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  CheckHelp(rsInfoNetwork);
 
   if input = '-b' then
     QueryNetworkAddress
@@ -637,12 +595,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryNameserver;
 begin
   writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  CheckHelp(rsInfoNetwork);
 
   if input = '-b' then
     QueryDomain
@@ -681,12 +634,7 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryAdminName;
 begin
   writeln(rsAdminName, '*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoAdmin);
-    readln(input);
-  end;
+  CheckHelp(rsInfoAdmin);
 
   if input = '-b' then
   begin
