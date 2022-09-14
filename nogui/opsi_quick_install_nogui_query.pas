@@ -544,7 +544,7 @@ procedure TQuickInstallNoQuiQuery.QueryIPName;
 begin
   writeln(rsIPName);
   readln(input);
-  while not ((input = 'auto') or isValidFQDN(input) or (input = '-b')) do
+  while not ((input = 'auto') or isValidFQDN(input) or (input = '-b') or (input = '')) do
   begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
@@ -559,7 +559,11 @@ begin
   end
   else
   begin
-    Data.ipName := input;
+    if input = '' then
+      Data.ipName := 'auto'
+    else
+      Data.ipName := input;
+
     QueryIPNumber;
   end;
 end;
@@ -568,7 +572,7 @@ procedure TQuickInstallNoQuiQuery.QueryIPNumber;
 begin
   writeln(rsIPNumber);
   readln(input);
-  while not ((input = 'auto') or isValidIP4(input) or (input = '-b')) do
+  while not ((input = 'auto') or isValidIP4(input) or (input = '-b') or (input = '')) do
   begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
@@ -576,7 +580,11 @@ begin
 
   if not JumpBackToQuery(@QueryIPName) then
   begin
-    Data.ipNumber := input;
+    if input = '' then
+      Data.ipNumber := 'auto'
+    else
+      Data.ipNumber := input;
+
     QueryOverview;
   end;
 end;

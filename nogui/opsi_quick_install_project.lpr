@@ -56,13 +56,19 @@ type
     readln(UserDefinedLang);
     // check for right input
     while not ((UserDefinedLang = 'de') or (UserDefinedLang = 'en') or
-        (UserDefinedLang = 'fr') or (UserDefinedLang = 'es')) do
+        (UserDefinedLang = 'fr') or (UserDefinedLang = 'es') or
+        (UserDefinedLang = '')) do
     begin
       writeln('"', UserDefinedLang, '"', rsNotValid);
       readln(UserDefinedLang);
     end;
-    TranslateUnitResourceStrings('opsi_quick_install_resourcestrings',
-      '../gui/locale/opsi_quick_install_project.' + UserDefinedLang + '.po');
+
+    // for UserDefinedLang = '' we keep the system language for which the resourcestrings were already translated
+    if UserDefinedLang <> '' then
+    begin
+      TranslateUnitResourceStrings('opsi_quick_install_resourcestrings',
+        '../gui/locale/opsi_quick_install_project.' + UserDefinedLang + '.po');
+    end;
 
     writeln(rsCarryOut);
     sleep(50);
