@@ -764,7 +764,7 @@ begin
   writeln(Counter, ' ', rsIPNumberO, Data.ipNumber);
 end;
 
-procedure AddQueryProcedureToList(QueryProcedure: TQueryProcedure;
+procedure AddQueryToList(QueryProcedure: TQueryProcedure;
   var QueryProceduresList: TQueryProceduresList);
 begin
   SetLength(QueryProceduresList, Length(QueryProceduresList) + 1);
@@ -784,43 +784,43 @@ begin
   {Custom installation}
   if Data.CustomSetup then
   begin
-    AddQueryProcedureToList(@QueryRepo, QueryProceduresList);
-    AddQueryProcedureToList(@QueryProxy, QueryProceduresList);
-    AddQueryProcedureToList(@QueryRepoNoCache, QueryProceduresList);
-    AddQueryProcedureToList(@QueryBackend, QueryProceduresList);
+    AddQueryToList(@QueryRepo, QueryProceduresList);
+    AddQueryToList(@QueryProxy, QueryProceduresList);
+    AddQueryToList(@QueryRepoNoCache, QueryProceduresList);
+    AddQueryToList(@QueryBackend, QueryProceduresList);
 
     if Data.backend = 'mysql' then
-      AddQueryProcedureToList(@QueryCopyModules, QueryProceduresList);
+      AddQueryToList(@QueryCopyModules, QueryProceduresList);
 
-    AddQueryProcedureToList(@QueryRepoKind, QueryProceduresList);
+    AddQueryToList(@QueryRepoKind, QueryProceduresList);
   end;
 
   {Both}
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-    AddQueryProcedureToList(@QueryUCS, QueryProceduresList);
+    AddQueryToList(@QueryUCS, QueryProceduresList);
 
   {Custom installation}
   if Data.CustomSetup then
-    AddQueryProcedureToList(@QueryReboot, QueryProceduresList);
+    AddQueryToList(@QueryReboot, QueryProceduresList);
 
   {Both}
-  AddQueryProcedureToList(@QueryDhcp, QueryProceduresList);
+  AddQueryToList(@QueryDhcp, QueryProceduresList);
   if Data.dhcp.PropertyEntry = 'true' then
   begin
-    AddQueryProcedureToList(@QueryLink, QueryProceduresList);
-    AddQueryProcedureToList(@QueryNetmask, QueryProceduresList);
-    AddQueryProcedureToList(@QueryNetworkAddress, QueryProceduresList);
-    AddQueryProcedureToList(@QueryDomain, QueryProceduresList);
-    AddQueryProcedureToList(@QueryNameserver, QueryProceduresList);
-    AddQueryProcedureToList(@QueryGateway, QueryProceduresList);
+    AddQueryToList(@QueryLink, QueryProceduresList);
+    AddQueryToList(@QueryNetmask, QueryProceduresList);
+    AddQueryToList(@QueryNetworkAddress, QueryProceduresList);
+    AddQueryToList(@QueryDomain, QueryProceduresList);
+    AddQueryToList(@QueryNameserver, QueryProceduresList);
+    AddQueryToList(@QueryGateway, QueryProceduresList);
   end;
 
-  AddQueryProcedureToList(@QueryAdminName, QueryProceduresList);
+  AddQueryToList(@QueryAdminName, QueryProceduresList);
   if Data.adminName <> '' then
-    AddQueryProcedureToList(@QueryAdminPassword, QueryProceduresList);
+    AddQueryToList(@QueryAdminPassword, QueryProceduresList);
 
-  AddQueryProcedureToList(@QueryIPName, QueryProceduresList);
-  AddQueryProcedureToList(@QueryIPNumber, QueryProceduresList);
+  AddQueryToList(@QueryIPName, QueryProceduresList);
+  AddQueryToList(@QueryIPNumber, QueryProceduresList);
   //writeln(Result.Text);
 
   Result := QueryProceduresList;
