@@ -1,4 +1,4 @@
-unit opsiquickinstall_data;
+unit opsiquickinstall_QueryData;
 
 {$mode objfpc}{$H+}
 
