@@ -59,9 +59,9 @@ compile opsi-quickinstall linux:
     - echo "$LAZ_PROJECT_FILE_GUI"
     - echo "$LAZ_PROJECT_FILE_NOGUI"
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
-    - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI
+    - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI --build-mode=Release
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
-    - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI
+    - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI --build-mode=Release
     - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
     - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
     - '[-n "$(ls -d l-opsi-server*)"] && rm -r build/opsi-quickinstall/l-opsi-server*'
