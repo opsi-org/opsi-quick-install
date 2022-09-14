@@ -34,7 +34,7 @@ type
     procedure QueryProxy;
     procedure QueryRepoNoCache;
     procedure QueryBackend;
-    procedure QueryModules;
+    procedure QueryCopyModules;
     procedure QueryRepoKind;
     procedure QueryUCS;
     procedure QueryReboot;
@@ -289,15 +289,14 @@ begin
     end;
 
     if Data.backend = 'mysql' then
-      QueryModules
+      QueryCopyModules
     else
       QueryRepoKind;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryModules;
+procedure TQuickInstallNoQuiQuery.QueryCopyModules;
 begin
-  // copy modules:
   writeln(rsCopyModules, rsYesNoOp, '*');
   CheckInput('y,n,-b', True, rsInfoModules);
 
@@ -320,7 +319,7 @@ begin
   if input = '-b' then
   begin
     if Data.backend = 'mysql' then
-      QueryModules
+      QueryCopyModules
     else
       QueryBackend;
   end
@@ -791,7 +790,7 @@ begin
     AddQueryProcedureToList(@QueryBackend, QueryProceduresList);
 
     if Data.backend = 'mysql' then
-      AddQueryProcedureToList(@QueryModules, QueryProceduresList);
+      AddQueryProcedureToList(@QueryCopyModules, QueryProceduresList);
 
     AddQueryProcedureToList(@QueryRepoKind, QueryProceduresList);
   end;
