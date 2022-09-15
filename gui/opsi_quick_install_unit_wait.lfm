@@ -18,5 +18,6 @@ object Wait: TWait
     Alignment = taCenter
     Caption = 'LabelWait'
     Layout = tlCenter
+    WordWrap = True
   end
 end
