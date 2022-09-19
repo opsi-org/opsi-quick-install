@@ -467,53 +467,77 @@ begin
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryNetmask;
+var
+  Suggestions: string;
 begin
-  writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions(NetworkDetails), ']*');
+  Suggestions := GetNetmaskSuggestions(NetworkDetails);
+  writeln(rsNetmask, rsSuggestion, Suggestions, ']*');
   CheckHelp(rsInfoNetwork);
   if CheckJumpToOverview then Exit;
 
   if not JumpBackToQuery(@QueryLink) then
   begin
-    Data.netmask := input;
+    if input = '' then
+      Data.netmask := TakeFirstSuggestion(Suggestions)
+    else
+      Data.netmask := input;
     QueryNetworkAddress;
   end;
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
+var
+  Suggestions: string;
 begin
-  writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions(NetworkDetails), ']*');
+  Suggestions := GetNetworkAddressSuggestions(NetworkDetails);
+  writeln(rsNetworkAddress, rsSuggestion, Suggestions, ']*');
   CheckHelp(rsInfoNetwork);
   if CheckJumpToOverview then Exit;
 
   if not JumpBackToQuery(@QueryNetmask) then
   begin
-    Data.networkAddress := input;
+    if input = '' then
+      Data.networkAddress := TakeFirstSuggestion(Suggestions)
+    else
+      Data.networkAddress := input;
     QueryDomain;
   end;
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryDomain;
+var
+  Suggestions: string;
 begin
-  writeln(rsDomain, rsSuggestion, GetDomainSuggestions(NetworkDetails), ']*');
+  Suggestions := GetDomainSuggestions(NetworkDetails);
+  writeln(rsDomain, rsSuggestion, Suggestions, ']*');
   CheckHelp(rsInfoNetwork);
   if CheckJumpToOverview then Exit;
 
   if not JumpBackToQuery(@QueryNetworkAddress) then
   begin
-    Data.domain := input;
+    if input = '' then
+      Data.domain := TakeFirstSuggestion(Suggestions)
+    else
+      Data.domain := input;
     QueryNameserver;
   end;
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryNameserver;
+var
+  Suggestions: string;
 begin
-  writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions(NetworkDetails), ']*');
+  Suggestions := GetNameserverSuggestions(NetworkDetails);
+  writeln(rsNameserver, rsSuggestion, Suggestions, ']*');
   CheckHelp(rsInfoNetwork);
   if CheckJumpToOverview then Exit;
 
   if not JumpBackToQuery(@QueryDomain) then
   begin
-    Data.nameserver := input;
+    if input = '' then
+      Data.nameserver := TakeFirstSuggestion(Suggestions)
+    else
+      Data.nameserver := input;
     QueryGateway;
   end;
 end;
@@ -532,7 +556,10 @@ begin
 
   if not JumpBackToQuery(@QueryNameserver) then
   begin
-    Data.gateway := input;
+    if input = '' then
+      Data.gateway := suggestion
+    else
+      Data.gateway := input;
     QueryAdminName;
   end;
 end;

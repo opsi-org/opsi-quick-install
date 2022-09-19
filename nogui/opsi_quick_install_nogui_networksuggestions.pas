@@ -8,12 +8,21 @@ uses
   Classes, SysUtils,
   osnetworkcalculator;
 
+function TakeFirstSuggestion(Suggestions: string): string;
 function GetNetmaskSuggestions(NetworkDetails: array of string): string;
 function GetNetworkAddressSuggestions(NetworkDetails: array of string): string;
 function GetDomainSuggestions(NetworkDetails: array of string): string;
 function GetNameserverSuggestions(NetworkDetails: array of string): string;
 
 implementation
+
+function TakeFirstSuggestion(Suggestions: string): string;
+begin
+  if Pos(',', Suggestions) = 0 then
+    Result := Suggestions
+  else
+    Result := Copy(Suggestions, 1, Pos(',', Suggestions) - 1);
+end;
 
 function GetNetmaskSuggestions(NetworkDetails: array of string): string;
 var
