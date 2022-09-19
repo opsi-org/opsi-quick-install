@@ -101,12 +101,12 @@ begin
   dhcp.SetEntries('false');
   symlink := 'default.nomenu';
 
-  netmask := '255.255.0.0';
-  networkAddress := '192.168.0.0';
-  domain := 'uib.local';
-  nameserver := '192.168.1.245';
+  netmask := '';
+  networkAddress := '';
+  domain := '';
+  nameserver := '';
 
-  gateway := '192.168.1.245';
+  gateway := '';
   adminName := 'adminuser';
   adminPassword := 'linux123';
   ipName := 'auto';
