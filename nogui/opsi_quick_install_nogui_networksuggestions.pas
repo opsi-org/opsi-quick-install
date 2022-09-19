@@ -81,12 +81,14 @@ begin
   // IP4.DOMAIN[1]
   if NetworkDetails[index] <> '' then
   begin
-    Suggestions += NetworkDetails[index];
+    if NetworkDetails[index] <> 'lan' then
+      Suggestions += NetworkDetails[index]; // lan is no valid domain
     // IP4.DOMAIN[2]
     Inc(index);
     if NetworkDetails[index] <> '' then
     begin
-      Suggestions += ', ' + NetworkDetails[index];
+      if Suggestions <> '' then Suggestions += ', ';
+      Suggestions += NetworkDetails[index];
       // IP4.DOMAIN[3]
       Inc(index);
       if NetworkDetails[index] <> '' then

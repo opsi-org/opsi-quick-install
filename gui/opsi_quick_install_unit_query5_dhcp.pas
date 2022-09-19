@@ -185,12 +185,21 @@ begin
   index := 3;
   if NetworkDetails[index] <> '' then
   begin
-    RadioBtnDomain1.Visible := True;
-    RadioBtnDomain1.Caption := NetworkDetails[index];
+    if NetworkDetails[index] <> 'lan' then
+    begin
+      RadioBtnDomain1.Visible := True;
+      RadioBtnDomain1.Checked := True;
+      RadioBtnDomain1.Caption := NetworkDetails[index];
+    end;
     // IP4.DOMAIN[2]
     index += 1;
     if NetworkDetails[index] <> '' then
     begin
+      if not RadioBtnDomain1.Visible then
+      begin
+        RadioBtnDomain2.Checked := True;
+        RadioBtnDomain2.Left := RadioBtnDomain1.Left;
+      end;
       RadioBtnDomain2.Visible := True;
       RadioBtnDomain2.Caption := NetworkDetails[index];
       // IP4.DOMAIN[3]
@@ -200,13 +209,16 @@ begin
         RadioBtnDomain3.Visible := True;
         RadioBtnDomain3.Caption := NetworkDetails[index];
         // if too many checkboxes (i.e. 3), move CheckBoxOtherDomain down
-        RadioBtnOtherDomain.AnchorSide[akTop].Side := asrBottom;
-        RadioBtnOtherDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
-        RadioBtnOtherDomain.AnchorSide[akLeft].Side := asrLeft;
-        RadioBtnOtherDomain.AnchorSide[akLeft].Control := RadioBtnDomain1;
-        RadioBtnOtherDomain.BorderSpacing.Left := 0;
-        EditDomain.AnchorSide[akTop].Side := asrBottom;
-        EditDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
+        if RadioBtnDomain1.Visible then
+        begin
+          RadioBtnOtherDomain.AnchorSide[akTop].Side := asrBottom;
+          RadioBtnOtherDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
+          RadioBtnOtherDomain.AnchorSide[akLeft].Side := asrLeft;
+          RadioBtnOtherDomain.AnchorSide[akLeft].Control := RadioBtnDomain1;
+          RadioBtnOtherDomain.BorderSpacing.Left := 0;
+          EditDomain.AnchorSide[akTop].Side := asrBottom;
+          EditDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
+        end;
       end;
     end;
   end;

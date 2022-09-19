@@ -42,12 +42,13 @@ object Query5_dhcp: TQuery5_dhcp
   object PanelNetmask: TPanel
     AnchorSideTop.Control = Owner
     Left = 120
-    Height = 44
+    Height = 49
     Top = 30
     Width = 591
+    AutoSize = True
     BorderSpacing.Top = 30
     BevelOuter = bvNone
-    ClientHeight = 44
+    ClientHeight = 49
     ClientWidth = 591
     ParentFont = False
     TabOrder = 2
@@ -137,7 +138,7 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Side = asrBottom
     Left = 120
     Height = 49
-    Top = 94
+    Top = 99
     Width = 555
     AutoSize = True
     BorderSpacing.Top = 20
@@ -232,7 +233,7 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Side = asrBottom
     Left = 120
     Height = 49
-    Top = 163
+    Top = 168
     Width = 495
     AutoSize = True
     BorderSpacing.Top = 20
@@ -272,9 +273,8 @@ object Query5_dhcp: TQuery5_dhcp
       Top = 19
       Width = 72
       Caption = 'ucs.test'
-      Checked = True
       TabOrder = 1
-      TabStop = True
+      Visible = False
     end
     object RadioBtnDomain2: TRadioButton
       AnchorSideLeft.Control = RadioBtnDomain1
@@ -288,6 +288,7 @@ object Query5_dhcp: TQuery5_dhcp
       BorderSpacing.Left = 20
       Caption = 'uib.local'
       TabOrder = 2
+      Visible = False
     end
     object RadioBtnDomain3: TRadioButton
       AnchorSideLeft.Control = RadioBtnDomain2
@@ -301,6 +302,7 @@ object Query5_dhcp: TQuery5_dhcp
       BorderSpacing.Left = 20
       Caption = 'vmnat.local'
       TabOrder = 3
+      Visible = False
     end
     object RadioBtnOtherDomain: TRadioButton
       AnchorSideLeft.Control = RadioBtnDomain3
@@ -313,7 +315,9 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 65
       BorderSpacing.Left = 20
       Caption = 'Other:'
+      Checked = True
       TabOrder = 4
+      TabStop = True
     end
   end
   object PanelNameserver: TPanel
@@ -321,7 +325,7 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Side = asrBottom
     Left = 120
     Height = 49
-    Top = 232
+    Top = 237
     Width = 571
     AutoSize = True
     BorderSpacing.Top = 20
@@ -415,7 +419,7 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Side = asrBottom
     Left = 120
     Height = 49
-    Top = 301
+    Top = 306
     Width = 571
     AutoSize = True
     BorderSpacing.Top = 20
