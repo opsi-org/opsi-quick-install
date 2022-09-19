@@ -39,6 +39,7 @@ begin
   FFileText.Add('backend=' + Data.backend);
   FFileText.Add('dnsdomain=' + Data.domain);
   FFileText.Add('force_copy_modules=' + Data.copyMod.PropertyEntry);
+  FFileText.Add('gateway=' + Data.gateway);
   FFileText.Add('install_and_configure_dhcp=' + Data.dhcp.PropertyEntry);
   FFileText.Add('myipname=' + Data.ipName);
   FFileText.Add('myipnumber=' + Data.ipNumber);
