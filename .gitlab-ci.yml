@@ -58,6 +58,7 @@ compile opsi-quickinstall linux:
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"
     - echo "$LAZ_PROJECT_FILE_NOGUI"
+    - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI --build-mode=Release
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
