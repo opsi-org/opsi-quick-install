@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls, LCLtranslator, Buttons, process,
+  StdCtrls, Buttons, process,
   osnetutil,
   osfuncunix,
   OpsiLinuxInstaller_WelcomeForm,
@@ -25,7 +25,6 @@ type
     QuickInstallPanel: TPanel;
     RadioBtnDefault: TRadioButton;
     RadioBtnCustom: TRadioButton;
-    procedure RemoveFuzziesFromLocaleFiles;
     procedure SetDefaultLanguage(const Languages: TStringList);
     procedure FillLanguageSelection;
     procedure SetTextsByResourceStrings; override;
@@ -61,25 +60,6 @@ uses
 
 {$R *.lfm}
 
-procedure TQuickInstall.RemoveFuzziesFromLocaleFiles;
-var
-  removeFuzzys: string;
-begin
-  // from all po files remove all fuzzys that might have been introduced by the nogui version
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.de.po ../gui/locale/opsi_quick_install_project.de.po'],
-    removeFuzzys);
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.en.po ../gui/locale/opsi_quick_install_project.en.po'],
-    removeFuzzys);
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.es.po ../gui/locale/opsi_quick_install_project.es.po'],
-    removeFuzzys);
-  RunCommand('/bin/sh', ['-c',
-    'echo | msgattrib --clear-fuzzy -o ../gui/locale/opsi_quick_install_project.fr.po ../gui/locale/opsi_quick_install_project.fr.po'],
-    removeFuzzys);
-end;
-
 // Set position for BtnNext on first form !manually! for right position after
 // language change.
 // needs to be done for each language!
@@ -100,15 +80,12 @@ begin
 end;
 
 procedure TQuickInstall.SetDefaultLanguage(const Languages: TStringList);
-var
-  Lang: string;
 begin
-  Lang := Copy(GetEnvironmentVariable('LANG'), 1, 2);
+  Language.Abbreviation := Copy(GetEnvironmentVariable('LANG'), 1, 2);
   // let the combo box show the system language at the beginning
-  ComboBoxLanguages.ItemIndex := Languages.IndexOf(Lang);
+  ComboBoxLanguages.ItemIndex := Languages.IndexOf(Language.Abbreviation);
   // now set position of BtnNext for the default language
-  SetBtnWidth(Lang);
-  Language.Abbreviation := Lang;
+  SetBtnWidth(Language.Abbreviation);
 end;
 
 procedure TQuickInstall.FillLanguageSelection;
@@ -145,7 +122,6 @@ begin
   inherited FormCreate(Sender);
   CenterFormOnScreen(Sender as TForm);
 
-  //RemoveFuzziesFromLocaleFiles;
   Language := TLanguageObject.Create('../../../lazarus/');
 
   // set constant button positions:
