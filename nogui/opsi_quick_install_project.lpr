@@ -8,8 +8,6 @@ uses
   StrUtils,
   CustApp,
   Process,
-  GetText,
-  Translations,
   DistributionInfo,
   osRunCommandElevated,
   osfunclin,
@@ -51,6 +49,18 @@ type
     writeln(rsWelcome);
   end;
 
+  procedure TranslateNoguiResourceStrings;
+  begin
+    Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
+      '../locale/opsi_quick_install_CommonResourceStrings.' +
+      Language.Abbreviation + '.po');
+    Language.TranslateProjectResourceStrings('opsi_quick_install_NoguiResourceStrings',
+      '../locale/opsi_quick_install_NoguiResourceStrings.' +
+      Language.Abbreviation + '.po');
+    Language.TranslateCommonResourceStrings('WelcomeResourceStrings',
+      'Welcome.' + Language.Abbreviation + '.po');
+  end;
+
   procedure UseUserDefinedLanguage;
   var
     UserDefinedLang: string;
@@ -69,13 +79,8 @@ type
     // for UserDefinedLang = '' we keep the system language for which the resourcestrings were already translated
     if UserDefinedLang <> '' then
     begin
-      TranslateUnitResourceStrings('opsi_quick_install_NoguiResourceStrings',
-        '../locale/opsi_quick_install_NoguiResourceStrings.' + UserDefinedLang + '.po');
-      TranslateUnitResourceStrings('opsi_quick_install_CommonResourceStrings',
-        '../locale/opsi_quick_install_CommonResourceStrings.' + UserDefinedLang + '.po');
       Language.Abbreviation := UserDefinedLang;
-      Language.TranslateCommonResourceStrings('WelcomeResourceStrings',
-        'Welcome.' + Language.Abbreviation + '.po');
+      TranslateNoguiResourceStrings;
     end;
 
     writeln(rsCarryOut);
@@ -267,21 +272,10 @@ type
   end;
 
   procedure UseSystemLanguageForResourcestrings;
-  var
-    Lang, DefLang: string;
   begin
     // get default language (system language)
-    GetLanguageIDs(Lang, DefLang);
-    Language.Abbreviation := Lang;
-    // use po-files of gui version (because LCL (from the gui version) does not
-    // seem to be able to use po-files from other directories while the nogui
-    // version is flexible)
-    TranslateUnitResourceStrings('opsi_quick_install_NoguiResourceStrings',
-      '../locale/opsi_quick_install_NoguiResourceStrings.%s.po', Lang, DefLang);
-    TranslateUnitResourceStrings('opsi_quick_install_CommonResourceStrings',
-      '../locale/opsi_quick_install_CommonResourceStrings.%s.po', Lang, DefLang);
-    Language.TranslateCommonResourceStrings('WelcomeResourceStrings',
-      'Welcome.' + Language.Abbreviation + '.po');
+    Language.Abbreviation := Copy(GetEnvironmentVariable('LANG'), 1, 2);
+    TranslateNoguiResourceStrings;
   end;
 
   procedure CheckThatOqiSupportsDistribution(QuickInstall: TQuickInstall);
@@ -311,7 +305,6 @@ type
 
 var
   QuickInstall: TQuickInstall;
-  //r: TTranslateUnitResult;
 const
   LogfileName = 'opsi_quickinstall_nogui.log';
 
