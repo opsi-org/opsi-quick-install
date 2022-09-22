@@ -9,8 +9,9 @@ uses
   DistributionInfo,
   osfunclin,
   oslog,
-  opsi_quick_install_resourcestrings,
-  OpsiLinuxInstaller_QueryData;
+  opsi_quick_install_CommonResourceStrings,
+  OpsiLinuxInstaller_QueryData,
+  OpsiLinuxInstaller_LanguageObject;
 
 type
 
@@ -68,6 +69,10 @@ implementation
 
 procedure TSplitData.SetEntries(PropertyEntry: string);
 begin
+  (*Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
+    '../locale/opsi_quick_install_CommonResourceStrings.' +
+    Language.Abbreviation + '.po');*)
+
   FPropertyEntry := PropertyEntry;
   if PropertyEntry = 'true' then
     FOverviewEntry := rsYes

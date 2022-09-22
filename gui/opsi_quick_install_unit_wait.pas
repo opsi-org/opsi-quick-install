@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  opsi_quick_install_resourcestrings,
+  opsi_quick_install_CommonResourceStrings,
   opsiquickinstall_InstallationScriptExecuter,
   IndependentMessageDisplayer,
   opsiquickinstall_QueryData,

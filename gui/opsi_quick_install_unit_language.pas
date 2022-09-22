@@ -13,8 +13,10 @@ uses
   FormAppearanceFunctions,
   LogFileFunctions,
   oslog,
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_QueryData;
+  opsiquickinstall_QueryData,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
+  OpsiLinuxInstaller_LanguageObject;
 
 type
 
@@ -26,11 +28,14 @@ type
     procedure RemoveFuzziesFromLocaleFiles;
     procedure SetDefaultLanguage(const Languages: TStringList);
     procedure FillLanguageSelection;
+    procedure SetTextsByResourceStrings; override;
     procedure GetBtnFinishWidth;
     procedure BtnNextClick(Sender: TObject); override;
     procedure ComboBoxLanguagesChange(Sender: TObject);
     procedure FormActivate(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
+
+
   public
   const
     LogFileName = 'opsi_quickinstall.log';
@@ -95,11 +100,15 @@ begin
 end;
 
 procedure TQuickInstall.SetDefaultLanguage(const Languages: TStringList);
+var
+  Lang: string;
 begin
+  Lang := Copy(GetEnvironmentVariable('LANG'), 1, 2);
   // let the combo box show the system language at the beginning
-  ComboBoxLanguages.ItemIndex := Languages.IndexOf(GetDefaultLang);
+  ComboBoxLanguages.ItemIndex := Languages.IndexOf(Lang);
   // now set position of BtnNext for the default language
-  SetBtnWidth(GetDefaultLang);
+  SetBtnWidth(Lang);
+  Language.Abbreviation := Lang;
 end;
 
 procedure TQuickInstall.FillLanguageSelection;
@@ -115,12 +124,29 @@ begin
   SetDefaultLanguage(Languages);
 end;
 
+procedure TQuickInstall.SetTextsByResourceStrings;
+begin
+  inherited SetTextsByResourceStrings;
+
+  Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
+    '../locale/opsi_quick_install_CommonResourceStrings.' +
+    Language.Abbreviation + '.po');
+  Language.TranslateProjectResourceStrings('opsi_quick_install_GuiResourceStrings',
+    '../locale/opsi_quick_install_GuiResourceStrings.' +
+    Language.Abbreviation + '.po');
+
+  LabelSetup.Caption := rsSetup;
+  RadioBtnDefault.Caption := rsStandard;
+  RadioBtnCustom.Caption := rsCustom;
+end;
+
 procedure TQuickInstall.FormCreate(Sender: TObject);
 begin
   inherited FormCreate(Sender);
   CenterFormOnScreen(Sender as TForm);
 
-  RemoveFuzziesFromLocaleFiles;
+  //RemoveFuzziesFromLocaleFiles;
+  Language := TLanguageObject.Create('../../../lazarus/');
 
   // set constant button positions:
   BtnBack.Left := 20;
@@ -147,14 +173,7 @@ begin
   // initialize data structure to store the QuickInstall data for easier access
   Data := TQuickInstallData.Create;
 
-  // text by resourcestrings
-  LabelWelcome.Caption := rsWelcome;
-  LabelSelLanguage.Caption := rsSelLanguage;
-  LabelSetup.Caption := rsSetup;
-  RadioBtnDefault.Caption := rsStandard;
-  RadioBtnCustom.Caption := rsCustom;
-  LabelCarryOut.Caption := rsCarryOut;
-  BtnNext.Caption := rsNext;
+  SetTextsByResourceStrings;
 end;
 
 procedure TQuickInstall.GetBtnFinishWidth;
@@ -219,28 +238,27 @@ procedure TQuickInstall.ComboBoxLanguagesChange(Sender: TObject);
 begin
   if ComboBoxLanguages.Text = 'Deutsch' then
   begin
-    SetDefaultLang('de');
+    Language.Abbreviation := 'de';
     SetBtnWidth('de');
-    // Somehow the following made problems with de->en->de translation so we set
-    // it here always again.
-    LabelCarryOut.Caption := rsCarryOut;
+    SetTextsByResourceStrings;
   end
   else if ComboBoxLanguages.Text = 'English' then
   begin
-    SetDefaultLang('en');
+    Language.Abbreviation := 'en';
     SetBtnWidth('en');
+    SetTextsByResourceStrings;
   end
   else if ComboBoxLanguages.Text = 'Español' then
   begin
-    SetDefaultLang('es');
+    Language.Abbreviation := 'es';
     SetBtnWidth('es');
-    LabelCarryOut.Caption := rsCarryOut;
+    SetTextsByResourceStrings;
   end
   else if ComboBoxLanguages.Text = 'Français' then
   begin
-    SetDefaultLang('fr');
+    Language.Abbreviation := 'fr';
     SetBtnWidth('fr');
-    LabelCarryOut.Caption := rsCarryOut;
+    SetTextsByResourceStrings;
   end;
 end;
 

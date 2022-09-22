@@ -7,12 +7,13 @@ interface
 uses
   Classes, SysUtils,
   opsiquickinstall_QueryData,
-  opsi_quick_install_resourcestrings,
   DistributionInfo,
   osnetworkcalculator,
   osnetutil,
   SupportedOpsiServerDistributions,
-  opsi_quick_install_nogui_NetworkSuggestions;
+  opsi_quick_install_nogui_NetworkSuggestions,
+  opsi_quick_install_NoguiResourceStrings,
+  opsi_quick_install_CommonResourceStrings;
 
 type
   TQueryProcedure = procedure of object;
@@ -663,66 +664,66 @@ var
 begin
   writeln('');
   writeln(rsOverview);
-  writeln(rsOpsiVersionO, Data.opsiVersion);
+  writeln(rsOpsiVersionOverview, Data.opsiVersion);
   {Custom installation}
   if Data.CustomSetup then
   begin
-    writeln(Counter, ' ', rsRepoO, Data.repo);
+    writeln(Counter, ' ', rsRepoOverview, Data.repo);
     Inc(Counter);
-    writeln(Counter, ' ', rsProxyO, Data.proxy);
+    writeln(Counter, ' ', rsProxyOverview, Data.proxy);
     Inc(Counter);
-    writeln(Counter, ' ', rsRepoNoCacheO, Data.repoNoCache);
+    writeln(Counter, ' ', rsRepoNoCacheOverview, Data.repoNoCache);
     Inc(Counter);
-    writeln(Counter, ' ', rsBackendO, Data.backend);
+    writeln(Counter, ' ', rsBackendOverview, Data.backend);
     Inc(Counter);
     if Data.backend = 'mysql' then
     begin
-      writeln(Counter, ' ', rsCopyModulesO, Data.copyMod.OverviewEntry);
+      writeln(Counter, ' ', rsCopyModulesOverview, Data.copyMod.OverviewEntry);
       Inc(Counter);
     end;
-    writeln(Counter, ' ', rsRepoKindO, Data.repoKind);
+    writeln(Counter, ' ', rsRepoKindOverview, Data.repoKind);
     Inc(Counter);
   end;
   {Both}
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
   begin
-    writeln(Counter, ' ', rsUCSO, Data.ucsPassword);
+    writeln(Counter, ' ', rsUCSOverview, Data.ucsPassword);
     Inc(Counter);
   end;
   {Custom installation}
   if Data.CustomSetup then
   begin
-    writeln(Counter, ' ', rsRebootO, Data.reboot.OverviewEntry);
+    writeln(Counter, ' ', rsRebootOverview, Data.reboot.OverviewEntry);
     Inc(Counter);
   end;
   {Both}
-  writeln(Counter, ' ', rsDhcpO, Data.dhcp.OverviewEntry);
+  writeln(Counter, ' ', rsDhcpOverview, Data.dhcp.OverviewEntry);
   Inc(Counter);
   if Data.dhcp.PropertyEntry = 'true' then
   begin
-    writeln(Counter, ' ', rsTFTPROOTO, Data.symlink);
+    writeln(Counter, ' ', rsTFTPROOTOverview, Data.symlink);
     Inc(Counter);
-    writeln(Counter, ' ', rsNetmaskO, Data.netmask);
+    writeln(Counter, ' ', rsNetmaskOverview, Data.netmask);
     Inc(Counter);
-    writeln(Counter, ' ', rsNetworkO, Data.networkAddress);
+    writeln(Counter, ' ', rsNetworkOverview, Data.networkAddress);
     Inc(Counter);
-    writeln(Counter, ' ', rsDomainO, Data.domain);
+    writeln(Counter, ' ', rsDomainOverview, Data.domain);
     Inc(Counter);
-    writeln(Counter, ' ', rsNameserverO, Data.nameserver);
+    writeln(Counter, ' ', rsNameserverOverview, Data.nameserver);
     Inc(Counter);
-    writeln(Counter, ' ', rsGatewayO, Data.gateway);
+    writeln(Counter, ' ', rsGatewayOverview, Data.gateway);
     Inc(Counter);
   end;
-  writeln(Counter, ' ', rsAdminNameO, Data.adminName);
+  writeln(Counter, ' ', rsAdminNameOverview, Data.adminName);
   Inc(Counter);
   if Data.adminName <> '' then
   begin
-    writeln(Counter, ' ', rsAdminPasswordO, Data.adminPassword);
+    writeln(Counter, ' ', rsAdminPasswordOverview, Data.adminPassword);
     Inc(Counter);
   end;
-  writeln(Counter, ' ', rsIPNameO, Data.ipName);
+  writeln(Counter, ' ', rsIPNameOverview, Data.ipName);
   Inc(Counter);
-  writeln(Counter, ' ', rsIPNumberO, Data.ipNumber);
+  writeln(Counter, ' ', rsIPNumberOverview, Data.ipNumber);
 end;
 
 procedure AddQueryToList(QueryProcedure: TQueryProcedure;

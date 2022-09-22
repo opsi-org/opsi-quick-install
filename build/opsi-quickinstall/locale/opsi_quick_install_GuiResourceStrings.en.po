@@ -1,0 +1,114 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: opsi_quick_install_GuiResourceStrings.rscapdistr
+msgctxt "opsi_quick_install_GuiResourceStrings.rscapdistr"
+msgid "Distribution"
+msgstr "Distribution"
+
+#: opsi_quick_install_GuiResourceStrings.rscapquery
+msgctxt "opsi_quick_install_GuiResourceStrings.rscapquery"
+msgid "Query"
+msgstr "Query"
+
+#: opsi_quick_install_GuiResourceStrings.rscapquery2
+msgctxt "opsi_quick_install_GuiResourceStrings.rscapquery2"
+msgid "Query (part 2)"
+msgstr "Query (part 2)"
+
+#: opsi_quick_install_GuiResourceStrings.rscapquery3
+msgctxt "opsi_quick_install_GuiResourceStrings.rscapquery3"
+msgid "Query (part 3)"
+msgstr "Query (part 3)"
+
+#: opsi_quick_install_GuiResourceStrings.rscapquerydhcp
+msgid "Query (dhcp)"
+msgstr "Query (dhcp)"
+
+#: opsi_quick_install_GuiResourceStrings.rscapqueryuserinfo
+msgctxt "opsi_quick_install_GuiResourceStrings.rscapqueryuserinfo"
+msgid "Query (user info)"
+msgstr "Query (user info)"
+
+#: opsi_quick_install_GuiResourceStrings.rscorrect
+msgid ""
+"If this is correct, please click \"next >\" to continue. If not, please edit "
+"the distribution and then continue with \"next >\"."
+msgstr ""
+"If this is correct, please click \"next >\" to continue. If not, please edit "
+"the distribution and then continue with \"next >\"."
+
+#: opsi_quick_install_GuiResourceStrings.rscustom
+msgctxt "opsi_quick_install_GuiResourceStrings.rscustom"
+msgid "Custom"
+msgstr "Custom"
+
+#: opsi_quick_install_GuiResourceStrings.rsdomainother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsdomainother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsfinish
+msgctxt "opsi_quick_install_GuiResourceStrings.rsfinish"
+msgid " finish "
+msgstr " finish "
+
+#: opsi_quick_install_GuiResourceStrings.rsgatewayother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsgatewayother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsnameserverother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsnameserverother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsnetmaskother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsnetmaskother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsnetworkaddressother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsnetworkaddressother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsopsi41
+msgid "Opsi 4.1"
+msgstr "Opsi 4.1"
+
+#: opsi_quick_install_GuiResourceStrings.rsopsi42
+msgid "Opsi 4.2"
+msgstr "Opsi 4.2"
+
+#: opsi_quick_install_GuiResourceStrings.rsoverviewbtn
+msgctxt "opsi_quick_install_GuiResourceStrings.rsoverviewbtn"
+msgid " overview "
+msgstr " overview "
+
+#: opsi_quick_install_GuiResourceStrings.rsproxy
+msgid "Proxy to use (http://myproxy.dom.org:8080):"
+msgstr "Proxy to use (http://myproxy.dom.org:8080)"
+
+#: opsi_quick_install_GuiResourceStrings.rsproxynone
+msgctxt "opsi_quick_install_GuiResourceStrings.rsproxynone"
+msgid "None"
+msgstr "None"
+
+#: opsi_quick_install_GuiResourceStrings.rsproxyother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsproxyother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsrepoother
+msgctxt "opsi_quick_install_GuiResourceStrings.rsrepoother"
+msgid "Other:"
+msgstr "Other:"
+
+#: opsi_quick_install_GuiResourceStrings.rsstandard
+msgid "Standard"
+msgstr "Standard"
+
+#: opsi_quick_install_GuiResourceStrings.rsstartinstallation
+msgid "Finally click \"finish\" to start the installation of opsi-server."
+msgstr "Finally click \"finish\" to start the installation of opsi-server."

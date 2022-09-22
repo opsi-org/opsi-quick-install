@@ -9,7 +9,8 @@ uses
   Process, osnetworkcalculator,
   OpsiLinuxInstaller_QueryForm,
   FormAppearanceFunctions,
-  opsi_quick_install_resourcestrings,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
   opsiquickinstall_QueryData;
 
 type
