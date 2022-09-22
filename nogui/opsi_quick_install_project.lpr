@@ -202,8 +202,6 @@ type
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/', MessageDisplayer);
 
     writeln('');
-    writeln(rsInstall + Data.opsiVersion + ':' + #10 + rsWait +
-      LongMessageSeperator + rsSomeMin);
     LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
   end;
 

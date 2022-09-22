@@ -10,8 +10,7 @@ uses
   osfunclin,
   oslog,
   opsi_quick_install_CommonResourceStrings,
-  OpsiLinuxInstaller_QueryData,
-  OpsiLinuxInstaller_LanguageObject;
+  OpsiLinuxInstaller_QueryData;
 
 type
 

@@ -65,14 +65,6 @@ msgstr "DNS domain (for dhcp)"
 msgid "DNS domain: "
 msgstr "DNS domain: "
 
-#: opsi_quick_install_CommonResourceStrings.rsdownloadlatestlopsiserver
-msgid "Downloading latest l-opsi-server... "
-msgstr "Downloading latest l-opsi-server... "
-
-#: opsi_quick_install_CommonResourceStrings.rsfailed
-msgid "failed"
-msgstr "failed"
-
 #: opsi_quick_install_CommonResourceStrings.rsgateway
 msgid "Gateway (option routers for dhcp):"
 msgstr "Gateway (option routers for dhcp)"
@@ -155,18 +147,6 @@ msgstr ""
 "Choose \"default.menu\" if you want to show a small menu when no netboot "
 "product is on setup (bios only)."
 
-#: opsi_quick_install_CommonResourceStrings.rsinstall
-msgid "Installing "
-msgstr "Installing "
-
-#: opsi_quick_install_CommonResourceStrings.rsinstallation
-msgid "Installation "
-msgstr "Installation "
-
-#: opsi_quick_install_CommonResourceStrings.rsinstallationof
-msgid "Installation of "
-msgstr "Installation of "
-
 #: opsi_quick_install_CommonResourceStrings.rsinvalidfqdnwarning
 msgid ""
 "Opsi-QuickInstall Warning:\n"
@@ -200,10 +180,6 @@ msgstr ""
 #: opsi_quick_install_CommonResourceStrings.rsipnumberoverview
 msgid "IP number: "
 msgstr "IP number: "
-
-#: opsi_quick_install_CommonResourceStrings.rslog
-msgid "You can find the log files here:"
-msgstr "You can find the log files here:"
 
 #: opsi_quick_install_CommonResourceStrings.rsnameserver
 msgid "Primary nameserver (for dhcp):"
@@ -296,14 +272,6 @@ msgstr "Repository: "
 msgid "Please select a setup type:"
 msgstr "Please select a setup type:"
 
-#: opsi_quick_install_CommonResourceStrings.rssomemin
-msgid "(This may take some minutes)"
-msgstr "(This may take some minutes)"
-
-#: opsi_quick_install_CommonResourceStrings.rssuccess
-msgid "successful"
-msgstr "successful"
-
 #: opsi_quick_install_CommonResourceStrings.rstftproot
 msgid "Which file should the TFTPROOT default symlink point to?"
 msgstr "Which file should the TFTPROOT default symlink point to?"
@@ -311,10 +279,6 @@ msgstr "Which file should the TFTPROOT default symlink point to?"
 #: opsi_quick_install_CommonResourceStrings.rstftprootoverview
 msgid "TFTPROOT symlink points to: "
 msgstr "TFTPROOT symlink points to: "
-
-#: opsi_quick_install_CommonResourceStrings.rstryolderversion
-msgid "Try older version of l-opsi-server"
-msgstr "Try older version of l-opsi-server"
 
 #: opsi_quick_install_CommonResourceStrings.rsucs
 msgid ""
@@ -327,10 +291,6 @@ msgstr ""
 #: opsi_quick_install_CommonResourceStrings.rsucsoverview
 msgid "Password of administrator of UCS domain controller: "
 msgstr "Password of administrator of UCS domain controller: "
-
-#: opsi_quick_install_CommonResourceStrings.rswait
-msgid "Please wait for the installation to start... "
-msgstr "Please wait for the installation to start... "
 
 #: opsi_quick_install_CommonResourceStrings.rsyes
 msgid "Yes"

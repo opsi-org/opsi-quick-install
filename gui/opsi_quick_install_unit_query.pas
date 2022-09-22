@@ -12,8 +12,7 @@ uses
   opsiquickinstall_QueryData,
   opsi_quick_install_CommonResourceStrings,
   opsi_quick_install_GuiResourceStrings,
-  oslog,
-  OpsiLinuxInstaller_LanguageObject;
+  oslog;
 
 type
 

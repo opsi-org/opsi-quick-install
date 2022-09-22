@@ -23,11 +23,6 @@ resourcestring
   rsNext = ' next > ';
   rsBack = ' < back ';
   rsOverview = 'Overview';
-  rsInstallation = 'Installation ';
-  rsTryOlderVersion = 'Try older version of l-opsi-server';
-  rsInstallationOf = 'Installation of ';
-  rsFailed = 'failed';
-  rsSuccess = 'successful';
   rsInvalidFqdnWarning =
     'Opsi-QuickInstall Warning:' + #10 +
     'We could not find a valid local DNS hostname on this computer.' +
@@ -35,12 +30,6 @@ resourcestring
     #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' +
     LongMessageSeperator + 'quickinstall-manual.html#opsi-quickinstall-prep' +
     #10 + 'for more information.';
-  rsSomeMin = '(This may take some minutes)';
-  rsWait = 'Please wait for the installation to start... ';
-  rsInstall = 'Installing ';
-  rsDownloadLatestLOpsiServer =
-    'Downloading latest l-opsi-server... ';
-  rsLog = 'You can find the log files here:';
 
   {Queries}
   rsSetup = 'Please select a setup type:';
