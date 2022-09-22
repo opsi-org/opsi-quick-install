@@ -7,9 +7,9 @@ interface
 uses
   Classes, SysUtils,
   oslog,
-  opsi_quick_install_resourcestrings,
   OpsiLinuxInstaller_InstallationScriptExecuter,
-  opsiquickinstall_QueryData;
+  opsiquickinstall_QueryData,
+  opsi_quick_install_CommonResourceStrings;
 
 type
 
