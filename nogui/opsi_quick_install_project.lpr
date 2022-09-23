@@ -51,13 +51,11 @@ type
 
   procedure TranslateNoguiResourceStrings;
   begin
-    Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
-      '../locale/opsi_quick_install_CommonResourceStrings.' +
-      Language.Abbreviation + '.po');
-    Language.TranslateProjectResourceStrings('opsi_quick_install_NoguiResourceStrings',
-      '../locale/opsi_quick_install_NoguiResourceStrings.' +
-      Language.Abbreviation + '.po');
-    Language.TranslateCommonResourceStrings('WelcomeResourceStrings',
+    Language.TranslateResourceStrings('opsi_quick_install_CommonResourceStrings',
+      'opsi_quick_install_CommonResourceStrings.' + Language.Abbreviation + '.po');
+    Language.TranslateResourceStrings('opsi_quick_install_NoguiResourceStrings',
+      'opsi_quick_install_NoguiResourceStrings.' + Language.Abbreviation + '.po');
+    Language.TranslateResourceStrings('WelcomeResourceStrings',
       'Welcome.' + Language.Abbreviation + '.po');
   end;
 
@@ -320,7 +318,7 @@ begin
   QuickInstall.QuickInstallCommand := TRunCommandElevated.Create('', False);
   CheckFQDN;
 
-  Language := TLanguageObject.Create('../../../lazarus/');
+  Language := TLanguageObject.Create('../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
   UseSystemLanguageForResourcestrings;
 
   CheckThatOqiSupportsDistribution(QuickInstall);

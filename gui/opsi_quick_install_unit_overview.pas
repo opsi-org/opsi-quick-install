@@ -50,8 +50,8 @@ procedure TOverview.FormActivate(Sender: TObject);
 begin
   inherited FormActivate(Sender);
 
-  Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
-    '../locale/opsi_quick_install_CommonResourceStrings.' +
+  Language.TranslateResourceStrings('opsi_quick_install_CommonResourceStrings',
+    'opsi_quick_install_CommonResourceStrings.' +
     Language.Abbreviation + '.po');
 
   MemoOverview.Left := QuickInstall.panelLeft;

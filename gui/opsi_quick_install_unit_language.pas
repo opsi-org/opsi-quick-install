@@ -35,6 +35,7 @@ type
     procedure FormCreate(Sender: TObject); override;
 
 
+
   public
   const
     LogFileName = 'opsi_quickinstall.log';
@@ -105,12 +106,10 @@ procedure TQuickInstall.SetTextsByResourceStrings;
 begin
   inherited SetTextsByResourceStrings;
 
-  Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
-    '../locale/opsi_quick_install_CommonResourceStrings.' +
-    Language.Abbreviation + '.po');
-  Language.TranslateProjectResourceStrings('opsi_quick_install_GuiResourceStrings',
-    '../locale/opsi_quick_install_GuiResourceStrings.' +
-    Language.Abbreviation + '.po');
+  Language.TranslateResourceStrings('opsi_quick_install_CommonResourceStrings',
+    'opsi_quick_install_CommonResourceStrings.' + Language.Abbreviation + '.po');
+  Language.TranslateResourceStrings('opsi_quick_install_GuiResourceStrings',
+    'opsi_quick_install_GuiResourceStrings.' + Language.Abbreviation + '.po');
 
   LabelSetup.Caption := rsSetup;
   RadioBtnDefault.Caption := rsStandard;
@@ -122,7 +121,7 @@ begin
   inherited FormCreate(Sender);
   CenterFormOnScreen(Sender as TForm);
 
-  Language := TLanguageObject.Create('../../../lazarus/');
+  Language := TLanguageObject.Create('../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
 
   // set constant button positions:
   BtnBack.Left := 20;
