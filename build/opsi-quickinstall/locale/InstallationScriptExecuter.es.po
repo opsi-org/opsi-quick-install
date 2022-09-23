@@ -1,0 +1,1 @@
+/home/schmitz/Repos/opsi-quick-install/lazarus/common/OpsiLinuxInstaller/locale/InstallationScriptExecuter.es.po
