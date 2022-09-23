@@ -1,1 +1,0 @@
-/home/schmitz/Repos/opsi-quick-install/lazarus/common/OpsiLinuxInstaller/locale/Welcome.de.po

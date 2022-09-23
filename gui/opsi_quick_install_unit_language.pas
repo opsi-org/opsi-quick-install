@@ -122,7 +122,7 @@ begin
   inherited FormCreate(Sender);
   CenterFormOnScreen(Sender as TForm);
 
-  Language := TLanguageObject.Create;
+  Language := TLanguageObject.Create('../../../lazarus/');
 
   // set constant button positions:
   BtnBack.Left := 20;
