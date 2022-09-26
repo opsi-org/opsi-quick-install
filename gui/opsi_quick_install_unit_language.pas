@@ -36,6 +36,7 @@ type
 
 
 
+
   public
   const
     LogFileName = 'opsi_quickinstall.log';
@@ -121,7 +122,9 @@ begin
   inherited FormCreate(Sender);
   CenterFormOnScreen(Sender as TForm);
 
-  Language := TLanguageObject.Create('../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
+  Language := TLanguageObject.Create(
+    '../../../lazarus/common/OpsiLinuxInstaller/locale/',
+    '../locale/');
 
   // set constant button positions:
   BtnBack.Left := 20;
@@ -211,30 +214,14 @@ end;
 
 procedure TQuickInstall.ComboBoxLanguagesChange(Sender: TObject);
 begin
-  if ComboBoxLanguages.Text = 'Deutsch' then
-  begin
-    Language.Abbreviation := 'de';
-    SetBtnWidth('de');
-    SetTextsByResourceStrings;
-  end
-  else if ComboBoxLanguages.Text = 'English' then
-  begin
-    Language.Abbreviation := 'en';
-    SetBtnWidth('en');
-    SetTextsByResourceStrings;
-  end
-  else if ComboBoxLanguages.Text = 'Español' then
-  begin
-    Language.Abbreviation := 'es';
-    SetBtnWidth('es');
-    SetTextsByResourceStrings;
-  end
-  else if ComboBoxLanguages.Text = 'Français' then
-  begin
-    Language.Abbreviation := 'fr';
-    SetBtnWidth('fr');
-    SetTextsByResourceStrings;
+  case ComboBoxLanguages.Text of
+    'Deutsch': Language.Abbreviation := 'de';
+    'English': Language.Abbreviation := 'en';
+    'Español': Language.Abbreviation := 'es';
+    'Français': Language.Abbreviation := 'fr';
   end;
+  SetBtnWidth(Language.Abbreviation);
+  SetTextsByResourceStrings;
 end;
 
 procedure TQuickInstall.FormActivate(Sender: TObject);
