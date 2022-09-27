@@ -46,7 +46,7 @@ type
   procedure WelcomeUser;
   begin
     writeln('');
-    writeln(rsWelcome);
+    writeln(StringReplace(rsWelcome, '[]', 'opsi-server', [rfReplaceAll]));
   end;
 
   procedure TranslateNoguiResourceStrings;
@@ -318,7 +318,9 @@ begin
   QuickInstall.QuickInstallCommand := TRunCommandElevated.Create('', False);
   CheckFQDN;
 
-  Language := TLanguageObject.Create('../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
+  Language := TLanguageObject.Create(
+    '../../../lazarus/common/OpsiLinuxInstaller/locale/',
+    '../locale/');
   UseSystemLanguageForResourcestrings;
 
   CheckThatOqiSupportsDistribution(QuickInstall);

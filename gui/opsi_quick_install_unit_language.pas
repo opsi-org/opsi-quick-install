@@ -37,6 +37,7 @@ type
 
 
 
+
   public
   const
     LogFileName = 'opsi_quickinstall.log';
@@ -112,6 +113,8 @@ begin
   Language.TranslateResourceStrings('opsi_quick_install_GuiResourceStrings',
     'opsi_quick_install_GuiResourceStrings.' + Language.Abbreviation + '.po');
 
+  LabelWelcome.Caption := StringReplace(LabelWelcome.Caption, '[]',
+    'opsi-server', [rfReplaceAll]);
   LabelSetup.Caption := rsSetup;
   RadioBtnDefault.Caption := rsStandard;
   RadioBtnCustom.Caption := rsCustom;
@@ -123,8 +126,7 @@ begin
   CenterFormOnScreen(Sender as TForm);
 
   Language := TLanguageObject.Create(
-    '../../../lazarus/common/OpsiLinuxInstaller/locale/',
-    '../locale/');
+    '../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
 
   // set constant button positions:
   BtnBack.Left := 20;
