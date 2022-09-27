@@ -1,0 +1,303 @@
+# Translators:
+# Niko Wenselowski, 2021
+# Martin Scalese <m.scalese@uib.de>, 2021
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: opsi_quick_install_CommonResourceStrings.rsadminname
+msgid ""
+"What is the name of the opsi admin user to create? (empty = nothing created)"
+msgstr ""
+"Cuál es el nombre del admin de opsi a crear? (vacío = nada será creado)"
+
+#: opsi_quick_install_CommonResourceStrings.rsadminnameoverview
+msgid "Opsi admin user name: "
+msgstr "Nombre de usuario del opsi admin:"
+
+#: opsi_quick_install_CommonResourceStrings.rsadminpassword
+msgid ""
+"What is the password of the opsi admin user to create? (empty = nothing "
+"created)"
+msgstr "Cuál es la clave del admin de opsi a crear? (vacío = nada será creado)"
+
+#: opsi_quick_install_CommonResourceStrings.rsadminpasswordoverview
+msgid "Opsi admin user password: "
+msgstr "clave del admin de opsi:"
+
+#: opsi_quick_install_CommonResourceStrings.rsback
+msgid " < back "
+msgstr " < volver "
+
+#: opsi_quick_install_CommonResourceStrings.rsbackend
+msgid ""
+"Which backend should be installed? (mysql needs a valid activation file)"
+msgstr ""
+"Que backend debería ser instalado? (MySql necesita un archivo de activación "
+"válido)"
+
+#: opsi_quick_install_CommonResourceStrings.rsbackendoverview
+msgid "Backend: "
+msgstr "Backend:"
+
+#: opsi_quick_install_CommonResourceStrings.rscopymodules
+msgid "Should we copy modules even if /etc/opsi/modules still exists?"
+msgstr "Copiar módulos aún si /etc/opsi/modules existe?"
+
+#: opsi_quick_install_CommonResourceStrings.rscopymodulesoverview
+msgid "Copy modules: "
+msgstr "Copiar módulos:"
+
+#: opsi_quick_install_CommonResourceStrings.rsdhcp
+msgid "Should we run the opsi dhcp-server on this machine?"
+msgstr "Se debería ejecutar el servidor dhcp de opsi en este ordenador?"
+
+#: opsi_quick_install_CommonResourceStrings.rsdhcpoverview
+msgid "Run opsi dhcp-server: "
+msgstr "Ejecutar el servidor opsi dhcp:"
+
+#: opsi_quick_install_CommonResourceStrings.rsdistr
+msgid "We recognized the following distribution on this computer:"
+msgstr "Se ha identificado la siguiente distribución para este ordenador:"
+
+#: opsi_quick_install_CommonResourceStrings.rsdomain
+msgid "DNS domain (for dhcp):"
+msgstr "Dominio DNS (para dhcp):"
+
+#: opsi_quick_install_CommonResourceStrings.rsdomainoverview
+msgid "DNS domain: "
+msgstr "Dominio DNS:"
+
+#: opsi_quick_install_CommonResourceStrings.rsgateway
+msgid "Gateway (option routers for dhcp):"
+msgstr "Gateway (opción routers para dhcp):"
+
+#: opsi_quick_install_CommonResourceStrings.rsgatewayoverview
+msgid "Gateway: "
+msgstr "Gateway:"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfoadmin
+msgid ""
+"User to create for the operation of opsi.\n"
+"This user can not manage system settings."
+msgstr ""
+"Usuario a crear para la operación de opsi.\n"
+"Este usuario no puede gestionar configuraciones de sistema.\n"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfobackend
+msgid "Should the data of opsi be stored in a file or a mysql database?"
+msgstr "Guardar información de opsi en un archivo o en una DB de MySQL?"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfodhcp
+msgid ""
+"Select \"No\" if you already have a dhcp-server.\n"
+"Select \"Yes\" if you want to install the dhcp-server on the opsi-server."
+msgstr ""
+"Seleccione \"No\" si ya posee un servidor dhcp.\n"
+"Seleccione \"Yes\" si desea instalar el servidor dhcp en el servidor de "
+"opsi.\n"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfodistribution
+msgid "The following distributions are supported:"
+msgstr "Las siguientes distribuciones son soportadas:"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfomodules
+msgid ""
+"For mysql you need active modules. For further information and prices please "
+"write an e-mail to info@uib.de"
+msgstr ""
+"Para utilizar MySQL necesita un archivo de módulos activo. Para mas "
+"información y precios por favor por e-mail: info@uib.de"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfonetwork
+msgid "Information on the network in which the opsi-server will be installed."
+msgstr "Información de la red en la cuál el servidor opsi será instalado."
+
+#: opsi_quick_install_CommonResourceStrings.rsinfoopsiversion
+msgid ""
+"It's recommended to install opsi 4.2 since it is the latest version; the "
+"support for opsi 4.1 will end soon."
+msgstr ""
+"Se recomienda instalar opsi 4.2 ya que es la versión mas actual; el soporte "
+"para opsi 4.1 concluirá pronto."
+
+#: opsi_quick_install_CommonResourceStrings.rsinforeboot
+msgid ""
+"If yes, shortly after the opsi-server is installed, your computer will "
+"reboot."
+msgstr ""
+"En caso afirmativo, luego de la instalación del servidor opsi, su "
+"computadora se reiniciará"
+
+#: opsi_quick_install_CommonResourceStrings.rsinforepo
+msgid "Source from which opsi will be installed."
+msgstr "Fuente desde la cuál opsi será instalado."
+
+#: opsi_quick_install_CommonResourceStrings.rsinforepokind
+msgid ""
+"Select the stability of the installation:\n"
+"Stable is reliable, testing is the beta version, experimental may cause some "
+"errors."
+msgstr ""
+"Seleccione el origen de la instalación:\n"
+"Stable es la versión más establecida, testing es la versión beta y "
+"experimental podría contener elementos a reparar.\n"
+
+#: opsi_quick_install_CommonResourceStrings.rsinfotftproot
+msgid ""
+"Choose \"default.menu\" if you want to show a small menu when no netboot "
+"product is on setup (bios only)."
+msgstr ""
+"Seleccione \"default.menu\" si desea un pequeño menú cuando un producto \"no "
+"netboot\" está en setup (solo bios)."
+
+#: opsi_quick_install_CommonResourceStrings.rsinvalidfqdnwarning
+msgid ""
+"Opsi-QuickInstall Warning:\n"
+"We could not find a valid local DNS hostname on this computer. This can lead "
+"to problems during the installation! Please see\n"
+"https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/quickinstall-manual."
+"html#opsi-quickinstall-prep\n"
+"for more information."
+msgstr ""
+
+#: opsi_quick_install_CommonResourceStrings.rsipname
+msgid ""
+"Set a different IP name (\"auto\" = use automatically determined FQDN of "
+"this computer)"
+msgstr ""
+"Fijar un nombre IP diferente (\"auto\" = utiliza el FQDN determinado "
+"automáticamente de este ordenador)"
+
+#: opsi_quick_install_CommonResourceStrings.rsipnameoverview
+msgid "IP name: "
+msgstr "Nombre IP:"
+
+#: opsi_quick_install_CommonResourceStrings.rsipnumber
+msgid ""
+"Set a different IP number (\"auto\" = use automatically determined IP "
+"address of this computer)"
+msgstr ""
+"Fijar un número de IP distinto (\"auto\" = utiliza la dirección IP "
+"determinada automáticamente de este ordenador)"
+
+#: opsi_quick_install_CommonResourceStrings.rsipnumberoverview
+msgid "IP number: "
+msgstr "Número de IP:"
+
+#: opsi_quick_install_CommonResourceStrings.rsnameserver
+msgid "Primary nameserver (for dhcp):"
+msgstr "Nombre de servidor primario (para dhcp):"
+
+#: opsi_quick_install_CommonResourceStrings.rsnameserveroverview
+msgid "Primary nameserver: "
+msgstr "Nombre de servidor primario:"
+
+#: opsi_quick_install_CommonResourceStrings.rsnetmask
+msgid "Netmask (for dhcp):"
+msgstr "Netmask (para dhcp):"
+
+#: opsi_quick_install_CommonResourceStrings.rsnetmaskoverview
+msgid "Netmask: "
+msgstr "Netmask:"
+
+#: opsi_quick_install_CommonResourceStrings.rsnetworkaddress
+msgid "Network address (for dhcp):"
+msgstr "Network address (para dhcp):"
+
+#: opsi_quick_install_CommonResourceStrings.rsnetworkoverview
+msgid "Network address: "
+msgstr "Network address:"
+
+#: opsi_quick_install_CommonResourceStrings.rsnext
+msgid " next > "
+msgstr " siguiente > "
+
+#: opsi_quick_install_CommonResourceStrings.rsno
+msgid "No"
+msgstr "No"
+
+#: opsi_quick_install_CommonResourceStrings.rsnosupport
+msgid ""
+"Unfortunately, opsi does not support your distribution. Only the following "
+"distributions are supported:"
+msgstr ""
+"Desafortunadamente, opsi no soporta ésta distribución. Las siguientes "
+"distribuciones son soportadas:"
+
+#: opsi_quick_install_CommonResourceStrings.rsopsiversionoverview
+msgid "Opsi version to install: "
+msgstr "Versión de opsi a instalar:"
+
+#: opsi_quick_install_CommonResourceStrings.rsoverview
+msgctxt "opsi_quick_install_CommonResourceStrings.rsoverview"
+msgid "Overview"
+msgstr "Visión general"
+
+#: opsi_quick_install_CommonResourceStrings.rsproxyoverview
+msgid "Proxy: "
+msgstr "Proxy"
+
+#: opsi_quick_install_CommonResourceStrings.rsreboot
+msgid "May the server reboot if this script is finished?"
+msgstr "Puede el server reiciarse luego de que este script sea finalizado?"
+
+#: opsi_quick_install_CommonResourceStrings.rsrebootoverview
+msgid "Reboot after script is finished: "
+msgstr "Reiniciar luego de que el script finalice:"
+
+#: opsi_quick_install_CommonResourceStrings.rsrepo
+msgid "(Base-) Repository for the opsi-server installation:"
+msgstr "Repositorio (Base-) para la instalación del servidor opsi:"
+
+#: opsi_quick_install_CommonResourceStrings.rsrepokind
+msgid "From which repo kind should be installed?"
+msgstr "De que tipo de repo debería instalarse?"
+
+#: opsi_quick_install_CommonResourceStrings.rsrepokindoverview
+msgid "Repo kind: "
+msgstr "Tipo de repo:"
+
+#: opsi_quick_install_CommonResourceStrings.rsreponocache
+msgid ""
+"(Base-) Repository for the opsi-server installation (without any cache "
+"proxy):"
+msgstr ""
+"Repositorio (Base-) para la instalación del servidor opsi (sin cache de "
+"proxy):"
+
+#: opsi_quick_install_CommonResourceStrings.rsreponocacheoverview
+msgid "Repository (without cache proxy): "
+msgstr "Repositorio (sin cache de proxy):"
+
+#: opsi_quick_install_CommonResourceStrings.rsrepooverview
+msgid "Repository: "
+msgstr "Repositorio:"
+
+#: opsi_quick_install_CommonResourceStrings.rssetup
+msgid "Please select a setup type:"
+msgstr "Por favor seleccione un tipo de setup:"
+
+#: opsi_quick_install_CommonResourceStrings.rstftproot
+msgid "Which file should the TFTPROOT default symlink point to?"
+msgstr ""
+"A que archivo debería el TFTROOT symlink por defecto debería referenciar?"
+
+#: opsi_quick_install_CommonResourceStrings.rstftprootoverview
+msgid "TFTPROOT symlink points to: "
+msgstr "TFTROOT symlink hace referencia a:"
+
+#: opsi_quick_install_CommonResourceStrings.rsucs
+msgid ""
+"What is the password of the administrator of the UCS domain controller "
+"(needed for other roles to join)?"
+msgstr ""
+"Cuál es la contraseña del administrador del controlador de domínio de UCS "
+"(necesario para que otros roles se unan)?"
+
+#: opsi_quick_install_CommonResourceStrings.rsucsoverview
+msgid "Password of administrator of UCS domain controller: "
+msgstr "Contraseña de administrador del controlador de domínio UCS:"
+
+#: opsi_quick_install_CommonResourceStrings.rsyes
+msgid "Yes"
+msgstr "Sí"

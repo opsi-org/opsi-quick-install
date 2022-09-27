@@ -9,8 +9,9 @@ uses
   StdCtrls,
   OpsiLinuxInstaller_QueryForm,
   FormAppearanceFunctions,
-  opsi_quick_install_resourcestrings,
   opsiquickinstall_QueryData,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
   oslog;
 
 type
@@ -112,7 +113,7 @@ begin
   LabelOpsiVersion.Caption := rsOpsiVersion;
   RadioBtnOpsi41.Caption := rsOpsi41;
   RadioBtnOpsi42.Caption := rsOpsi42;
-  InfoOpsiVersion.Hint := rsInfoOpsiVersion;
+  //InfoOpsiVersion.Hint := rsInfoOpsiVersion;
   LabelRepo.Caption := rsRepo;
   RadioBtnOtherRepo.Caption := rsRepoOther;
   InfoRepo.Hint := rsInfoRepo;

@@ -54,10 +54,14 @@ compile opsi-quickinstall linux:
     - git submodule update --init --recursive
     #- git submodule update --remote // this does not work and is not required
     - cd l-opsi-server-products && git pull origin master && cd ..
+    
+    # move common translation files to locale folder in build folder so that they are also delivered
+    - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
+    
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"
-    - echo "$LAZ_PROJECT_FILE_NOGUI"
+    - echo "$LAZ_PROJECT_FILE_NOGUI"   
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI --build-mode=Release
     - echo "Compiling $PROJECT_NAME for Linux with GUI"

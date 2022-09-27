@@ -9,8 +9,10 @@ uses
   MaskEdit,
   OpsiLinuxInstaller_BaseForm,
   FormAppearanceFunctions,
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_QueryData;
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
+  opsiquickinstall_QueryData,
+  OpsiLinuxInstaller_LanguageObject;
 
 type
 
@@ -48,38 +50,42 @@ procedure TOverview.FormActivate(Sender: TObject);
 begin
   inherited FormActivate(Sender);
 
+  Language.TranslateResourceStrings('opsi_quick_install_CommonResourceStrings',
+    'opsi_quick_install_CommonResourceStrings.' +
+    Language.Abbreviation + '.po');
+
   MemoOverview.Left := QuickInstall.panelLeft;
   PanelFinish.Width := 400;
 
   MemoOverview.Clear;
   // Opsi version
-  MemoOverview.Lines.Add(rsOpsiVersionO + Data.opsiVersion);
+  MemoOverview.Lines.Add(rsOpsiVersionOverview + Data.opsiVersion);
 
   {Custom installation}
   if Data.CustomSetup then
   begin
     MemoOverview.Lines.Add('');
     // Repository
-    MemoOverview.Lines.Add(rsRepoO + Data.repo);
+    MemoOverview.Lines.Add(rsRepoOverview + Data.repo);
     // Proxy
-    MemoOverview.Lines.Add(rsProxyO + Data.proxy);
+    MemoOverview.Lines.Add(rsProxyOverview + Data.proxy);
     // Repository (no cache)
-    MemoOverview.Lines.Add(rsRepoNoCacheO + Data.repoNoCache);
+    MemoOverview.Lines.Add(rsRepoNoCacheOverview + Data.repoNoCache);
 
     MemoOverview.Lines.Add('');
     // Backend
-    MemoOverview.Lines.Add(rsBackendO + Data.backend);
+    MemoOverview.Lines.Add(rsBackendOverview + Data.backend);
     // Copy modules
-    MemoOverview.Lines.Add(rsCopyModulesO + Data.copyMod.OverviewEntry);
+    MemoOverview.Lines.Add(rsCopyModulesOverview + Data.copyMod.OverviewEntry);
     // Repo kind
-    MemoOverview.Lines.Add(rsRepoKindO + Data.repoKind);
+    MemoOverview.Lines.Add(rsRepoKindOverview + Data.repoKind);
 
     MemoOverview.Lines.Add('');
     // UCS password
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      MemoOverview.Lines.Add(rsUCSO + Data.ucsPassword);
+      MemoOverview.Lines.Add(rsUCSOverview + Data.ucsPassword);
     // Reboot
-    MemoOverview.Lines.Add(rsRebootO + Data.reboot.OverviewEntry);
+    MemoOverview.Lines.Add(rsRebootOverview + Data.reboot.OverviewEntry);
   end;
 
   {Both}
@@ -87,30 +93,30 @@ begin
   if Data.dhcp.PropertyEntry = 'true' then
   begin
     MemoOverview.Lines.Add('');
-    MemoOverview.Lines.Add(rsDhcpO + Data.dhcp.OverviewEntry);
+    MemoOverview.Lines.Add(rsDhcpOverview + Data.dhcp.OverviewEntry);
     // TFTPROOT
-    MemoOverview.Lines.Add(rsTFTPROOTO + Data.symlink);
+    MemoOverview.Lines.Add(rsTFTPROOTOverview + Data.symlink);
     // Netmask
-    MemoOverview.Lines.Add(rsNetmaskO + Data.netmask);
+    MemoOverview.Lines.Add(rsNetmaskOverview + Data.netmask);
     // Network address
-    MemoOverview.Lines.Add(rsNetworkO + Data.networkAddress);
+    MemoOverview.Lines.Add(rsNetworkOverview + Data.networkAddress);
     // Domain
-    MemoOverview.Lines.Add(rsDomainO + Data.domain);
+    MemoOverview.Lines.Add(rsDomainOverview + Data.domain);
     // Nameservere
-    MemoOverview.Lines.Add(rsNameserverO + Data.nameserver);
+    MemoOverview.Lines.Add(rsNameserverOverview + Data.nameserver);
     // Gateway
-    MemoOverview.Lines.Add(rsGatewayO + Data.gateway);
+    MemoOverview.Lines.Add(rsGatewayOverview + Data.gateway);
   end;
 
   MemoOverview.Lines.Add('');
   // Admin name
-  MemoOverview.Lines.Add(rsAdminNameO + Data.adminName);
+  MemoOverview.Lines.Add(rsAdminNameOverview + Data.adminName);
   // Admin password
-  MemoOverview.Lines.Add(rsAdminPasswordO + Data.adminPassword);
+  MemoOverview.Lines.Add(rsAdminPasswordOverview + Data.adminPassword);
   // IP name
-  MemoOverview.Lines.Add(rsIPNameO + Data.ipName);
+  MemoOverview.Lines.Add(rsIPNameOverview + Data.ipName);
   // IP number
-  MemoOverview.Lines.Add(rsIPNumberO + Data.ipNumber);
+  MemoOverview.Lines.Add(rsIPNumberOverview + Data.ipNumber);
 
   // text by resourcestrings
   Caption := rsOverview;

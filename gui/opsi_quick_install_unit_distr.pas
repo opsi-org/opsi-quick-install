@@ -10,7 +10,8 @@ uses
   oslog,
   SupportedOpsiServerDistributions,
   OpsiLinuxInstaller_DistributionForm,
-  opsi_quick_install_resourcestrings,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
   opsiquickinstall_QueryData,
   DistributionInfo,
   FormAppearanceFunctions;

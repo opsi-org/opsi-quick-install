@@ -6,7 +6,6 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
-  opsi_quick_install_resourcestrings,
   opsiquickinstall_InstallationScriptExecuter,
   IndependentMessageDisplayer,
   opsiquickinstall_QueryData,
@@ -43,10 +42,7 @@ begin
     'l-opsi-server', 'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
     MessageDisplayer);
 
-  // text by resourcestrings
-  LabelWait.Caption := rsWait + LongMessageSeperator + rsSomeMin;
   Application.ProcessMessages;
-
   LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
 
   // Closing TWait recursively closes all forms

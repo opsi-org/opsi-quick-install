@@ -1,0 +1,65 @@
+msgid ""
+msgstr "Content-Type: text/plain; charset=UTF-8"
+
+#: opsi_quick_install_NoguiResourceStrings.rsbackendop
+msgid " [Options: \"f\" for file, \"m\" for mysql]"
+msgstr " [Optionen: \"f\" für file, \"m\" für mysql]"
+
+#: opsi_quick_install_NoguiResourceStrings.rscontinue
+msgid ""
+"To continue and start the installation, please press enter.\n"
+"If you like to jump back to a question, please press the number key of the "
+"respective number in the overview."
+msgstr ""
+"Um fortzufahren und die Installation zu starten, drücken Sie bitte Enter.\n"
+"Wenn Sie zu einer Frage zurückspringen möchten, geben Sie bitte die "
+"entsprechende Zahl aus der Übersicht ein."
+
+#: opsi_quick_install_NoguiResourceStrings.rsiscorrect
+msgid "Is this correct?"
+msgstr "Ist das korrekt?"
+
+#: opsi_quick_install_NoguiResourceStrings.rslangop
+msgid ""
+" [Options: \"de\" for Deutsch, \"en\" for English, \"fr\" for Français, \"es"
+"\" for Español]"
+msgstr ""
+" [Optionen: \"de\" für Deutsch, \"en\" für Englisch, \"fr\" für Français, "
+"\"es\" für Español]"
+
+#: opsi_quick_install_NoguiResourceStrings.rslinkop
+msgid " [Options: \"m\" for default.menu, \"nom\" for default.nomenu]"
+msgstr " [Optionen: \"m\" für default.menu, \"nom\" für default.nomenu]"
+
+#: opsi_quick_install_NoguiResourceStrings.rsnotvalid
+msgid " is not a valid input."
+msgstr " ist keine gültige Eingabe."
+
+#: opsi_quick_install_NoguiResourceStrings.rsopsiversionop
+msgid " [Options: \"1\" for Opsi 4.1, \"2\" for Opsi 4.2]"
+msgstr " [Optionen: \"1\" für Opsi 4.1, \"2\" für Opsi 4.2]"
+
+#: opsi_quick_install_NoguiResourceStrings.rsotherdistr
+msgid "Please type in the correct distribution:"
+msgstr "Bitte geben Sie die richtige Distribution ein:"
+
+#: opsi_quick_install_NoguiResourceStrings.rsrepokindop
+msgid " [Options: \"s\" for stable, \"t\" for testing, \"e\" for experimental]"
+msgstr ""
+" [Optionen: \"s\" für stable, \"t\" für testing, \"e\" für experimental]"
+
+#: opsi_quick_install_NoguiResourceStrings.rssetupop
+msgid " [Options: \"s\" for standard, \"c\" for custom]"
+msgstr " [Optionen: \"s\" für Standard, \"c\" für Benutzerdefiniert]"
+
+#: opsi_quick_install_NoguiResourceStrings.rssuggestion
+msgid "[Suggestions: "
+msgstr "[Vorschläge: "
+
+#: opsi_quick_install_NoguiResourceStrings.rsuseproxy
+msgid "Would you like to use a proxy?"
+msgstr "Möchten Sie einen Proxy verwenden?"
+
+#: opsi_quick_install_NoguiResourceStrings.rsyesnoop
+msgid " [Options: \"y\" for yes, \"n\" for no]"
+msgstr " [Optionen: \"y\" für Ja, \"n\" für Nein]"

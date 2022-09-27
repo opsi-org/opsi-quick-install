@@ -5,13 +5,12 @@ unit opsi_quick_install_unit_password;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls, ExtCtrls,
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
   MaskEdit, LCLType, cthreads, Process,
   osLog,
   FormAppearanceFunctions,
   OpsiLinuxInstaller_PasswordForm,
-  opsiquickinstall_QueryData,
-  opsi_quick_install_resourcestrings;
+  opsiquickinstall_QueryData;
 
 type
 
@@ -39,14 +38,6 @@ begin
   inherited FormActivate(Sender);
   CenterFormOnForm(self, Overview);
   BtnFinish.Left := Width - BtnBack.Left - QuickInstall.BtnFinishWidth;
-
-  // text by resourcestrings
-  Caption := rsPassword;
-  LabelRights.Caption := rsRights;
-  LabelPassword.Caption := rsPassword + ':';
-  CheckBoxShowPassword.Caption := rsShowPassword;
-  BtnBack.Caption := rsBack;
-  BtnFinish.Caption := rsFinish;
 end;
 
 procedure TPassword.BtnBackClick(Sender: TObject);
@@ -58,7 +49,7 @@ end;
 
 procedure TPassword.BtnFinishClick(Sender: TObject);
 begin
-  if not IsPasswordCorrect(rsWrongPassword) then Exit;
+  if not IsPasswordCorrect then Exit;
 
   btnFinishClicked := True;
   Wait.Visible := True;
