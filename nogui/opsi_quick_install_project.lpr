@@ -273,6 +273,8 @@ type
   begin
     // get default language (system language)
     Language.Abbreviation := Copy(GetEnvironmentVariable('LANG'), 1, 2);
+    if not MatchStr(Language.Abbreviation, ['de', 'en', 'fr', 'es']) then
+      Language.Abbreviation := 'en';
     TranslateNoguiResourceStrings;
   end;
 
@@ -319,8 +321,7 @@ begin
   CheckFQDN;
 
   Language := TLanguageObject.Create(
-    '../../../lazarus/common/OpsiLinuxInstaller/locale/',
-    '../locale/');
+    '../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
   UseSystemLanguageForResourcestrings;
 
   CheckThatOqiSupportsDistribution(QuickInstall);

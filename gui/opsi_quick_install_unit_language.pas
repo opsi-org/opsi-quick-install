@@ -16,7 +16,8 @@ uses
   opsiquickinstall_QueryData,
   opsi_quick_install_CommonResourceStrings,
   opsi_quick_install_GuiResourceStrings,
-  OpsiLinuxInstaller_LanguageObject;
+  OpsiLinuxInstaller_LanguageObject,
+  StrUtils;
 
 type
 
@@ -85,6 +86,8 @@ end;
 procedure TQuickInstall.SetDefaultLanguage(const Languages: TStringList);
 begin
   Language.Abbreviation := Copy(GetEnvironmentVariable('LANG'), 1, 2);
+  if not MatchStr(Language.Abbreviation, ['de', 'en', 'fr', 'es']) then
+    Language.Abbreviation := 'en';
   // let the combo box show the system language at the beginning
   ComboBoxLanguages.ItemIndex := Languages.IndexOf(Language.Abbreviation);
   // now set position of BtnNext for the default language
