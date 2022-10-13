@@ -8,30 +8,19 @@ uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ExtCtrls,
   oslog,
-  SupportedOpsiServerDistributions;
+  SupportedOpsiServerDistributions,
+  OpsiLinuxInstaller_DistributionForm,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
+  opsiquickinstall_QueryData,
+  DistributionInfo,
+  FormAppearanceFunctions;
 
 type
 
-  { TDistribution }
-
-  TDistribution = class(TForm)
-    BtnBack: TButton;
-    BtnNext: TButton;
-    EditDistr: TEdit;
-    InfoDistribution: TImage;
-    LabelCorrect: TLabel;
-    LabelDistr: TLabel;
-    PanelDistr: TPanel;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-  private
-  public
-  var
-    // Distribution.GoOn tells TQuickInstall whether in TDistribution the next or
-    // the back button was clicked, i.e. whether to go on to the next form or to
-    // stay on TQuickInstall after TDistribution closed.
-    GoOn: boolean;
+  TDistribution = class(TOpsiLinuxInstallerDistributionForm)
+    procedure BtnNextClick(Sender: TObject); override;
+    procedure FormActivate(Sender: TObject); override;
   end;
 
 var
@@ -40,28 +29,20 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
-  opsi_quick_install_unit_language,
-  DistributionInfo;
+  opsi_quick_install_unit_language;
 
 {$R *.lfm}
 
-{ TDistribution }
-
 procedure TDistribution.FormActivate(Sender: TObject);
 begin
-  // centering TDistribution nicely on TQuickInstall
-  Distribution.Left := QuickInstall.Left + Round(QuickInstall.Width / 2) -
-    Round(Width / 2);
-  Distribution.Top := QuickInstall.Top + Round(QuickInstall.Height / 2) -
-    Round(Height / 2);
+  CenterFormOnForm(self, QuickInstall);
 
   // position buttons here because of different layout (size of TDistribution)
   BtnBack.Left := QuickInstall.BtnBack.Left;
   BtnNext.Left := Width - BtnBack.Left - QuickInstall.BtnNextWidth;
-  // we have one InfoImage
-  setInfoBasics(InfoDistribution);
+
+  QuickInstall.SetInfoImageLayout(InfoDistribution);
+
   // show distribution suggestion
   EditDistr.Text := Data.DistrInfo.DistroName + ' ' + Data.DistrInfo.DistroRelease;
 
@@ -78,8 +59,7 @@ procedure TDistribution.BtnNextClick(Sender: TObject);
 var
   UserEditedDistroName, UserEditedDistroRelease: string;
 begin
-  GoOn := True;
-  Distribution.Close;
+  inherited BtnNextClick(Sender);
 
   // If the distribution was edited:
   if EditDistr.Text <> Data.DistrInfo.DistroName + ' ' +
@@ -103,12 +83,6 @@ begin
     FreeAndNil(Data);
     Halt(1);
   end;
-end;
-
-procedure TDistribution.BtnBackClick(Sender: TObject);
-begin
-  GoOn := False;
-  Distribution.Close;
 end;
 
 end.

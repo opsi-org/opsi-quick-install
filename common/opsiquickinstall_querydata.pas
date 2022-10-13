@@ -1,4 +1,4 @@
-unit opsiquickinstall_data;
+unit opsiquickinstall_QueryData;
 
 {$mode objfpc}{$H+}
 
@@ -8,12 +8,13 @@ uses
   Classes, SysUtils,
   DistributionInfo,
   osfunclin,
-  oslog;
+  oslog,
+  opsi_quick_install_CommonResourceStrings,
+  OpsiLinuxInstaller_QueryData;
 
 type
 
   {TSplitData}
-
   // For data that appears in the overview and the file properties.conf in different ways,
   // e.g. OverviewEntry = 'Yes' or 'Ja' or 'Oui' or ... and PropertyEntry = 'true'
   TSplitData = class(TObject)
@@ -21,20 +22,18 @@ type
     FOverviewEntry: string;
     FPropertyEntry: string; // mostly gets boolean value
   public
-    procedure SetEntries(SetOverviewEntry: string; SetPropertyEntry: string);
+    procedure SetEntries(PropertyEntry: string);
     property OverviewEntry: string read FOverviewEntry;
     property PropertyEntry: string read FPropertyEntry;
   end;
 
-type
-
   {TQuickInstallData}
-
-  TQuickInstallData = class(TObject)
+  TQuickInstallData = class(TOpsiLinuxInstallerData)
+  private
+    procedure SetDefaultValues;
   public
   var
     CustomSetup: boolean;
-    DistrInfo: TDistributionInfo;
 
     opsiVersion, repo, proxy, repoNoCache: string;
 
@@ -49,7 +48,6 @@ type
 
     netmask, networkAddress, domain, nameserver, gateway: string;
     adminName, adminPassword, ipName, ipNumber: string;
-
   const
     QuickInstallVersion = '4.2.0.8';
     baseRepoUrlOpsi41 =
@@ -58,6 +56,7 @@ type
       'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/';
 
     constructor Create;
+    destructor Destroy; override;
   end;
 
 var
@@ -67,21 +66,24 @@ implementation
 
 {TSplitData}
 
-procedure TSplitData.SetEntries(SetOverviewEntry: string; SetPropertyEntry: string);
+procedure TSplitData.SetEntries(PropertyEntry: string);
 begin
-  FOverviewEntry := SetOverviewEntry;
-  FPropertyEntry := SetPropertyEntry;
+  (*Language.TranslateProjectResourceStrings('opsi_quick_install_CommonResourceStrings',
+    '../locale/opsi_quick_install_CommonResourceStrings.' +
+    Language.Abbreviation + '.po');*)
+
+  FPropertyEntry := PropertyEntry;
+  if PropertyEntry = 'true' then
+    FOverviewEntry := rsYes
+  else
+    FOverviewEntry := rsNo;
 end;
+
 
 {TQuickInstallData}
 
-constructor TQuickInstallData.Create;
+procedure TQuickInstallData.SetDefaultValues;
 begin
-  // Following line takes time and is therefore executed only once at the
-  // beginning of oqi when Data is created.
-  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
-
-  // set default values:
   opsiVersion := 'Opsi 4.2';
   // automatically adjust repo to opsiVersion
   if opsiVersion = 'Opsi 4.2' then
@@ -93,26 +95,45 @@ begin
 
   backend := 'file';
   copyMod := TSplitData.Create;
-  copyMod.SetEntries('', 'false');
+  copyMod.SetEntries('false');
   repoKind := 'stable';
 
   ucsPassword := '';
   reboot := TSplitData.Create;
-  reboot.SetEntries('', 'false');
+  reboot.SetEntries('false');
   dhcp := TSplitData.Create;
-  dhcp.SetEntries('', 'false');
+  dhcp.SetEntries('false');
   symlink := 'default.nomenu';
 
-  netmask := '255.255.0.0';
-  networkAddress := '192.168.0.0';
-  domain := 'uib.local';
-  nameserver := '192.168.1.245';
+  netmask := '';
+  networkAddress := '';
+  domain := '';
+  nameserver := '';
 
-  gateway := '192.168.1.245';
+  gateway := '';
   adminName := 'adminuser';
   adminPassword := 'linux123';
   ipName := 'auto';
   ipNumber := 'auto';
+end;
+
+constructor TQuickInstallData.Create;
+begin
+  inherited Create;
+
+  // Following line takes time and is therefore executed only once at the
+  // beginning of oqi when Data is created.
+  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
+
+  SetDefaultValues;
+end;
+
+destructor TQuickInstallData.Destroy;
+begin
+  if Assigned(copyMod) then FreeAndNil(copyMod);
+  if Assigned(reboot) then FreeAndNil(reboot);
+  if Assigned(dhcp) then FreeAndNil(dhcp);
+  inherited Destroy;
 end;
 
 end.

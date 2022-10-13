@@ -9,7 +9,7 @@ object QuickInstall: TQuickInstall
   OnActivate = FormActivate
   OnCreate = FormCreate
   LCLVersion = '2.2.0.4'
-  object BackgrImage: TImage
+  object BackgroundImage: TImage
     Left = 0
     Height = 450
     Top = 0
@@ -19,9 +19,9 @@ object QuickInstall: TQuickInstall
   end
   object BtnNext: TButton
     Left = 660
-    Height = 25
+    Height = 33
     Top = 410
-    Width = 51
+    Width = 56
     AutoSize = True
     Caption = ' next > '
     OnClick = BtnNextClick
@@ -143,9 +143,9 @@ object QuickInstall: TQuickInstall
   end
   object BtnBack: TButton
     Left = 20
-    Height = 25
+    Height = 33
     Top = 410
-    Width = 51
+    Width = 57
     AutoSize = True
     Caption = ' < back '
     Enabled = False
@@ -153,24 +153,14 @@ object QuickInstall: TQuickInstall
     TabOrder = 3
     Visible = False
   end
-  object BtnOverview: TButton
-    Left = 264
-    Height = 25
-    Top = 408
-    Width = 87
-    AutoSize = True
-    Caption = 'BtnOverview'
-    TabOrder = 4
-    Visible = False
-  end
   object BtnFinish: TButton
     Left = 392
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 63
+    Width = 69
     AutoSize = True
     Caption = 'BtnFinish'
-    TabOrder = 5
+    TabOrder = 4
     Visible = False
   end
 end

@@ -5,15 +5,17 @@ unit opsi_quick_install_unit_wait;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  opsiquickinstall_InstallationScriptExecuter,
+  IndependentMessageDisplayer,
+  opsiquickinstall_QueryData,
+  FormAppearanceFunctions;
 
 type
-
-  { TWait }
-
   TWait = class(TForm)
     LabelWait: TLabel;
     procedure FormActivate(Sender: TObject);
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
   end;
 
 var
@@ -22,20 +24,35 @@ var
 implementation
 
 uses
-  opsi_quick_install_unit_overview,
-  opsi_quick_install_resourcestrings;
+  opsi_quick_install_unit_password;
 
 {$R *.lfm}
 
-{ TWait }
-
 procedure TWait.FormActivate(Sender: TObject);
+var
+  LOpsiServerInstallationScriptExecuter: TLOpsiServerInstallationScriptExecuter;
+  MessageDisplayer: TIndependentMessageDisplayer;
 begin
-  Left := Overview.Left + Round(Overview.Width / 2) - Round(Width / 2);
-  Top := Overview.Top + Round(Overview.Height / 2) - Round(Height / 2);
-  // text by resourcestrings
-  LabelWait.Caption := rsWait + #10 + ' ';
+  CenterFormOnForm(self, Password);
+
+  MessageDisplayer := TIndependentMessageDisplayer.Create(LabelWait);
+  LOpsiServerInstallationScriptExecuter :=
+    TLOpsiServerInstallationScriptExecuter.Create(Password.EditPassword.Text,
+    Password.RadioBtnSudo.Checked, Data.DistrInfo.PackageManagementShellCommand,
+    'l-opsi-server', 'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
+    MessageDisplayer);
+
+  Application.ProcessMessages;
+  LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
+
+  // Closing TWait recursively closes all forms
+  Close;
+end;
+
+procedure TWait.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+begin
+  CloseAction := caFree;
+  Password.Close;
 end;
 
 end.
-

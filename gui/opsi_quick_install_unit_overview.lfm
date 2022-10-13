@@ -8,8 +8,8 @@ object Overview: TOverview
   ClientWidth = 731
   OnActivate = FormActivate
   OnClose = FormClose
-  LCLVersion = '2.0.12.0'
-  object BackgrImage: TImage
+  LCLVersion = '2.2.0.4'
+  object BackgroundImage: TImage
     Left = 0
     Height = 451
     Top = 0
@@ -18,9 +18,9 @@ object Overview: TOverview
   end
   object BtnBack: TButton
     Left = 16
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 51
+    Width = 57
     AutoSize = True
     Caption = ' < back '
     OnClick = BtnBackClick
@@ -29,9 +29,9 @@ object Overview: TOverview
   end
   object BtnFinish: TButton
     Left = 665
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 45
+    Width = 51
     AutoSize = True
     Caption = ' finish '
     ParentBidiMode = False
@@ -62,7 +62,6 @@ object Overview: TOverview
       Width = 392
       Align = alTop
       Caption = 'Finally click ''finish'' to start the installation of opsi-server.'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end

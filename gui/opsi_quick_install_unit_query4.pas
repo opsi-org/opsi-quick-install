@@ -5,16 +5,16 @@ unit opsi_quick_install_unit_query4;
 interface
 
 uses
-  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls;
+  Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
+  opsiquickinstall_QueryData;
 
 type
 
-  { TQuery4 }
-
-  TQuery4 = class(TForm)
-    BackgrImage: TImage;
-    BtnBack: TButton;
-    BtnNext: TButton;
+  TQuery4 = class(TOpsiLinuxInstallerQueryForm)
     EditPasswordUCS: TEdit;
     InfoReboot: TImage;
     InfoDhcp: TImage;
@@ -36,15 +36,11 @@ type
     RadioBtnNo: TRadioButton;
     RadioBtnNoMenu: TRadioButton;
     RadioBtnYes: TRadioButton;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
+    procedure FormActivate(Sender: TObject); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     procedure RadioBtnDhcpYesChange(Sender: TObject);
-  private
-
-  public
-
   end;
 
 var
@@ -53,16 +49,12 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_query2,
   opsi_quick_install_unit_query5_dhcp,
   opsi_quick_install_unit_query6;
 
 {$R *.lfm}
-
-{ TQuery4 }
 
 procedure TQuery4.BtnNextClick(Sender: TObject);
 begin
@@ -71,14 +63,14 @@ begin
   Data.ucsPassword := EditPasswordUCS.Text;
   // Reboot
   if RadioBtnYes.Checked then
-    Data.reboot.SetEntries(RadioBtnYes.Caption, 'true')
+    Data.reboot.SetEntries('true')
   else
-    Data.reboot.SetEntries(RadioBtnNo.Caption, 'false');
+    Data.reboot.SetEntries('false');
   // Dhcp
   if RadioBtnDhcpYes.Checked then
-    Data.dhcp.SetEntries(RadioBtnDhcpYes.Caption, 'true')
+    Data.dhcp.SetEntries('true')
   else
-    Data.dhcp.SetEntries(RadioBtnDhcpNo.Caption, 'false');
+    Data.dhcp.SetEntries('false');
   // TFTPROOT
   if RadioBtnMenu.Checked then
     Data.symlink := RadioBtnMenu.Caption
@@ -99,17 +91,17 @@ begin
     showForm(Query6, self);
     Query6.BtnBack.Left := BtnBack.Left;
     Query6.BtnBack.Top := BtnBack.Top;
-    Query6.BtnOverview.Left :=
-      Query6.Width - Query6.BtnBack.Left - QuickInstall.BtnOverviewWidth;
-    Query6.BtnOverview.Top := BtnNext.Top;
+    Query6.BtnNext.Left := BtnNext.Left;
+    Query6.BtnNext.Top := BtnNext.Top;
   end;
 end;
 
 procedure TQuery4.FormActivate(Sender: TObject);
 begin
-  PanelFilePointer.AutoSize:=False;
-  SetBasics(self);
-  PanelFilePointer.AutoSize:=True;
+  inherited FormActivate(Sender);
+
+  PanelFilePointer.AutoSize := False;
+  PanelFilePointer.AutoSize := True;
   // ask for UCS password only if distribution is Univention
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
     PanelPasswordMasterAdmin.Visible := True
@@ -153,6 +145,7 @@ end;
 
 procedure TQuery4.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query2.Close;
 end;
 
@@ -173,7 +166,6 @@ end;
 
 procedure TQuery4.BtnBackClick(Sender: TObject);
 begin
-  // show form depending on setup type
   if not Data.CustomSetup then
     showForm(QuickInstall, self)
   else

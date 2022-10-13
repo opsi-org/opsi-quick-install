@@ -8,8 +8,8 @@ object Query5_dhcp: TQuery5_dhcp
   ClientWidth = 730
   OnActivate = FormActivate
   OnClose = FormClose
-  LCLVersion = '2.0.10.0'
-  object BackgrImage: TImage
+  LCLVersion = '2.2.0.4'
+  object BackgroundImage: TImage
     AnchorSideTop.Side = asrBottom
     Left = 0
     Height = 450
@@ -19,9 +19,9 @@ object Query5_dhcp: TQuery5_dhcp
   end
   object BtnNext: TButton
     Left = 664
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 51
+    Width = 56
     AutoSize = True
     Caption = ' next > '
     OnClick = BtnNextClick
@@ -30,9 +30,9 @@ object Query5_dhcp: TQuery5_dhcp
   end
   object BtnBack: TButton
     Left = 16
-    Height = 25
+    Height = 33
     Top = 408
-    Width = 51
+    Width = 57
     AutoSize = True
     Caption = ' < back '
     OnClick = BtnBackClick
@@ -42,12 +42,13 @@ object Query5_dhcp: TQuery5_dhcp
   object PanelNetmask: TPanel
     AnchorSideTop.Control = Owner
     Left = 120
-    Height = 44
+    Height = 49
     Top = 30
     Width = 591
+    AutoSize = True
     BorderSpacing.Top = 30
     BevelOuter = bvNone
-    ClientHeight = 44
+    ClientHeight = 49
     ClientWidth = 591
     ParentFont = False
     TabOrder = 2
@@ -58,7 +59,6 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 591
       Align = alTop
       Caption = 'Netmask (for dhcp)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -111,7 +111,7 @@ object Query5_dhcp: TQuery5_dhcp
       AnchorSideTop.Control = LabelNetmask
       AnchorSideTop.Side = asrBottom
       Left = 471
-      Height = 25
+      Height = 30
       Top = 19
       Width = 120
       BorderSpacing.Left = 10
@@ -137,13 +137,13 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Control = PanelNetmask
     AnchorSideTop.Side = asrBottom
     Left = 120
-    Height = 44
-    Top = 94
+    Height = 49
+    Top = 99
     Width = 555
     AutoSize = True
     BorderSpacing.Top = 20
     BevelOuter = bvNone
-    ClientHeight = 44
+    ClientHeight = 49
     ClientWidth = 555
     ParentFont = False
     TabOrder = 3
@@ -154,7 +154,6 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 555
       Align = alTop
       Caption = 'Network address (for dhcp)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -221,7 +220,7 @@ object Query5_dhcp: TQuery5_dhcp
       AnchorSideTop.Control = LabelAddress
       AnchorSideTop.Side = asrBottom
       Left = 435
-      Height = 25
+      Height = 30
       Top = 19
       Width = 120
       BorderSpacing.Left = 10
@@ -233,13 +232,13 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Control = PanelAddress
     AnchorSideTop.Side = asrBottom
     Left = 120
-    Height = 44
-    Top = 158
+    Height = 49
+    Top = 168
     Width = 495
     AutoSize = True
     BorderSpacing.Top = 20
     BevelOuter = bvNone
-    ClientHeight = 44
+    ClientHeight = 49
     ClientWidth = 495
     ParentFont = False
     TabOrder = 4
@@ -250,7 +249,6 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 495
       Align = alTop
       Caption = 'DNS domain (for dhcp)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -260,7 +258,7 @@ object Query5_dhcp: TQuery5_dhcp
       AnchorSideTop.Control = LabelDomain
       AnchorSideTop.Side = asrBottom
       Left = 375
-      Height = 25
+      Height = 30
       Top = 19
       Width = 120
       BorderSpacing.Left = 10
@@ -275,9 +273,8 @@ object Query5_dhcp: TQuery5_dhcp
       Top = 19
       Width = 72
       Caption = 'ucs.test'
-      Checked = True
       TabOrder = 1
-      TabStop = True
+      Visible = False
     end
     object RadioBtnDomain2: TRadioButton
       AnchorSideLeft.Control = RadioBtnDomain1
@@ -291,6 +288,7 @@ object Query5_dhcp: TQuery5_dhcp
       BorderSpacing.Left = 20
       Caption = 'uib.local'
       TabOrder = 2
+      Visible = False
     end
     object RadioBtnDomain3: TRadioButton
       AnchorSideLeft.Control = RadioBtnDomain2
@@ -304,6 +302,7 @@ object Query5_dhcp: TQuery5_dhcp
       BorderSpacing.Left = 20
       Caption = 'vmnat.local'
       TabOrder = 3
+      Visible = False
     end
     object RadioBtnOtherDomain: TRadioButton
       AnchorSideLeft.Control = RadioBtnDomain3
@@ -316,20 +315,22 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 65
       BorderSpacing.Left = 20
       Caption = 'Other:'
+      Checked = True
       TabOrder = 4
+      TabStop = True
     end
   end
   object PanelNameserver: TPanel
     AnchorSideTop.Control = PanelDomain
     AnchorSideTop.Side = asrBottom
     Left = 120
-    Height = 44
-    Top = 222
+    Height = 49
+    Top = 237
     Width = 571
     AutoSize = True
     BorderSpacing.Top = 20
     BevelOuter = bvNone
-    ClientHeight = 44
+    ClientHeight = 49
     ClientWidth = 571
     ParentFont = False
     TabOrder = 5
@@ -340,7 +341,6 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 571
       Align = alTop
       Caption = 'Primary nameserver (for dhcp)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -406,7 +406,7 @@ object Query5_dhcp: TQuery5_dhcp
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = RadioBtnNameserver1
       Left = 451
-      Height = 25
+      Height = 30
       Top = 19
       Width = 120
       BorderSpacing.Left = 10
@@ -418,13 +418,13 @@ object Query5_dhcp: TQuery5_dhcp
     AnchorSideTop.Control = PanelNameserver
     AnchorSideTop.Side = asrBottom
     Left = 120
-    Height = 44
-    Top = 286
+    Height = 49
+    Top = 306
     Width = 571
     AutoSize = True
     BorderSpacing.Top = 20
     BevelOuter = bvNone
-    ClientHeight = 44
+    ClientHeight = 49
     ClientWidth = 571
     ParentFont = False
     TabOrder = 6
@@ -435,7 +435,6 @@ object Query5_dhcp: TQuery5_dhcp
       Width = 571
       Align = alTop
       Caption = 'Gateway (option routers for dhcp)'
-      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -501,7 +500,7 @@ object Query5_dhcp: TQuery5_dhcp
       AnchorSideLeft.Side = asrBottom
       AnchorSideTop.Control = RadioBtnGateway1
       Left = 451
-      Height = 25
+      Height = 30
       Top = 19
       Width = 120
       BorderSpacing.Left = 10

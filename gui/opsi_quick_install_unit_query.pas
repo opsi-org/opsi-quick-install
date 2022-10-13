@@ -6,16 +6,17 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls;
+  StdCtrls,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions,
+  opsiquickinstall_QueryData,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
+  oslog;
 
 type
 
-  { TQuery }
-
-  TQuery = class(TForm)
-    BackgrImage: TImage;
-    BtnNext: TButton;
-    BtnBack: TButton;
+  TQuery = class(TOpsiLinuxInstallerQueryForm)
     EditDefaultRepoNoCache: TEdit;
     EditDefaultRepo: TEdit;
     EditProxy: TEdit;
@@ -40,13 +41,11 @@ type
     RadioBtnMyProxy: TRadioButton;
     RadioBtnOpsi41: TRadioButton;
     RadioBtnOpsi42: TRadioButton;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
+    procedure FormActivate(Sender: TObject); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
     procedure RadioBtnOpsi41Change(Sender: TObject);
-  private
-  public
   end;
 
 var
@@ -55,11 +54,8 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
   opsi_quick_install_unit_language,
-  opsi_quick_install_unit_query2,
-  oslog;
+  opsi_quick_install_unit_query2;
 
 {$R *.lfm}
 
@@ -101,15 +97,14 @@ end;
 
 procedure TQuery.FormActivate(Sender: TObject);
 begin
-  // bring all panels to the same position (QuickInstall.panelLeft)
-  SetBasics(self);
+  inherited FormActivate(Sender);
 
   // default opsi version is 4.2
   // set default repo depending on default opsi version
   if self.RadioBtnOpsi41.Checked then
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi41
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi41
   else
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi42;
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi42;
   // same repo for no cache proxy
   EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
 
@@ -118,7 +113,7 @@ begin
   LabelOpsiVersion.Caption := rsOpsiVersion;
   RadioBtnOpsi41.Caption := rsOpsi41;
   RadioBtnOpsi42.Caption := rsOpsi42;
-  InfoOpsiVersion.Hint := rsInfoOpsiVersion;
+  //InfoOpsiVersion.Hint := rsInfoOpsiVersion;
   LabelRepo.Caption := rsRepo;
   RadioBtnOtherRepo.Caption := rsRepoOther;
   InfoRepo.Hint := rsInfoRepo;
@@ -133,6 +128,7 @@ end;
 
 procedure TQuery.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   QuickInstall.Close;
 end;
 
@@ -141,12 +137,12 @@ begin
   // when opsi version changes, adjust default repos
   if RadioBtnOpsi41.Checked then
   begin
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi41;
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi41;
     EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
   end
   else
   begin
-    EditDefaultRepo.Text := QuickInstall.baseURLOpsi42;
+    EditDefaultRepo.Text := Data.baseRepoUrlOpsi42;
     EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
   end;
 end;

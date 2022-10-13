@@ -6,60 +6,123 @@ interface
 
 uses
   Classes, SysUtils,
-  opsiquickinstall_data,
-  opsi_quick_install_resourcestrings,
+  opsiquickinstall_QueryData,
   DistributionInfo,
-  LinuxRepository,
   osnetworkcalculator,
   osnetutil,
-  SupportedOpsiServerDistributions;
+  SupportedOpsiServerDistributions,
+  opsi_quick_install_nogui_NetworkSuggestions,
+  opsi_quick_install_NoguiResourceStrings,
+  opsi_quick_install_CommonResourceStrings;
 
 type
+  TQueryProcedure = procedure of object;
+  TQueryProceduresList = array of TQueryProcedure;
+
   TQuickInstallNoQuiQuery = class(TObject)
   private
     input: string;
     NetworkDetails: array of string;
+    FJumpToOverviewAllowed: boolean;
 
+    function CheckJumpToOverview: boolean;
+    procedure CheckInput(ValidOptions: string; EmptyInputAllowed: boolean;
+      HelpInfo: string);
+    procedure CheckHelp(HelpInfo: string);
+    function JumpBackToQuery(QueryProcedure: TQueryProcedure): boolean;
+
+    procedure QueryDistribution;
     procedure QuerySetupType;
     //procedure QueryOpsiVersion;
     procedure QueryRepo;
     procedure QueryProxy;
     procedure QueryRepoNoCache;
     procedure QueryBackend;
-    procedure QueryModules;
+    procedure QueryCopyModules;
     procedure QueryRepoKind;
-    procedure QueryUCS;
+    procedure QueryUCSPassword;
     procedure QueryReboot;
     procedure QueryDhcp;
     procedure QueryLink;
-    function GetNetmaskSuggestions: string;
     procedure QueryNetmask;
-    function GetNetworkAddressSuggestions: string;
     procedure QueryNetworkAddress;
-    function GetDomainSuggestions: string;
     procedure QueryDomain;
-    function GetNameserverSuggestions: string;
     procedure QueryNameserver;
     procedure QueryGateway;
     procedure QueryAdminName;
     procedure QueryAdminPassword;
     procedure QueryIPName;
     procedure QueryIPNumber;
-    procedure JumpBackFromOverviewToQuery(QueryName: string);
+    procedure JumpBackFromOverviewToQuery(QueryProcedure: TQueryProcedure);
     procedure PrintOverview;
-    function GetAskedQueries: TStringList;
+    function GetAskedQueries: TQueryProceduresList;
     procedure QueryOverview;
   public
     QueryFinished: boolean;
-    procedure QueryDistribution;
+    procedure StartQuery;
   end;
 
 
 
 implementation
 
+function TQuickInstallNoQuiQuery.CheckJumpToOverview: boolean;
+begin
+  Result := False;
+  if (input = '-o') and FJumpToOverviewAllowed then
+  begin
+    Result := True;
+    QueryOverview;
+  end;
+end;
+
+procedure TQuickInstallNoQuiQuery.CheckInput(ValidOptions: string;
+  EmptyInputAllowed: boolean; HelpInfo: string);
+var
+  ListOfValidOptions: TStringList;
+begin
+  ListOfValidOptions := TStringList.Create;
+  ListOfValidOptions.AddCommaText(ValidOptions);
+  if EmptyInputAllowed then ListOfValidOptions.add('');
+
+  while (ListOfValidOptions.IndexOf(input) = -1) do
+  begin
+    if (input = '-h') and (HelpInfo <> '') then
+      writeln(HelpInfo)
+    else
+      writeln('"', input, '"', rsNotValid);
+
+    readln(input);
+  end;
+end;
+
+procedure TQuickInstallNoQuiQuery.CheckHelp(HelpInfo: string);
+begin
+  readln(input);
+  while input = '-h' do
+  begin
+    writeln(HelpInfo);
+    readln(input);
+  end;
+end;
+
+function TQuickInstallNoQuiQuery.JumpBackToQuery(QueryProcedure:
+  TQueryProcedure): boolean;
+begin
+  Result := (input = '-b');
+  if Result then QueryProcedure;
+end;
+
+
 // Input variables not set by resourcestrings but by characters for no
 // requirement of a mouse.
+
+procedure TQuickInstallNoQuiQuery.StartQuery;
+begin
+  FJumpToOverviewAllowed := False;
+  Data.adminPassword := '';
+  QueryDistribution;
+end;
 
 procedure TQuickInstallNoQuiQuery.QueryDistribution;
 var
@@ -68,14 +131,8 @@ begin
   writeln(rsDistr, ' ', Data.DistrInfo.DistroName, ' ', Data.DistrInfo.DistroRelease);
   writeln(rsIsCorrect, rsYesNoOp, '*');
   readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoDistribution + #10 + SupportedDistributionsInfoString)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('y,n', True, rsInfoDistribution + #10 + SupportedDistributionsInfoString);
+
   // if distribution isn't correct, read the correct one
   if input = 'n' then
   begin
@@ -101,20 +158,16 @@ procedure TQuickInstallNoQuiQuery.QuerySetupType;
 begin
   writeln(rsSetup, rsSetupOp);
   readln(input);
-  while not ((input = 's') or (input = 'c') or (input = '-b') or (input = '')) do
-  begin
-    writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  CheckInput('s,c,-b', True, '');
+
   // if input = -b then go back to the previous query
-  if input = '-b' then
-    QueryDistribution
-  else
+  if not JumpBackToQuery(@QueryDistribution) then
   begin
-    if input = 'c' then
-      Data.CustomSetup := True
-    else // cases input = 's', input = ''
-      Data.CustomSetup := False;
+    case input of
+      'c': Data.CustomSetup := True;
+      's': Data.CustomSetup := False;
+      '': Data.CustomSetup := False;
+    end;
 
     if Data.CustomSetup then
       // following queries only for custom setup
@@ -122,7 +175,7 @@ begin
       QueryRepo
     else
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      QueryUCS
+      QueryUCSPassword
     else
       QueryDhcp;
   end;
@@ -161,6 +214,7 @@ begin
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi42, ']', '*');
 
   readln(input);
+  if CheckJumpToOverview then Exit;
   while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
   begin
     if input = '-h' then
@@ -170,23 +224,17 @@ begin
     readln(input);
   end;
 
-  if input = '-b' then
-    //QueryOpsiVersion
-    QuerySetupType
-  else
+  if not JumpBackToQuery(@QuerySetupType) then
   begin // cases input = 'http...', input = ''
     if input = '' then
     begin
-      if Data.opsiVersion = 'Opsi 4.1' then
-        Data.repo := Data.baseRepoUrlOpsi41
-      else
-      if Data.opsiVersion = 'Opsi 4.2' then
-        Data.repo := Data.baseRepoUrlOpsi42;
+      case Data.opsiVersion of
+        'Opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
+        'Opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
+      end
     end
     else
-    begin
       Data.repo := input;
-    end;
 
     QueryProxy;
   end;
@@ -196,25 +244,21 @@ procedure TQuickInstallNoQuiQuery.QueryProxy;
 begin
   writeln(rsUseProxy, rsYesNoOp);
   readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  if CheckJumpToOverview then Exit;
+  CheckInput('y,n,-b', True, '');
 
-  if input = '-b' then
-    QueryRepo
-  else
+  if not JumpBackToQuery(@QueryRepo) then
   begin
-    if input = 'y' then
-    begin
-      writeln('Which Proxy would you like to use? [Example: "http://myproxy.dom.org:8080"]');
-      readln(input);
-      Data.proxy := input;
-    end
-    else // cases input = 'n', input = ''
-      Data.proxy := '';
-
+    case input of
+      '': Data.proxy := '';
+      'n': Data.proxy := '';
+      'y':
+      begin
+        writeln('Which Proxy would you like to use? [Example: "http://myproxy.dom.org:8080"]');
+        readln(input);
+        Data.proxy := input;
+      end;
+    end;
     QueryRepoNoCache;
   end;
 end;
@@ -228,15 +272,14 @@ begin
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi42, ']');
 
   readln(input);
+  if CheckJumpToOverview then Exit;
   while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
   begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
 
-  if input = '-b' then
-    QueryProxy
-  else
+  if not JumpBackToQuery(@QueryProxy) then
   begin // cases input = 'http...', input = ''
     if input = '' then
       Data.repoNoCache := Data.repo
@@ -251,54 +294,38 @@ procedure TQuickInstallNoQuiQuery.QueryBackend;
 begin
   writeln(rsBackend, rsBackendOp, '*');
   readln(input);
-  while not ((input = 'f') or (input = 'm') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoBackend)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  if CheckJumpToOverview then Exit;
+  CheckInput('f,m,-b', True, rsInfoBackend);
 
-  if input = '-b' then
-    QueryRepoNoCache
-  else
+  if not JumpBackToQuery(@QueryRepoNoCache) then
   begin
-    if input = 'm' then
-      Data.backend := 'mysql'
-    else
-      Data.backend := 'file'; // cases input = 'f', input = ''
+    case input of
+      'm': Data.backend := 'mysql';
+      'f': Data.backend := 'file';
+      '': Data.backend := 'file';
+    end;
 
     if Data.backend = 'mysql' then
-      QueryModules
+      QueryCopyModules
     else
       QueryRepoKind;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryModules;
+procedure TQuickInstallNoQuiQuery.QueryCopyModules;
 begin
-  // copy modules:
   writeln(rsCopyModules, rsYesNoOp, '*');
   readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoModules)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  if CheckJumpToOverview then Exit;
+  CheckInput('y,n,-b', True, rsInfoModules);
 
-  if input = '-b' then
-    QueryBackend
-  else
+  if not JumpBackToQuery(@QueryBackend) then
   begin
-    if input = 'y' then
-      Data.copyMod.SetEntries(rsYes, 'true')
-    else
-      Data.copyMod.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
-
+    case input of
+      'y': Data.copyMod.SetEntries('true');
+      'n': Data.copyMod.SetEntries('false');
+      '': Data.copyMod.SetEntries('false');
+    end;
     QueryRepoKind;
   end;
 end;
@@ -307,44 +334,37 @@ procedure TQuickInstallNoQuiQuery.QueryRepoKind;
 begin
   writeln(rsRepoKind, rsRepoKindOp, '*');
   readln(input);
-  while not ((input = 'e') or (input = 't') or (input = 's') or
-      (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoRepoKind)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  if CheckJumpToOverview then Exit;
+  CheckInput('e,t,s,-b', True, rsInfoRepoKind);
 
   if input = '-b' then
   begin
     if Data.backend = 'mysql' then
-      QueryModules
+      QueryCopyModules
     else
       QueryBackend;
   end
   else
   begin
-    if input = 'e' then
-      Data.repoKind := 'experimental'
-    else if input = 't' then
-      Data.repoKind := 'testing'
-    else
-      Data.repoKind := 'stable'; // cases input = 's', input = ''
+    case input of
+      'e': Data.repoKind := 'experimental';
+      't': Data.repoKind := 'testing';
+      's': Data.repoKind := 'stable';
+      '': Data.repoKind := 'stable';
+    end;
 
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      QueryUCS
+      QueryUCSPassword
     else
       QueryReboot;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryUCS;
+procedure TQuickInstallNoQuiQuery.QueryUCSPassword;
 begin
-  // ucs password:
   writeln(rsUCS);
   readln(input);
+  if CheckJumpToOverview then Exit;
   if input = '-b' then // go back
   begin
     if not Data.CustomSetup then
@@ -366,29 +386,23 @@ procedure TQuickInstallNoQuiQuery.QueryReboot;
 begin
   writeln(rsReboot, rsYesNoOp, '*');
   readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoReboot)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  if CheckJumpToOverview then Exit;
+  CheckInput('y,n,-b', True, rsInfoReboot);
 
   if input = '-b' then
   begin
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-      QueryUCS
+      QueryUCSPassword
     else
       QueryRepoKind;
   end
   else
   begin
-    if input = 'y' then
-      Data.reboot.SetEntries(rsYes, 'true')
-    else
-      Data.reboot.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
-
+    case input of
+      'y': Data.reboot.SetEntries('true');
+      'n': Data.reboot.SetEntries('false');
+      '': Data.reboot.SetEntries('false');
+    end;
     QueryDhcp;
   end;
 end;
@@ -397,14 +411,8 @@ procedure TQuickInstallNoQuiQuery.QueryDhcp;
 begin
   writeln(rsDhcp, rsYesNoOp, '*');
   readln(input);
-  while not ((input = 'y') or (input = 'n') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoDhcp)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
+  if CheckJumpToOverview then Exit;
+  CheckInput('y,n,-b', True, rsInfoDhcp);
 
   if input = '-b' then
   begin
@@ -413,17 +421,18 @@ begin
     else
     begin
       if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-        QueryUCS
+        QueryUCSPassword
       else
         QuerySetupType;
     end;
   end
   else
   begin
-    if input = 'y' then
-      Data.dhcp.SetEntries(rsYes, 'true')
-    else
-      Data.dhcp.SetEntries(rsNo, 'false'); // cases input = 'n', input = ''
+    case input of
+      'y': Data.dhcp.SetEntries('true');
+      'n': Data.dhcp.SetEntries('false');
+      '': Data.dhcp.SetEntries('false');
+    end;
 
     if Data.dhcp.PropertyEntry = 'true' then
     begin
@@ -444,203 +453,92 @@ procedure TQuickInstallNoQuiQuery.QueryLink;
 begin
   writeln(rsTFTPROOT, rsLinkOp, '*');
   readln(input);
-  while not ((input = 'm') or (input = 'nom') or (input = '-b') or (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoTFTPROOT)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
-  if input = '-b' then
-    QueryDhcp
-  else
-  begin
-    if input = 'm' then
-      Data.symlink := 'default.menu'
-    else
-      Data.symlink := 'default.nomenu'; // cases input = 'nom', input = ''
+  if CheckJumpToOverview then Exit;
+  CheckInput('m,nom,-b', True, rsInfoTFTPROOT);
 
+  if not JumpBackToQuery(@QueryDhcp) then
+  begin
+    case input of
+      'm': Data.symlink := 'default.menu';
+      'nom': Data.symlink := 'default.nomenu';
+      '': Data.symlink := 'default.nomenu';
+    end;
     QueryNetmask;
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetNetmaskSuggestions: string;
-var
-  Suggestions: string = '';
-  network: array of string;
-  index: integer = 0;
-begin
-  // IP4.ADDRESS[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    network := NetworkDetails[index].Split(['/']);
-    Suggestions += getNetmaskByIP4adr(network[1]);
-    // IP4.ADDRESS[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      network := NetworkDetails[index].Split(['/']);
-      Suggestions += ', ' + getNetmaskByIP4adr(network[1]);
-      // IP4.ADDRESS[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-      begin
-        network := NetworkDetails[index].Split(['/']);
-        Suggestions += ', ' + getNetmaskByIP4adr(network[1]);
-      end;
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryNetmask;
+var
+  Suggestions: string;
 begin
-  writeln(rsNetmask, rsSuggestion, GetNetmaskSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  Suggestions := GetNetmaskSuggestions(NetworkDetails);
+  writeln(rsNetmask, rsSuggestion, Suggestions, ']*');
+  CheckHelp(rsInfoNetwork);
+  if CheckJumpToOverview then Exit;
 
-  if input = '-b' then
-    QueryLink
-  else
+  if not JumpBackToQuery(@QueryLink) then
   begin
-    Data.netmask := input;
+    if input = '' then
+      Data.netmask := TakeFirstSuggestion(Suggestions)
+    else
+      Data.netmask := input;
     QueryNetworkAddress;
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetNetworkAddressSuggestions: string;
-var
-  Suggestions: string = '';
-  network: array of string;
-  index: integer = 0;
-begin
-  // IP4.ADDRESS[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    network := NetworkDetails[index].Split(['/']);
-    Suggestions += getIP4NetworkByAdrAndMask(network[0], network[1]);
-    // IP4.ADDRESS[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      network := NetworkDetails[index].Split(['/']);
-      Suggestions += ', ' + getIP4NetworkByAdrAndMask(network[0], network[1]);
-      // IP4.ADDRESS[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-      begin
-        network := NetworkDetails[index].Split(['/']);
-        Suggestions += ', ' + getIP4NetworkByAdrAndMask(network[0], network[1]);
-      end;
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
+var
+  Suggestions: string;
 begin
-  writeln(rsNetworkAddress, rsSuggestion, GetNetworkAddressSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  Suggestions := GetNetworkAddressSuggestions(NetworkDetails);
+  writeln(rsNetworkAddress, rsSuggestion, Suggestions, ']*');
+  CheckHelp(rsInfoNetwork);
+  if CheckJumpToOverview then Exit;
 
-  if input = '-b' then
-    QueryNetmask
-  else
+  if not JumpBackToQuery(@QueryNetmask) then
   begin
-    Data.networkAddress := input;
+    if input = '' then
+      Data.networkAddress := TakeFirstSuggestion(Suggestions)
+    else
+      Data.networkAddress := input;
     QueryDomain;
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetDomainSuggestions: string;
-var
-  Suggestions: string = '';
-  index: integer = 3;
-begin
-  // IP4.DOMAIN[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    Suggestions += NetworkDetails[index];
-    // IP4.DOMAIN[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      Suggestions += ', ' + NetworkDetails[index];
-      // IP4.DOMAIN[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-        Suggestions += ', ' + NetworkDetails[index];
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryDomain;
+var
+  Suggestions: string;
 begin
-  writeln(rsDomain, rsSuggestion, GetDomainSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  Suggestions := GetDomainSuggestions(NetworkDetails);
+  writeln(rsDomain, rsSuggestion, Suggestions, ']*');
+  CheckHelp(rsInfoNetwork);
+  if CheckJumpToOverview then Exit;
 
-  if input = '-b' then
-    QueryNetworkAddress
-  else
+  if not JumpBackToQuery(@QueryNetworkAddress) then
   begin
-    Data.domain := input;
+    if input = '' then
+      Data.domain := TakeFirstSuggestion(Suggestions)
+    else
+      Data.domain := input;
     QueryNameserver;
   end;
 end;
 
-function TQuickInstallNoQuiQuery.GetNameserverSuggestions: string;
-var
-  Suggestions: string = '';
-  index: integer = 6;
-begin
-  // IP4.DNS[1]
-  if NetworkDetails[index] <> '' then
-  begin
-    Suggestions += NetworkDetails[index];
-    // IP4.DNS[2]
-    Inc(index);
-    if NetworkDetails[index] <> '' then
-    begin
-      Suggestions += ', ' + NetworkDetails[index];
-      // IP4.DNS[3]
-      Inc(index);
-      if NetworkDetails[index] <> '' then
-        Suggestions += ', ' + NetworkDetails[index];
-    end;
-  end;
-  Result := Suggestions;
-end;
-
 procedure TQuickInstallNoQuiQuery.QueryNameserver;
+var
+  Suggestions: string;
 begin
-  writeln(rsNameserver, rsSuggestion, GetNameserverSuggestions, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  Suggestions := GetNameserverSuggestions(NetworkDetails);
+  writeln(rsNameserver, rsSuggestion, Suggestions, ']*');
+  CheckHelp(rsInfoNetwork);
+  if CheckJumpToOverview then Exit;
 
-  if input = '-b' then
-    QueryDomain
-  else
+  if not JumpBackToQuery(@QueryDomain) then
   begin
-    Data.nameserver := input;
+    if input = '' then
+      Data.nameserver := TakeFirstSuggestion(Suggestions)
+    else
+      Data.nameserver := input;
     QueryGateway;
   end;
 end;
@@ -654,18 +552,15 @@ begin
     suggestion := NetworkDetails[9];
 
   writeln(rsGateway, rsSuggestion, suggestion, ']*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoNetwork);
-    readln(input);
-  end;
+  CheckHelp(rsInfoNetwork);
+  if CheckJumpToOverview then Exit;
 
-  if input = '-b' then
-    QueryNameserver
-  else
+  if not JumpBackToQuery(@QueryNameserver) then
   begin
-    Data.gateway := input;
+    if input = '' then
+      Data.gateway := suggestion
+    else
+      Data.gateway := input;
     QueryAdminName;
   end;
 end;
@@ -673,12 +568,8 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryAdminName;
 begin
   writeln(rsAdminName, '*');
-  readln(input);
-  while input = '-h' do
-  begin
-    writeln(rsInfoAdmin);
-    readln(input);
-  end;
+  CheckHelp(rsInfoAdmin);
+  if CheckJumpToOverview then Exit;
 
   if input = '-b' then
   begin
@@ -701,9 +592,8 @@ procedure TQuickInstallNoQuiQuery.QueryAdminPassword;
 begin
   writeln(rsAdminPassword, '*');
   readln(input);
-  if input = '-b' then
-    QueryAdminName
-  else
+  if CheckJumpToOverview then Exit;
+  if not JumpBackToQuery(@QueryAdminName) then
   begin
     Data.adminPassword := input;
     QueryIPName;
@@ -714,7 +604,8 @@ procedure TQuickInstallNoQuiQuery.QueryIPName;
 begin
   writeln(rsIPName);
   readln(input);
-  while not ((input = 'auto') or isValidFQDN(input) or (input = '-b')) do
+  if CheckJumpToOverview then Exit;
+  while not ((input = 'auto') or isValidFQDN(input) or (input = '-b') or (input = '')) do
   begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
@@ -729,7 +620,11 @@ begin
   end
   else
   begin
-    Data.ipName := input;
+    if input = '' then
+      Data.ipName := 'auto'
+    else
+      Data.ipName := input;
+
     QueryIPNumber;
   end;
 end;
@@ -738,79 +633,28 @@ procedure TQuickInstallNoQuiQuery.QueryIPNumber;
 begin
   writeln(rsIPNumber);
   readln(input);
-  while not ((input = 'auto') or isValidIP4(input) or (input = '-b')) do
+  if CheckJumpToOverview then Exit;
+  while not ((input = 'auto') or isValidIP4(input) or (input = '-b') or (input = '')) do
   begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
   end;
 
-  if input = '-b' then
-    QueryIPName
-  else
+  if not JumpBackToQuery(@QueryIPName) then
   begin
-    Data.ipNumber := input;
+    if input = '' then
+      Data.ipNumber := 'auto'
+    else
+      Data.ipNumber := input;
+
     QueryOverview;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.JumpBackFromOverviewToQuery(QueryName: string);
+procedure TQuickInstallNoQuiQuery.JumpBackFromOverviewToQuery(
+  QueryProcedure: TQueryProcedure);
 begin
-  if QueryName = 'QueryRepo' then
-    QueryRepo
-  else
-  if QueryName = 'QueryProxy' then
-    QueryProxy
-  else
-  if QueryName = 'QueryRepoNoCache' then
-    QueryRepoNoCache
-  else
-  if QueryName = 'QueryBackend' then
-    QueryBackend
-  else
-  if QueryName = 'QueryModules' then
-    QueryModules
-  else
-  if QueryName = 'QueryRepoKind' then
-    QueryRepoKind
-  else
-  if QueryName = 'QueryUCS' then
-    QueryUCS
-  else
-  if QueryName = 'QueryReboot' then
-    QueryReboot
-  else
-  if QueryName = 'QueryDhcp' then
-    QueryDhcp
-  else
-  if QueryName = 'QueryLink' then
-    QueryLink
-  else
-  if QueryName = 'QueryNetmask' then
-    QueryNetmask
-  else
-  if QueryName = 'QueryNetworkAddress' then
-    QueryNetworkAddress
-  else
-  if QueryName = 'QueryDomain' then
-    QueryDomain
-  else
-  if QueryName = 'QueryNameserver' then
-    QueryNameserver
-  else
-  if QueryName = 'QueryGateway' then
-    QueryGateway
-  else
-  if QueryName = 'QueryAdminName' then
-    QueryAdminName
-  else
-  if QueryName = 'QueryAdminPassword' then
-    QueryAdminPassword
-  else
-  if QueryName = 'QueryIPName' then
-    QueryIPName
-  else
-  if QueryName = 'QueryIPNumber' then
-    QueryIPNumber;
+  QueryProcedure;
 end;
 
 procedure TQuickInstallNoQuiQuery.PrintOverview;
@@ -820,137 +664,151 @@ var
 begin
   writeln('');
   writeln(rsOverview);
-  writeln(rsOpsiVersionO, Data.opsiVersion);
+  writeln(rsOpsiVersionOverview, Data.opsiVersion);
   {Custom installation}
   if Data.CustomSetup then
   begin
-    writeln(Counter, ' ', rsRepoO, Data.repo);
+    writeln(Counter, ' ', rsRepoOverview, Data.repo);
     Inc(Counter);
-    writeln(Counter, ' ', rsProxyO, Data.proxy);
+    writeln(Counter, ' ', rsProxyOverview, Data.proxy);
     Inc(Counter);
-    writeln(Counter, ' ', rsRepoNoCacheO, Data.repoNoCache);
+    writeln(Counter, ' ', rsRepoNoCacheOverview, Data.repoNoCache);
     Inc(Counter);
-    writeln(Counter, ' ', rsBackendO, Data.backend);
+    writeln(Counter, ' ', rsBackendOverview, Data.backend);
     Inc(Counter);
     if Data.backend = 'mysql' then
     begin
-      writeln(Counter, ' ', rsCopyModulesO, Data.copyMod.OverviewEntry);
+      writeln(Counter, ' ', rsCopyModulesOverview, Data.copyMod.OverviewEntry);
       Inc(Counter);
     end;
-    writeln(Counter, ' ', rsRepoKindO, Data.repoKind);
+    writeln(Counter, ' ', rsRepoKindOverview, Data.repoKind);
     Inc(Counter);
   end;
   {Both}
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
   begin
-    writeln(Counter, ' ', rsUCSO, Data.ucsPassword);
+    writeln(Counter, ' ', rsUCSOverview, Data.ucsPassword);
     Inc(Counter);
   end;
   {Custom installation}
   if Data.CustomSetup then
   begin
-    writeln(Counter, ' ', rsRebootO, Data.reboot.OverviewEntry);
+    writeln(Counter, ' ', rsRebootOverview, Data.reboot.OverviewEntry);
     Inc(Counter);
   end;
   {Both}
-  writeln(Counter, ' ', rsDhcpO, Data.dhcp.OverviewEntry);
+  writeln(Counter, ' ', rsDhcpOverview, Data.dhcp.OverviewEntry);
   Inc(Counter);
   if Data.dhcp.PropertyEntry = 'true' then
   begin
-    writeln(Counter, ' ', rsTFTPROOTO, Data.symlink);
+    writeln(Counter, ' ', rsTFTPROOTOverview, Data.symlink);
     Inc(Counter);
-    writeln(Counter, ' ', rsNetmaskO, Data.netmask);
+    writeln(Counter, ' ', rsNetmaskOverview, Data.netmask);
     Inc(Counter);
-    writeln(Counter, ' ', rsNetworkO, Data.networkAddress);
+    writeln(Counter, ' ', rsNetworkOverview, Data.networkAddress);
     Inc(Counter);
-    writeln(Counter, ' ', rsDomainO, Data.domain);
+    writeln(Counter, ' ', rsDomainOverview, Data.domain);
     Inc(Counter);
-    writeln(Counter, ' ', rsNameserverO, Data.nameserver);
+    writeln(Counter, ' ', rsNameserverOverview, Data.nameserver);
     Inc(Counter);
-    writeln(Counter, ' ', rsGatewayO, Data.gateway);
+    writeln(Counter, ' ', rsGatewayOverview, Data.gateway);
     Inc(Counter);
   end;
-  writeln(Counter, ' ', rsAdminNameO, Data.adminName);
+  writeln(Counter, ' ', rsAdminNameOverview, Data.adminName);
   Inc(Counter);
   if Data.adminName <> '' then
   begin
-    writeln(Counter, ' ', rsAdminPasswordO, Data.adminPassword);
+    writeln(Counter, ' ', rsAdminPasswordOverview, Data.adminPassword);
     Inc(Counter);
   end;
-  writeln(Counter, ' ', rsIPNameO, Data.ipName);
+  writeln(Counter, ' ', rsIPNameOverview, Data.ipName);
   Inc(Counter);
-  writeln(Counter, ' ', rsIPNumberO, Data.ipNumber);
+  writeln(Counter, ' ', rsIPNumberOverview, Data.ipNumber);
 end;
 
-function TQuickInstallNoQuiQuery.GetAskedQueries: TStringList;
+procedure AddQueryToList(QueryProcedure: TQueryProcedure;
+  var QueryProceduresList: TQueryProceduresList);
+begin
+  SetLength(QueryProceduresList, Length(QueryProceduresList) + 1);
+  QueryProceduresList[Length(QueryProceduresList) - 1] := QueryProcedure;
+end;
+
+function TQuickInstallNoQuiQuery.GetAskedQueries: TQueryProceduresList;
+var
+  QueryProceduresList: TQueryProceduresList;
 begin
   // find the questions that were asked (depending on setup type and
   // distribution=Univention) and return their names
-  Result := TStringList.Create;
+  //Result := TStringList.Create;
+  QueryProceduresList := TQueryProceduresList.Create;
+  SetLength(QueryProceduresList, 0);
 
   {Custom installation}
   if Data.CustomSetup then
   begin
-    Result.Add('QueryRepo');
-    Result.Add('QueryProxy');
-    Result.Add('QueryRepoNoCache');
-    Result.Add('QueryBackend');
+    AddQueryToList(@QueryRepo, QueryProceduresList);
+    AddQueryToList(@QueryProxy, QueryProceduresList);
+    AddQueryToList(@QueryRepoNoCache, QueryProceduresList);
+    AddQueryToList(@QueryBackend, QueryProceduresList);
 
     if Data.backend = 'mysql' then
-      Result.Add('QueryModules');
+      AddQueryToList(@QueryCopyModules, QueryProceduresList);
 
-    Result.Add('QueryRepoKind');
+    AddQueryToList(@QueryRepoKind, QueryProceduresList);
   end;
 
   {Both}
   if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
-    Result.Add('QueryUCS');
+    AddQueryToList(@QueryUCSPassword, QueryProceduresList);
 
   {Custom installation}
   if Data.CustomSetup then
-    Result.Add('QueryReboot');
+    AddQueryToList(@QueryReboot, QueryProceduresList);
 
   {Both}
-  Result.Add('QueryDhcp');
+  AddQueryToList(@QueryDhcp, QueryProceduresList);
   if Data.dhcp.PropertyEntry = 'true' then
   begin
-    Result.Add('QueryLink');
-    Result.Add('QueryNetmask');
-    Result.Add('QueryNetworkAddress');
-    Result.Add('QueryDomain');
-    Result.Add('QueryNameserver');
-    Result.Add('QueryGateway');
+    AddQueryToList(@QueryLink, QueryProceduresList);
+    AddQueryToList(@QueryNetmask, QueryProceduresList);
+    AddQueryToList(@QueryNetworkAddress, QueryProceduresList);
+    AddQueryToList(@QueryDomain, QueryProceduresList);
+    AddQueryToList(@QueryNameserver, QueryProceduresList);
+    AddQueryToList(@QueryGateway, QueryProceduresList);
   end;
 
-  Result.Add('QueryAdminName');
+  AddQueryToList(@QueryAdminName, QueryProceduresList);
   if Data.adminName <> '' then
-    Result.Add('QueryAdminPassword');
+    AddQueryToList(@QueryAdminPassword, QueryProceduresList);
 
-  Result.Add('QueryIPName');
-  Result.Add('QueryIPNumber');
+  AddQueryToList(@QueryIPName, QueryProceduresList);
+  AddQueryToList(@QueryIPNumber, QueryProceduresList);
   //writeln(Result.Text);
+
+  Result := QueryProceduresList;
 end;
 
 procedure TQuickInstallNoQuiQuery.QueryOverview;
 var
   // list of the asked questions by numbers
-  queries: TStringList;
+  QueryProceduresList: TQueryProceduresList;
   QueryIndex: integer;
   ValidQueryIndex: boolean = False;
 begin
   PrintOverview;
-  queries := GetAskedQueries;
+  QueryProceduresList := GetAskedQueries;
 
   writeln('');
   writeln(rsContinue);
   // Jumping back to a query by the number in the overview:
   readln(input);
   try
-    QueryIndex := StrToInt(input);
-    if (QueryIndex > 0) and (QueryIndex <= queries.Count) then
+    QueryIndex := StrToInt(input) - 1;
+    if (QueryIndex >= 0) and (QueryIndex < Length(QueryProceduresList)) then
       ValidQueryIndex := True;
   except
   end;
+
   // only elements of 'queries' (jumping back) or '' (start installation) are valid inputs
   while not (ValidQueryIndex or (input = '')) do
   begin
@@ -958,15 +816,18 @@ begin
     writeln('"', input, '"', rsNotValid);
     readln(input);
     try
-      QueryIndex := StrToInt(input);
-      if (QueryIndex > 0) and (QueryIndex <= queries.Count) then
+      QueryIndex := StrToInt(input) - 1;
+      if (QueryIndex >= 0) and (QueryIndex < Length(QueryProceduresList)) then
         ValidQueryIndex := True;
     except
     end;
   end;
   // jump back to the respective question
   if input <> '' then
-    JumpBackFromOverviewToQuery(queries[QueryIndex-1])
+  begin
+    FJumpToOverviewAllowed := True;
+    JumpBackFromOverviewToQuery(QueryProceduresList[QueryIndex]);
+  end
   else
     QueryFinished := True;
 end;

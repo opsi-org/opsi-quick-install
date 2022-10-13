@@ -6,16 +6,16 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls,
-  Process, osnetworkcalculator;
+  Process, osnetworkcalculator,
+  OpsiLinuxInstaller_QueryForm,
+  FormAppearanceFunctions,
+  opsi_quick_install_CommonResourceStrings,
+  opsi_quick_install_GuiResourceStrings,
+  opsiquickinstall_QueryData;
 
 type
 
-  { TQuery5_dhcp }
-
-  TQuery5_dhcp = class(TForm)
-    BackgrImage: TImage;
-    BtnBack: TButton;
-    BtnNext: TButton;
+  TQuery5_dhcp = class(TOpsiLinuxInstallerQueryForm)
     EditNetmask: TEdit;
     EditAddress: TEdit;
     EditDomain: TEdit;
@@ -52,14 +52,10 @@ type
     RadioBtnDomain2: TRadioButton;
     RadioBtnDomain3: TRadioButton;
     RadioBtnOtherDomain: TRadioButton;
-    procedure BtnBackClick(Sender: TObject);
-    procedure BtnNextClick(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
-  private
-
-  public
-
+    procedure BtnBackClick(Sender: TObject); override;
+    procedure BtnNextClick(Sender: TObject); override;
+    procedure FormActivate(Sender: TObject); override;
+    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
   end;
 
 var
@@ -68,15 +64,10 @@ var
 implementation
 
 uses
-  opsi_quick_install_resourcestrings,
-  opsiquickinstall_data,
-  opsi_quick_install_unit_language,
   opsi_quick_install_unit_query4,
   opsi_quick_install_unit_query6;
 
 {$R *.lfm}
-
-{ TQuery5_dhcp }
 
 procedure TQuery5_dhcp.BtnNextClick(Sender: TObject);
 begin
@@ -128,9 +119,8 @@ begin
   showForm(Query6, self);
   Query6.BtnBack.Left := BtnBack.Left;
   Query6.BtnBack.Top := BtnBack.Top;
-  Query6.BtnOverview.Left :=
-    Query6.Width - Query6.BtnBack.Left - QuickInstall.BtnOverviewWidth;
-  Query6.BtnOverview.Top := BtnNext.Top;
+  Query6.BtnNext.Left := BtnNext.Left;
+  Query6.BtnNext.Top := BtnNext.Top;
 end;
 
 procedure TQuery5_dhcp.FormActivate(Sender: TObject);
@@ -138,7 +128,7 @@ var
   NetworkDetails, network: array of string;
   index: integer;
 begin
-  SetBasics(self);
+  inherited FormActivate(Sender);
 
   // Make automatic suggestions on network details for the dhcp:
   // get details
@@ -196,12 +186,21 @@ begin
   index := 3;
   if NetworkDetails[index] <> '' then
   begin
-    RadioBtnDomain1.Visible := True;
-    RadioBtnDomain1.Caption := NetworkDetails[index];
+    if NetworkDetails[index] <> 'lan' then
+    begin
+      RadioBtnDomain1.Visible := True;
+      RadioBtnDomain1.Checked := True;
+      RadioBtnDomain1.Caption := NetworkDetails[index];
+    end;
     // IP4.DOMAIN[2]
     index += 1;
     if NetworkDetails[index] <> '' then
     begin
+      if not RadioBtnDomain1.Visible then
+      begin
+        RadioBtnDomain2.Checked := True;
+        RadioBtnDomain2.Left := RadioBtnDomain1.Left;
+      end;
       RadioBtnDomain2.Visible := True;
       RadioBtnDomain2.Caption := NetworkDetails[index];
       // IP4.DOMAIN[3]
@@ -211,13 +210,16 @@ begin
         RadioBtnDomain3.Visible := True;
         RadioBtnDomain3.Caption := NetworkDetails[index];
         // if too many checkboxes (i.e. 3), move CheckBoxOtherDomain down
-        RadioBtnOtherDomain.AnchorSide[akTop].Side := asrBottom;
-        RadioBtnOtherDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
-        RadioBtnOtherDomain.AnchorSide[akLeft].Side := asrLeft;
-        RadioBtnOtherDomain.AnchorSide[akLeft].Control := RadioBtnDomain1;
-        RadioBtnOtherDomain.BorderSpacing.Left := 0;
-        EditDomain.AnchorSide[akTop].Side := asrBottom;
-        EditDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
+        if RadioBtnDomain1.Visible then
+        begin
+          RadioBtnOtherDomain.AnchorSide[akTop].Side := asrBottom;
+          RadioBtnOtherDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
+          RadioBtnOtherDomain.AnchorSide[akLeft].Side := asrLeft;
+          RadioBtnOtherDomain.AnchorSide[akLeft].Control := RadioBtnDomain1;
+          RadioBtnOtherDomain.BorderSpacing.Left := 0;
+          EditDomain.AnchorSide[akTop].Side := asrBottom;
+          EditDomain.AnchorSide[akTop].Control := RadioBtnDomain1;
+        end;
       end;
     end;
   end;
@@ -277,6 +279,7 @@ end;
 
 procedure TQuery5_dhcp.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
+  CloseAction := caFree;
   Query4.Close;
 end;
 
