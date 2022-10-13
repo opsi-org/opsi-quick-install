@@ -1,11 +1,13 @@
-opsi-quickinstall (4.2.0.9-1) experimental; urgency=low
+opsi-quickinstall (4.2.0.8-11) experimental; urgency=low
   * new (nogui):
   		* New option '-o' in query to jump forward to the overwiew again after jumping back from the overview to a question for correcting the answer
   		* Use default values for language (system language), ip name ("auto") and ip number ("auto")
   * change (nogui): Use first suggestion as default value in dhcp query, i.e. for netmask, network address, domain, nameserver and gateway
+  * change (internal): code revised for sustainable stability and easy maintenance
   * remove: Remove 'lan' from dhcp domain suggestions
+  * fix (gui): Use root rights in OpsiPackageDownloader only where necessary to avoid permission problems with sudo and root  
     
--- Anja-Melanie Schmitz <a.schmitz@uib.de>  Mon, 19 Sep 2022 13:30
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 13 Oct 2022 12:00
 
 
 opsi-quickinstall (4.2.0.8-1) testing; urgency=low
