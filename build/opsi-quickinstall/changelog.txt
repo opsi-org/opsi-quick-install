@@ -1,4 +1,10 @@
-opsi-quickinstall (4.2.0.8-11) experimental; urgency=low
+opsi-quickinstall (4.2.0.8-12) experimental; urgency=medium
+  * fix: Return empty dhcp network suggestions if nmcli is not installed 
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Mon, 17 Oct 2022 14:30
+
+
+opsi-quickinstall (4.2.0.8-11) experimental; urgency=medium
   * new (nogui):
   		* New option '-o' in query to jump forward to the overwiew again after jumping back from the overview to a question for correcting the answer
   		* Use default values for language (system language), ip name ("auto") and ip number ("auto")
@@ -10,7 +16,7 @@ opsi-quickinstall (4.2.0.8-11) experimental; urgency=low
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 13 Oct 2022 12:00
 
 
-opsi-quickinstall (4.2.0.8-1) testing; urgency=low
+opsi-quickinstall (4.2.0.8-1) stable; urgency=low
   * new: AlmaLinux 9, Rocky 9, RHEL 9, SUSE 15.3 and SUSE 15.4 added to supported distributions
   * change: Download opsi-script now directly from download.opensuse.org as tar.gz and delete it again after the installation
     (the way before was to add a repository from download.opensuse.org and install opsi-script on the system)
