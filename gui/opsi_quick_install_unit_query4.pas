@@ -125,9 +125,9 @@ begin
   // text by resourcestrings
   // adjust form caption depending on setup type
   if not Data.CustomSetup then
-    Caption := 'Opsi Quick Install - ' + rsCapQuery
+    Caption := ProgramName + ' - ' + rsCapQuery
   else
-    Caption := 'Opsi Quick Install - ' + rsCapQuery3;
+    Caption := ProgramName + ' - ' + rsCapQuery3;
   LabelPasswordMasterAdmin.Caption := rsUCS;
   LabelReboot.Caption := rsReboot;
   InfoReboot.Hint := rsInfoReboot;

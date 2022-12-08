@@ -92,7 +92,7 @@ begin
     RadioBtnTesting.BorderSpacing.Left := 0;
 
   // text by resourcestrings
-  Caption := 'Opsi Quick Install - ' + rsCapQuery2;
+  Caption := ProgramName + ' - ' + rsCapQuery2;
   LabelBackend.Caption := rsBackend;
   InfoBackend.Hint := rsInfoBackend;
   LabelCopyModules.Caption := rsCopyModules;

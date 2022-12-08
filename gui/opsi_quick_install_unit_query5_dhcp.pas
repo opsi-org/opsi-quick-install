@@ -261,7 +261,7 @@ begin
   end;
 
   // text by resourcestrings
-  Caption := 'Opsi Quick Install - ' + rsCapQueryDhcp;
+  Caption := ProgramName + ' - ' + rsCapQueryDhcp;
   InfoNetwork.Hint := rsInfoNetwork;
   LabelNetmask.Caption := rsNetmask;
   RadioBtnOtherMask.Caption := rsNetmaskOther;

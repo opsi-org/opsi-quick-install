@@ -80,7 +80,7 @@ begin
   PanelPasswordAdmin.AutoSize := False;
   PanelPasswordAdmin.AutoSize := True;
   // text by resourcestrings
-  Caption := 'Opsi Quick Install - ' + rsCapQueryUserInfo;
+  Caption := ProgramName + ' - ' + rsCapQueryUserInfo;
   LabelNameAdmin.Caption := rsAdminName;
   InfoAdmin.Hint := rsInfoAdmin;
   LabelPasswordAdmin.Caption := rsAdminPassword;

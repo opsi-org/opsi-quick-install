@@ -15,6 +15,7 @@ const
   {$IFDEF NOGUI}
   LongMessageSeperator = '';
   {$ENDIF NOGUI}
+  ProgramName = 'opsi-QuickInstall';
 
 resourcestring
 
@@ -24,7 +25,7 @@ resourcestring
   rsBack = ' Back ';
   rsOverview = 'Overview';
   rsInvalidFqdnWarning =
-    'Opsi-QuickInstall Warning:' + #10 +
+    ProgramName + ' Warning:' + #10 +
     'We could not find a valid local DNS hostname on this computer.' +
     ' This can lead to problems during the installation! Please see' +
     #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' +

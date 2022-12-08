@@ -109,7 +109,7 @@ begin
   EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
 
   // text by resourcestrings
-  Caption := 'Opsi Quick Install - ' + rsCapQuery;
+  Caption := ProgramName + ' - ' + rsCapQuery;
   LabelOpsiVersion.Caption := rsOpsiVersion;
   RadioBtnOpsi41.Caption := rsOpsi41;
   RadioBtnOpsi42.Caption := rsOpsi42;

@@ -34,11 +34,6 @@ type
     procedure ComboBoxLanguagesChange(Sender: TObject);
     procedure FormActivate(Sender: TObject); override;
     procedure FormCreate(Sender: TObject); override;
-
-
-
-
-
   public
   const
     LogFileName = 'opsi_quickinstall.log';
@@ -131,6 +126,7 @@ begin
   Language := TLanguageObject.Create(
     '../../../lazarus/common/OpsiLinuxInstaller/locale/', '../locale/');
 
+  Caption := ProgramName;
   // set constant button positions:
   BtnBack.Left := 20;
   //note that BtnNext.Width = width for english caption
@@ -150,7 +146,7 @@ begin
 
   InitializeLogFile(LogFileName);
   LogDatei.log('', LLnothing);
-  LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
+  LogDatei.log(ProgramName + ' version: ' + Data.QuickInstallVersion, LLessential);
   LogDatei.log('', LLnothing);
 
   // initialize data structure to store the QuickInstall data for easier access

@@ -135,7 +135,7 @@ type
     begin
       LogDatei.Log('Use default property values.', LLInfo);
       writeln('');
-      writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
+      writeln('Start ' + ProgramName + ' ' + Data.QuickInstallVersion);
       InstallOpsiServer;
       Terminate;
       Exit;
@@ -160,7 +160,7 @@ type
           end;
         end;
       except
-        writeln('Executing Opsi-QuickInstall with properties from file didn''t work!');
+        writeln('Executing ' + ProgramName + ' with properties from file didn''t work!');
       end;
       PropsFile.Free;
       Terminate;
@@ -257,7 +257,7 @@ type
 
     if not ((user = 'root') and (userID = '0')) then
     begin
-      writeln('Please execute Opsi Quick-Install as root!');
+      writeln('Please execute ' + ProgramName + ' as root!');
       Halt(1);
     end;
   end;
@@ -265,7 +265,7 @@ type
   procedure LogQuickInstallVersion;
   begin
     LogDatei.log('', LLessential);
-    LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
+    LogDatei.log(ProgramName + ' version: ' + Data.QuickInstallVersion, LLessential);
     LogDatei.log('', LLessential);
   end;
 
