@@ -20,8 +20,8 @@ resourcestring
 
   rsYes = 'Yes';
   rsNo = 'No';
-  rsNext = ' next > ';
-  rsBack = ' < back ';
+  rsNext = ' Next ';
+  rsBack = ' Back ';
   rsOverview = 'Overview';
   rsInvalidFqdnWarning =
     'Opsi-QuickInstall Warning:' + #10 +

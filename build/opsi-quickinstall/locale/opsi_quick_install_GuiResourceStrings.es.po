@@ -35,12 +35,11 @@ msgstr "Consulta (información de usuario)"
 
 #: opsi_quick_install_GuiResourceStrings.rscorrect
 msgid ""
-"If this is correct, please click \"next >\" to continue. If not, please edit "
-"the distribution and then continue with \"next >\"."
+"If this is correct, please click \"Next\" to continue. If not, please edit "
+"the distribution and then continue with \"Next\"."
 msgstr ""
-"Si esto es correcto, por favor haga click en \"siguiente>\" para continuar. "
-"Caso contrario, por favor edite la distro elegida y continue con \"siguiente>"
-"\"."
+"Si esto es correcto, por favor haga click en \"Siguiente\" para continuar. "
+"Caso contrario, por favor edite la distro elegida y continue con \"Siguiente\"."
 
 #: opsi_quick_install_GuiResourceStrings.rscustom
 msgctxt "opsi_quick_install_GuiResourceStrings.rscustom"
@@ -54,8 +53,8 @@ msgstr "Otro:"
 
 #: opsi_quick_install_GuiResourceStrings.rsfinish
 msgctxt "opsi_quick_install_GuiResourceStrings.rsfinish"
-msgid " finish "
-msgstr " terminar "
+msgid " Finish "
+msgstr " Terminar "
 
 #: opsi_quick_install_GuiResourceStrings.rsgatewayother
 msgctxt "opsi_quick_install_GuiResourceStrings.rsgatewayother"
@@ -114,7 +113,7 @@ msgid "Standard"
 msgstr "Standard"
 
 #: opsi_quick_install_GuiResourceStrings.rsstartinstallation
-msgid "Finally click \"finish\" to start the installation of opsi-server."
+msgid "Finally click \"Finish\" to start the installation of opsi-server."
 msgstr ""
-"Finalmente presione \"terminar\" para comenzar la instalación del servidor "
+"Finalmente presione \"Terminar\" para comenzar la instalación del servidor "
 "opsi."
