@@ -58,7 +58,7 @@ begin
   PanelFinish.Width := 400;
 
   MemoOverview.Clear;
-  // Opsi version
+  // opsi version
   MemoOverview.Lines.Add(rsOpsiVersionOverview + Data.opsiVersion);
 
   {Custom installation}

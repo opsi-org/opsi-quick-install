@@ -64,7 +64,7 @@ uses
 procedure TQuery.BtnNextClick(Sender: TObject);
 begin
   // Make Data entries:
-  // Opsi version
+  // opsi version
   if RadioBtnOpsi41.Checked then
     Data.opsiVersion := RadioBtnOpsi41.Caption
   else

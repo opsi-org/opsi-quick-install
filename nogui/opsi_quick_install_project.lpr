@@ -233,9 +233,9 @@ type
 
     // Read opsi version from repo url
     if Pos('4.1', Data.repo) > 0 then
-      Data.opsiVersion := 'Opsi 4.1'
+      Data.opsiVersion := 'opsi 4.1'
     else
-      Data.opsiVersion := 'Opsi 4.2';
+      Data.opsiVersion := 'opsi 4.2';
 
     InstallOpsiServer;
   end;
