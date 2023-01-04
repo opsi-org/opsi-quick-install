@@ -52,7 +52,6 @@ compile opsi-quickinstall linux:
     - git submodule update --init
   script:
     - git submodule update --init --recursive
-    - git submodule update --recursive --remote
     - cd l-opsi-server-products && git pull origin master && cd ..
     
     # move common translation files to locale folder in build folder so that they are also delivered
