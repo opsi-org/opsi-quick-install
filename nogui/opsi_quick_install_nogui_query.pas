@@ -37,6 +37,7 @@ type
     procedure QueryRepo;
     procedure QueryProxy;
     procedure QueryRepoNoCache;
+    procedure QueryGrafanaRepo;
     procedure QueryBackend;
     procedure QueryCopyModules;
     procedure QueryRepoKind;
@@ -286,6 +287,29 @@ begin
     else
       Data.repoNoCache := input;
 
+    QueryGrafanaRepo;
+  end;
+end;
+
+procedure TQuickInstallNoQuiQuery.QueryGrafanaRepo;
+begin
+  writeln(rsGrafanaRepo, rsSuggestion +
+    'https://packages.grafana.com/oss, https://packages.grafana.com/enterprise]');
+  readln(input);
+  if CheckJumpToOverview then Exit;
+  while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
+  begin
+    writeln('"', input, '"', rsNotValid);
+    readln(input);
+  end;
+
+  if not JumpBackToQuery(@QueryRepoNoCache) then
+  begin // cases input = 'http...', input = ''
+    if input = '' then
+      Data.grafanaRepo := 'https://packages.grafana.com/oss'
+    else
+      Data.grafanaRepo := input;
+
     QueryBackend;
   end;
 end;
@@ -297,7 +321,7 @@ begin
   if CheckJumpToOverview then Exit;
   CheckInput('f,m,-b', True, rsInfoBackend);
 
-  if not JumpBackToQuery(@QueryRepoNoCache) then
+  if not JumpBackToQuery(@QueryGrafanaRepo) then
   begin
     case input of
       'm': Data.backend := 'mysql';
@@ -749,6 +773,7 @@ begin
     AddQueryToList(@QueryRepo, QueryProceduresList);
     AddQueryToList(@QueryProxy, QueryProceduresList);
     AddQueryToList(@QueryRepoNoCache, QueryProceduresList);
+    AddQueryToList(@QueryGrafanaRepo, QueryProceduresList);
     AddQueryToList(@QueryBackend, QueryProceduresList);
 
     if Data.backend = 'mysql' then
