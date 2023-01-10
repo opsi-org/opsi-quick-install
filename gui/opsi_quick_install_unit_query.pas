@@ -20,6 +20,7 @@ type
     EditDefaultRepoNoCache: TEdit;
     EditDefaultRepo: TEdit;
     EditProxy: TEdit;
+    EditGrafanaRepo: TEdit;
     EditRepo: TEdit;
     EditOtherNoCache: TEdit;
     InfoRepo: TImage;
@@ -27,11 +28,16 @@ type
     LabelOpsiVersion: TLabel;
     LabelNoCache: TLabel;
     LabelProxy: TLabel;
+    LabelGrafanaRepo: TLabel;
     LabelRepo: TLabel;
     PanelOpsiVersion: TPanel;
     PanelNoCache: TPanel;
     PanelProxy: TPanel;
+    PanelGrafanaRepo: TPanel;
     PanelRepo: TPanel;
+    RadioBtnGrafanaRepoEnterprise: TRadioButton;
+    RadioBtnGrafanaRepoOss: TRadioButton;
+    RadioBtnOtherGrafanaRepo: TRadioButton;
     RadioBtnRepo: TRadioButton;
     RadioBtnNone: TRadioButton;
     RadioBtnOtherRepo: TRadioButton;
@@ -59,8 +65,6 @@ uses
 
 {$R *.lfm}
 
-{ TQuery }
-
 procedure TQuery.BtnNextClick(Sender: TObject);
 begin
   // Make Data entries:
@@ -86,6 +90,13 @@ begin
     Data.repoNoCache := EditDefaultRepoNoCache.Text
   else
     Data.repoNoCache := EditOtherNoCache.Text;
+  // Grafana repository
+  if RadioBtnGrafanaRepoOss.Checked then
+    Data.grafanaRepo := RadioBtnGrafanaRepoOss.Caption
+  else if RadioBtnGrafanaRepoEnterprise.Checked then
+    Data.grafanaRepo := RadioBtnGrafanaRepoEnterprise.Caption
+  else
+    Data.grafanaRepo := EditGrafanaRepo.Text;
 
   // show next form in custom setup
   showForm(Query2, self);
@@ -122,6 +133,8 @@ begin
   RadioBtnOtherProxy.Caption := rsProxyOther;
   LabelNoCache.Caption := rsRepoNoCache;
   RadioBtnOtherNoCache.Caption := rsRepoOther;
+  LabelGrafanaRepo.Caption := rsGrafanaRepo;
+  RadioBtnOtherGrafanaRepo.Caption := rsRepoOther;
   BtnBack.Caption := rsBack;
   BtnNext.Caption := rsNext;
 end;
