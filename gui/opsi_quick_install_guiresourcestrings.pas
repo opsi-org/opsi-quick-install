@@ -36,7 +36,6 @@ resourcestring
   rsNameserverOther = 'Other:';
   rsGatewayOther = 'Other:';
   {Query6}
-  rsOverviewBtn = ' overview ';
   rsFinish = ' Finish ';
   rsStartInstallation =
     'Finally click "Finish" to start the installation of opsi-server.';

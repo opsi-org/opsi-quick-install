@@ -84,11 +84,6 @@ msgstr "Opsi 4.1"
 msgid "Opsi 4.2"
 msgstr "Opsi 4.2"
 
-#: opsi_quick_install_GuiResourceStrings.rsoverviewbtn
-msgctxt "opsi_quick_install_GuiResourceStrings.rsoverviewbtn"
-msgid " overview "
-msgstr " visión general "
-
 #: opsi_quick_install_GuiResourceStrings.rsproxy
 msgid "Proxy to use (http://myproxy.dom.org:8080):"
 msgstr "Proxy a utilizar (http://myproxy.dom.org:8080):"
