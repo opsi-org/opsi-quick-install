@@ -59,7 +59,7 @@ msgstr "We recognized the following distribution on this computer:"
 
 #: opsi_quick_install_CommonResourceStrings.rsdomain
 msgid "DNS domain (for dhcp):"
-msgstr "DNS domain (for dhcp)"
+msgstr "DNS domain (for dhcp):"
 
 #: opsi_quick_install_CommonResourceStrings.rsdomainoverview
 msgid "DNS domain: "
@@ -191,7 +191,7 @@ msgstr "IP number: "
 
 #: opsi_quick_install_CommonResourceStrings.rsnameserver
 msgid "Primary nameserver (for dhcp):"
-msgstr "Primary nameserver (for dhcp)"
+msgstr "Primary nameserver (for dhcp):"
 
 #: opsi_quick_install_CommonResourceStrings.rsnameserveroverview
 msgid "Primary nameserver: "
@@ -199,7 +199,7 @@ msgstr "Primary nameserver: "
 
 #: opsi_quick_install_CommonResourceStrings.rsnetmask
 msgid "Netmask (for dhcp):"
-msgstr "Netmask (for dhcp)"
+msgstr "Netmask (for dhcp):"
 
 #: opsi_quick_install_CommonResourceStrings.rsnetmaskoverview
 msgid "Netmask: "
@@ -207,7 +207,7 @@ msgstr "Netmask: "
 
 #: opsi_quick_install_CommonResourceStrings.rsnetworkaddress
 msgid "Network address (for dhcp):"
-msgstr "Network address (for dhcp)"
+msgstr "Network address (for dhcp):"
 
 #: opsi_quick_install_CommonResourceStrings.rsnetworkoverview
 msgid "Network address: "
@@ -251,7 +251,7 @@ msgstr "Reboot after script is finished: "
 
 #: opsi_quick_install_CommonResourceStrings.rsrepo
 msgid "(Base-) Repository for the opsi-server installation:"
-msgstr "(Base-) Repository for the opsi-server installation"
+msgstr "(Base-) Repository for the opsi-server installation:"
 
 #: opsi_quick_install_CommonResourceStrings.rsrepokind
 msgid "From which repo kind should be installed?"
@@ -263,10 +263,9 @@ msgstr "Repo kind: "
 
 #: opsi_quick_install_CommonResourceStrings.rsreponocache
 msgid ""
-"(Base-) Repository for the opsi-server installation (without any cache "
-"proxy):"
+"(Base-) Repository for the opsi-server installation (without any cache proxy):"
 msgstr ""
-"(Base-) Repository for the opsi-server installation (without any cache proxy)"
+"(Base-) Repository for the opsi-server installation (without any cache proxy):"
 
 #: opsi_quick_install_CommonResourceStrings.rsreponocacheoverview
 msgid "Repository (without cache proxy): "

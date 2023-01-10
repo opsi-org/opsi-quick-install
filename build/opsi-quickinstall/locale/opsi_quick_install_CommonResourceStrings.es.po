@@ -255,7 +255,7 @@ msgstr "Reiniciar luego de que el script finalice:"
 
 #: opsi_quick_install_CommonResourceStrings.rsrepo
 msgid "(Base-) Repository for the opsi-server installation:"
-msgstr "Repositorio (Base-) para la instalación del servidor opsi:"
+msgstr "Repositorio (base) para la instalación del servidor opsi:"
 
 #: opsi_quick_install_CommonResourceStrings.rsrepokind
 msgid "From which repo kind should be installed?"
@@ -270,16 +270,16 @@ msgid ""
 "(Base-) Repository for the opsi-server installation (without any cache "
 "proxy):"
 msgstr ""
-"Repositorio (Base-) para la instalación del servidor opsi (sin cache de "
+"Repositorio (base) para la instalación del servidor opsi (sin cache de "
 "proxy):"
 
 #: opsi_quick_install_CommonResourceStrings.rsreponocacheoverview
 msgid "Repository (without cache proxy): "
-msgstr "Repositorio (sin cache de proxy):"
+msgstr "Repositorio (sin cache de proxy): "
 
 #: opsi_quick_install_CommonResourceStrings.rsrepooverview
 msgid "Repository: "
-msgstr "Repositorio:"
+msgstr "Repositorio: "
 
 #: opsi_quick_install_CommonResourceStrings.rssetup
 msgid "Please select a setup type:"
