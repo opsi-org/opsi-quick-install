@@ -7,6 +7,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
   cthreads,
   Interfaces, // this includes the LCL widgetset
   Forms,
+  opsi_quick_install_CommonResourceStrings,
   opsi_quick_install_unit_language,
   opsi_quick_install_unit_query,
   opsi_quick_install_unit_query2,
@@ -22,7 +23,7 @@ uses {$IFDEF UNIX} {$IFDEF UseCThreads}
 
 begin
   RequireDerivedFormResource := True;
-  Application.Title:='OpsiQuickInstallGui';
+  Application.Title:= ProgramName + ' Gui';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TQuickInstall, QuickInstall);
