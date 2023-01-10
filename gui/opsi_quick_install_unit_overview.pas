@@ -71,6 +71,8 @@ begin
     MemoOverview.Lines.Add(rsProxyOverview + Data.proxy);
     // Repository (no cache)
     MemoOverview.Lines.Add(rsRepoNoCacheOverview + Data.repoNoCache);
+    // Grafana repository
+    MemoOverview.Lines.Add(rsGrafanaRepoOverview + Data.grafanaRepo);
 
     MemoOverview.Lines.Add('');
     // Backend

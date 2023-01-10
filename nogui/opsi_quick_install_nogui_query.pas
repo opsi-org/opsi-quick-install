@@ -698,6 +698,8 @@ begin
     Inc(Counter);
     writeln(Counter, ' ', rsRepoNoCacheOverview, Data.repoNoCache);
     Inc(Counter);
+    writeln(Counter, ' ', rsGrafanaRepoOverview, Data.grafanaRepo);
+    Inc(Counter);
     writeln(Counter, ' ', rsBackendOverview, Data.backend);
     Inc(Counter);
     if Data.backend = 'mysql' then
