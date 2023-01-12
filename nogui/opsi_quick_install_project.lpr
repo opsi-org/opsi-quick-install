@@ -283,7 +283,7 @@ type
 
   procedure CheckThatOqiSupportsDistribution(QuickInstall: TQuickInstall);
   begin
-    // In the nogui query the checking of the distribution will be done later to
+    // In the query (option '-n') the checking of the distribution will be done later to
     // give the user the option to edit a wrongly detected distribution.
     if QuickInstall.HasOption('d', 'default') or QuickInstall.HasOption('f', 'file') then
     begin
