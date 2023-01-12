@@ -68,7 +68,7 @@ uses
 procedure TQuery.BtnNextClick(Sender: TObject);
 begin
   // Make Data entries:
-  // Opsi version
+  // opsi version
   if RadioBtnOpsi41.Checked then
     Data.opsiVersion := RadioBtnOpsi41.Caption
   else
@@ -120,7 +120,7 @@ begin
   EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
 
   // text by resourcestrings
-  Caption := 'Opsi Quick Install - ' + rsCapQuery;
+  Caption := ProgramName + ' - ' + rsCapQuery;
   LabelOpsiVersion.Caption := rsOpsiVersion;
   RadioBtnOpsi41.Caption := rsOpsi41;
   RadioBtnOpsi42.Caption := rsOpsi42;

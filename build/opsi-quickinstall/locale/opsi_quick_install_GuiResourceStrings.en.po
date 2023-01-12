@@ -32,11 +32,11 @@ msgstr "Query (user info)"
 
 #: opsi_quick_install_GuiResourceStrings.rscorrect
 msgid ""
-"If this is correct, please click \"next >\" to continue. If not, please edit "
-"the distribution and then continue with \"next >\"."
+"If this is correct, please click \"Next\" to continue. If not, please edit "
+"the distribution and then continue with \"Next\"."
 msgstr ""
-"If this is correct, please click \"next >\" to continue. If not, please edit "
-"the distribution and then continue with \"next >\"."
+"If this is correct, please click \"Next\" to continue. If not, please edit "
+"the distribution and then continue with \"Next\"."
 
 #: opsi_quick_install_GuiResourceStrings.rscustom
 msgctxt "opsi_quick_install_GuiResourceStrings.rscustom"
@@ -50,8 +50,8 @@ msgstr "Other:"
 
 #: opsi_quick_install_GuiResourceStrings.rsfinish
 msgctxt "opsi_quick_install_GuiResourceStrings.rsfinish"
-msgid " finish "
-msgstr " finish "
+msgid " Finish "
+msgstr " Finish "
 
 #: opsi_quick_install_GuiResourceStrings.rsgatewayother
 msgctxt "opsi_quick_install_GuiResourceStrings.rsgatewayother"
@@ -81,11 +81,6 @@ msgstr "Opsi 4.1"
 msgid "Opsi 4.2"
 msgstr "Opsi 4.2"
 
-#: opsi_quick_install_GuiResourceStrings.rsoverviewbtn
-msgctxt "opsi_quick_install_GuiResourceStrings.rsoverviewbtn"
-msgid " overview "
-msgstr " overview "
-
 #: opsi_quick_install_GuiResourceStrings.rsproxy
 msgid "Proxy to use (http://myproxy.dom.org:8080):"
 msgstr "Proxy to use (http://myproxy.dom.org:8080)"
@@ -110,5 +105,5 @@ msgid "Standard"
 msgstr "Standard"
 
 #: opsi_quick_install_GuiResourceStrings.rsstartinstallation
-msgid "Finally click \"finish\" to start the installation of opsi-server."
-msgstr "Finally click \"finish\" to start the installation of opsi-server."
+msgid "Finally click \"Finish\" to start the installation of opsi-server."
+msgstr "Finally click \"Finish\" to start the installation of opsi-server."

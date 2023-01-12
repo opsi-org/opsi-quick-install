@@ -84,9 +84,9 @@ end;
 
 procedure TQuickInstallData.SetDefaultValues;
 begin
-  opsiVersion := 'Opsi 4.2';
+  opsiVersion := 'opsi 4.2';
   // automatically adjust repo to opsiVersion
-  if opsiVersion = 'Opsi 4.2' then
+  if opsiVersion = 'opsi 4.2' then
     repo := baseRepoUrlOpsi42
   else
     repo := baseRepoUrlOpsi41;

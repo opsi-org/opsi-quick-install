@@ -209,9 +209,9 @@ end;}
 
 procedure TQuickInstallNoQuiQuery.QueryRepo;
 begin
-  if Data.opsiVersion = 'Opsi 4.1' then
+  if Data.opsiVersion = 'opsi 4.1' then
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi41, ']', '*')
-  else if Data.opsiVersion = 'Opsi 4.2' then
+  else if Data.opsiVersion = 'opsi 4.2' then
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi42, ']', '*');
 
   readln(input);
@@ -230,8 +230,8 @@ begin
     if input = '' then
     begin
       case Data.opsiVersion of
-        'Opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
-        'Opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
+        'opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
+        'opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
       end
     end
     else
@@ -267,9 +267,9 @@ end;
 procedure TQuickInstallNoQuiQuery.QueryRepoNoCache;
 begin
   // repo without cache proxy:
-  if Data.opsiVersion = 'Opsi 4.1' then
+  if Data.opsiVersion = 'opsi 4.1' then
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi41, ']')
-  else if Data.opsiVersion = 'Opsi 4.2' then
+  else if Data.opsiVersion = 'opsi 4.2' then
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi42, ']');
 
   readln(input);

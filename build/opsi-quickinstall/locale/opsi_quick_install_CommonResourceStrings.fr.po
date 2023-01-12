@@ -28,8 +28,8 @@ msgid "Opsi admin user password: "
 msgstr "Mot de passe de l'administrateur opsi:"
 
 #: opsi_quick_install_CommonResourceStrings.rsback
-msgid " < back "
-msgstr " < Retour "
+msgid " Back "
+msgstr " Retour "
 
 #: opsi_quick_install_CommonResourceStrings.rsbackend
 msgid ""
@@ -224,8 +224,8 @@ msgid "Network address: "
 msgstr "Adresse réseau :"
 
 #: opsi_quick_install_CommonResourceStrings.rsnext
-msgid " next > "
-msgstr " Suivant > "
+msgid " Next "
+msgstr " Suivant "
 
 #: opsi_quick_install_CommonResourceStrings.rsno
 msgid "No"

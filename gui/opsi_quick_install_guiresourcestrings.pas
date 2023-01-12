@@ -20,7 +20,7 @@ resourcestring
   rsCustom = 'Custom';
   {Distribution}
   rsCorrect =
-    'If this is correct, please click "next >" to continue. If not, please edit the distribution and then continue with "next >".';
+    'If this is correct, please click "Next" to continue. If not, please edit the distribution and then continue with "Next".';
   {Query}
   rsOpsiVersion = 'Which opsi version would you like to install?';
   rsOpsi41 = 'Opsi 4.1';
@@ -36,10 +36,9 @@ resourcestring
   rsNameserverOther = 'Other:';
   rsGatewayOther = 'Other:';
   {Query6}
-  rsOverviewBtn = ' overview ';
-  rsFinish = ' finish ';
+  rsFinish = ' Finish ';
   rsStartInstallation =
-    'Finally click "finish" to start the installation of opsi-server.';
+    'Finally click "Finish" to start the installation of opsi-server.';
 
 implementation
 

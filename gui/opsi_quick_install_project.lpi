@@ -7,7 +7,7 @@
         <CompatibilityMode Value="True"/>
       </Flags>
       <SessionStorage Value="InProjectDir"/>
-      <Title Value="OpsiQuickInstallGui"/>
+      <Title Value="opsi-QuickInstall Gui"/>
       <Scaled Value="True"/>
       <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
@@ -131,7 +131,7 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="12">
+    <Units Count="11">
       <Unit0>
         <Filename Value="opsi_quick_install_project.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -206,10 +206,6 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
       </Unit10>
-      <Unit11>
-        <Filename Value="../opsi_quick_install_resourcestrings.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit11>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
