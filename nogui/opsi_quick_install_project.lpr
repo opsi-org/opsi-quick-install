@@ -204,6 +204,9 @@ type
       Data.DistrInfo.PackageManagementShellCommand, 'l-opsi-server',
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/', MessageDisplayer);
 
+    if HasOption('f', 'file') then
+      LOpsiServerInstallationScriptExecuter.UsePropertiesFromFile(PropsFile);
+
     writeln('');
     LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
   end;
