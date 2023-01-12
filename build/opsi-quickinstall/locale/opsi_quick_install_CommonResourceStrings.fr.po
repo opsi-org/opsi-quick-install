@@ -78,6 +78,14 @@ msgstr "Passerelle (option routeurs pour DHCP):"
 msgid "Gateway: "
 msgstr "Passerelle :"
 
+#: opsi_quick_install_CommonResourceStrings.rsgrafanarepo
+msgid "(Base-) Repository for the grafana installation: "
+msgstr "Référentiel (de base) pour l'installation de grafana : "
+
+#: opsi_quick_install_CommonResourceStrings.rsgrafanarepooverview
+msgid "Grafana repository: "
+msgstr "Référentiel grafana : "
+
 #: opsi_quick_install_CommonResourceStrings.rsinfoadmin
 msgid ""
 "User to create for the operation of opsi.\n"

@@ -76,6 +76,14 @@ msgstr "Gateway (optionale Router für das DHCP):"
 msgid "Gateway: "
 msgstr "Gateway: "
 
+#: opsi_quick_install_CommonResourceStrings.rsgrafanarepo
+msgid "(Base-) Repository for the grafana installation: "
+msgstr "(Basis-) Repository für die Grafana-Installation: "
+
+#: opsi_quick_install_CommonResourceStrings.rsgrafanarepooverview
+msgid "Grafana repository: "
+msgstr "Grafana-Repository: "
+
 #: opsi_quick_install_CommonResourceStrings.rsinfoadmin
 msgid ""
 "User to create for the operation of opsi.\n"

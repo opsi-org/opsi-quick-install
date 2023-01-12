@@ -35,7 +35,7 @@ type
   var
     CustomSetup: boolean;
 
-    opsiVersion, repo, proxy, repoNoCache: string;
+    opsiVersion, repo, proxy, repoNoCache, grafanaRepo: string;
 
     backend: string;
     copyMod: TSplitData;
@@ -92,6 +92,7 @@ begin
     repo := baseRepoUrlOpsi41;
   proxy := '';
   repoNoCache := repo;
+  grafanaRepo := 'https://packages.grafana.com/oss';
 
   backend := 'file';
   copyMod := TSplitData.Create;

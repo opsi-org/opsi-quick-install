@@ -41,6 +41,7 @@ resourcestring
   rsInfoRepo = 'Source from which opsi will be installed.';
   rsRepoNoCache =
     '(Base-) Repository for the opsi-server installation (without any cache proxy):';
+  rsGrafanaRepo = '(Base-) Repository for the grafana installation: ';
   rsBackend = 'Which backend should be installed? (mysql needs a valid activation file)';
   rsInfoBackend = 'Should the data of opsi be stored in a file or a mysql database?';
   rsCopyModules = 'Should we copy modules even if /etc/opsi/modules still exists?';
@@ -81,6 +82,7 @@ resourcestring
   rsRepoOverview = 'Repository: ';
   rsProxyOverview = 'Proxy: ';
   rsRepoNoCacheOverview = 'Repository (without cache proxy): ';
+  rsGrafanaRepoOverview = 'Grafana repository: ';
   rsBackendOverview = 'Backend: ';
   rsCopyModulesOverview = 'Copy modules: ';
   rsRepoKindOverview = 'Repo kind: ';

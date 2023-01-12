@@ -46,7 +46,7 @@ object Query: TQuery
     AnchorSideTop.Control = PanelRepo
     Left = 560
     Height = 16
-    Top = 50
+    Top = 20
     Width = 14
     ParentShowHint = False
     ShowHint = True
@@ -123,9 +123,9 @@ object Query: TQuery
     AnchorSideTop.Control = Owner
     Left = 176
     Height = 78
-    Top = 50
+    Top = 20
     Width = 384
-    BorderSpacing.Top = 50
+    BorderSpacing.Top = 20
     BevelOuter = bvNone
     ClientHeight = 78
     ClientWidth = 384
@@ -196,7 +196,7 @@ object Query: TQuery
     AnchorSideTop.Side = asrBottom
     Left = 176
     Height = 92
-    Top = 143
+    Top = 113
     Width = 384
     BorderSpacing.Top = 15
     BevelOuter = bvNone
@@ -266,7 +266,7 @@ object Query: TQuery
     AnchorSideTop.Side = asrBottom
     Left = 176
     Height = 100
-    Top = 250
+    Top = 220
     Width = 384
     BorderSpacing.Top = 15
     BevelOuter = bvNone
@@ -332,6 +332,76 @@ object Query: TQuery
       BorderSpacing.Left = 10
       ParentFont = False
       TabOrder = 2
+    end
+  end
+  object PanelGrafanaRepo: TPanel
+    AnchorSideTop.Control = PanelNoCache
+    AnchorSideTop.Side = asrBottom
+    Left = 176
+    Height = 92
+    Top = 335
+    Width = 384
+    BorderSpacing.Top = 15
+    BevelOuter = bvNone
+    ClientHeight = 92
+    ClientWidth = 384
+    ParentFont = False
+    TabOrder = 6
+    object LabelGrafanaRepo: TLabel
+      Left = 0
+      Height = 19
+      Top = 0
+      Width = 384
+      Align = alTop
+      Caption = '(Base-) Repository for grafana installation'
+      ParentFont = False
+      WordWrap = True
+    end
+    object RadioBtnGrafanaRepoOss: TRadioButton
+      Left = 0
+      Height = 21
+      Top = 19
+      Width = 384
+      Align = alTop
+      Caption = 'https://packages.grafana.com/oss'
+      Checked = True
+      ParentFont = False
+      TabOrder = 0
+      TabStop = True
+    end
+    object RadioBtnGrafanaRepoEnterprise: TRadioButton
+      Left = 0
+      Height = 21
+      Top = 40
+      Width = 384
+      Align = alTop
+      Caption = 'https://packages.grafana.com/enterprise'
+      ParentFont = False
+      TabOrder = 1
+    end
+    object EditGrafanaRepo: TEdit
+      AnchorSideLeft.Control = RadioBtnOtherGrafanaRepo
+      AnchorSideLeft.Side = asrBottom
+      AnchorSideTop.Control = RadioBtnGrafanaRepoEnterprise
+      AnchorSideTop.Side = asrBottom
+      Left = 75
+      Height = 30
+      Top = 61
+      Width = 309
+      BorderSpacing.Left = 10
+      ParentFont = False
+      TabOrder = 2
+    end
+    object RadioBtnOtherGrafanaRepo: TRadioButton
+      AnchorSideTop.Control = RadioBtnGrafanaRepoEnterprise
+      AnchorSideTop.Side = asrBottom
+      Left = 0
+      Height = 21
+      Top = 61
+      Width = 65
+      Caption = 'Other:'
+      ParentFont = False
+      TabOrder = 3
     end
   end
 end
