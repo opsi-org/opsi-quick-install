@@ -211,15 +211,15 @@ type
 
   procedure TQuickInstall.NoGuiQuery;
   var
-    QuickInstallNoQuiQuery: TQuickInstallNoQuiQuery;
+    QuickInstallNoGuiQuery: TQuickInstallNoGuiQuery;
   begin
-    QuickInstallNoQuiQuery := TQuickInstallNoQuiQuery.Create;
+    QuickInstallNoGuiQuery := TQuickInstallNoGuiQuery.Create;
     // Start the series of queries and fill Data:
-    QuickInstallNoQuiQuery.StartQuery;
+    QuickInstallNoGuiQuery.StartQuery;
 
-    if QuickInstallNoQuiQuery.QueryFinished then
+    if QuickInstallNoGuiQuery.QueryFinished then
     begin
-      FreeAndNil(QuickInstallNoQuiQuery);
+      FreeAndNil(QuickInstallNoGuiQuery);
       InstallOpsiServer;
     end;
   end;
