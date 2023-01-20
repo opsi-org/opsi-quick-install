@@ -79,17 +79,20 @@ var
 begin
   inherited ExecuteInstallationScript;
 
-  // Important for getting the result 'failed' in case of a wrong password
-  // because in this case the RunCommands below aren't executed and therefore
-  // setup.opsiscript, that usually does it, isn't too:
   ResultFileText := TStringList.Create;
-  ResultFileText.Add('failed');
-  if not FileExists(FClientDataDir + 'result.conf') then
-    FInstallRunCommand.Run('touch ' + FClientDataDir + 'result.conf', Output);
+  try
+    // Important for getting the result 'failed' in case of a wrong password
+    // because in this case the RunCommands below aren't executed and therefore
+    // setup.opsiscript, that usually sets the result, isn't executed too:
+    ResultFileText.Add('failed');
+    if not FileExists(FClientDataDir + 'result.conf') then
+      FInstallRunCommand.Run('touch ' + FClientDataDir + 'result.conf', Output);
 
-  FInstallRunCommand.Run('chown -c $USER ' + FClientDataDir + 'result.conf', Output);
-  ResultFileText.SaveToFile(FClientDataDir + 'result.conf');
-  FreeAndNil(ResultFileText);
+    FInstallRunCommand.Run('chown -c $USER ' + FClientDataDir + 'result.conf', Output);
+    ResultFileText.SaveToFile(FClientDataDir + 'result.conf');
+  finally
+    FreeAndNil(ResultFileText);
+  end;
 
   {$IFDEF GUI}
   FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -batch ' +
@@ -110,13 +113,15 @@ var
 begin
   // get installation result from result.conf which is filled by the l-opsi-server
   ResultFileText := TStringList.Create;
-  ResultFileText.LoadFromFile(FClientDataDir + 'result.conf');
-  if (ResultFileText[0] = 'failed') and FTwoVersionsToTest then
-    Result := True
-  else
-    Result := False;
-
-  FreeAndNil(ResultFileText);
+  try
+    ResultFileText.LoadFromFile(FClientDataDir + 'result.conf');
+    if (ResultFileText[0] = 'failed') and FTwoVersionsToTest then
+      Result := True
+    else
+      Result := False;
+  finally
+    FreeAndNil(ResultFileText);
+  end;
 end;
 
 procedure TLOpsiServerInstallationScriptExecuter.LogResultOfLastInstallationAttempt;
@@ -124,9 +129,12 @@ var
   ResultFileText: TStringList;
 begin
   ResultFileText := TStringList.Create;
-  ResultFileText.LoadFromFile(FClientDataDir + 'result.conf');
-  LogResultOfLastInstallationAttempt(ResultFileText[0], Data.opsiVersion, LogOpsiServer);
-  FreeAndNil(ResultFileText);
+  try
+    ResultFileText.LoadFromFile(FClientDataDir + 'result.conf');
+    LogResultOfLastInstallationAttempt(ResultFileText[0], Data.opsiVersion, LogOpsiServer);
+  finally
+    FreeAndNil(ResultFileText);
+  end;
 end;
 
 end.
