@@ -1,3 +1,9 @@
+opsi-quickinstall (4.2.0.9-2) experimental; urgency=medium
+  * update l-opsi-server
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 02 Mar 2023 10:00
+
+
 opsi-quickinstall (4.2.0.8-12) experimental; urgency=medium
   * fix: Return empty dhcp network suggestions if nmcli is not installed 
     
