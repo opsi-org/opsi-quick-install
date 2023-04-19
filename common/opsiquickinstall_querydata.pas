@@ -6,8 +6,6 @@ interface
 
 uses
   Classes, SysUtils,
-  DistributionInfo,
-  osfunclin,
   oslog,
   opsi_quick_install_CommonResourceStrings,
   OpsiLinuxInstaller_QueryData;
@@ -121,11 +119,6 @@ end;
 constructor TQuickInstallData.Create;
 begin
   inherited Create;
-
-  // Following line takes time and is therefore executed only once at the
-  // beginning of oqi when Data is created.
-  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
-
   SetDefaultValues;
 end;
 
