@@ -1,108 +1,125 @@
-opsi-quickinstall (4.2.0.9-2) experimental; urgency=medium
-  * update l-opsi-server
+opsi-quickinstall (4.2.0.9-3)
+  Fixes:
+    Install 'tar' before using it because it is not pre-installed on all distributions
+    Remove unjustified error about missing 'lsb_release' from logging since it is normal that the package does not exist on all distributions
+    Show the message for downloading opsi-script only once, i.e. when the download is really performed
+  New:
+    Use l-opsi-server 4.2.0.9-3 as default
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri, 28 Apr 2023 12:00
+
+
+opsi-quickinstall (4.2.0.9-2)
+  New:
+    Query for grafana repository
+    Use l-opsi-server 4.2.0.9-2 as default
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 02 Mar 2023 10:00
 
 
-opsi-quickinstall (4.2.0.8-12) experimental; urgency=medium
-  * fix: Return empty dhcp network suggestions if nmcli is not installed 
+opsi-quickinstall (4.2.0.8-12)
+  Fixes:
+    Return empty dhcp network suggestions if nmcli is not installed 
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Mon, 17 Oct 2022 14:30
 
 
-opsi-quickinstall (4.2.0.8-11) experimental; urgency=medium
-  * new (nogui):
-  		* New option '-o' in query to jump forward to the overwiew again after jumping back from the overview to a question for correcting the answer
-  		* Use default values for language (system language), ip name ("auto") and ip number ("auto")
-  * change (nogui): Use first suggestion as default value in dhcp query, i.e. for netmask, network address, domain, nameserver and gateway
-  * change (internal): code revised for sustainable stability and easy maintenance
-  * remove: Remove 'lan' from dhcp domain suggestions
-  * fix (gui): Use root rights in OpsiPackageDownloader only where necessary to avoid permission problems with sudo and root  
+opsi-quickinstall (4.2.0.8-11)
+  New:
+    (nogui) Option '-o' in query to jump forward to the overwiew again after jumping back from the overview to a question for correcting the answer
+    (nogui) Use default values for language (system language), ip name ("auto") and ip number ("auto")
+  Fixes:
+    (gui) Permissions during installation
+  Changes:
+    (nogui) Use first suggestion as default value in dhcp query, i.e. for netmask, network address, domain, nameserver and gateway
+  Remove:
+   Suggestion 'lan' for dhcp domain
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 13 Oct 2022 12:00
 
 
-opsi-quickinstall (4.2.0.8-1) stable; urgency=low
-  * new: AlmaLinux 9, Rocky 9, RHEL 9, SUSE 15.3 and SUSE 15.4 added to supported distributions
-  * change: Download opsi-script now directly from download.opensuse.org as tar.gz and delete it again after the installation
-    (the way before was to add a repository from download.opensuse.org and install opsi-script on the system)
-  * fix (gui): Use root rights in all parts of OpsiPackageDownloader so that downloading the latest l-opsi-server works correctly
+opsi-quickinstall (4.2.0.8-1)
+  New:
+    Support for AlmaLinux 9, Rocky 9, RHEL 9, SUSE 15.3 and SUSE 15.4
+  Fixes:
+    (gui) Permissions during installation
+  Change:
+    Download opsi-script now directly from download.opensuse.org as tar.gz and delete it again after the installation
+      (before, a repository was added and opsi-script was installed on the system)
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri, 26 Aug 2022 12:30
 
 
-opsi-quickinstall (4.2.0.7-21) stable; urgency=low
-  * fix reading hostname from command line and checking it for valid fqdn
-    (delete line break at end of hostname)
-  * use generalized OpsiPackageDownloader instead of LOpsiServerDownloader
-  * gui: set sudo as default in password query
-  * gui: exit Opsi-QuickInstall in case of an unsupported distribution
+opsi-quickinstall (4.2.0.7-21)
+  Fixes:
+    Read hostname correctly for fqdn check
+    (gui) Exit in case of an unsupported distribution
+  Changes:
+    (gui) Set 'Sudo' as default in password query
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Wed,  13 Jul 2022 14:00
 
 
-opsi-quickinstall (4.2.0.7-3) experimental; urgency=low
-  * openSUSE 15.4 added as supported distribution
-  * warning in case of invalid local dns hostname added
-  * check of ip name and ip number added in nogui query
-  * nogui query code revised
+opsi-quickinstall (4.2.0.7-3)
+  New:
+    Support for openSUSE 15.4
+    Warning in case of invalid local dns hostname at start
+    (nogui) Check ip name and ip number in query
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri,  01 Jul 2022 11:00
 
 
-opsi-quickinstall (4.2.0.7-2) testing; urgency=low
-  * Added to supported distributions:
-  	  UCS 5.0,
-  	  Alma Linux 8,
-  	  RHEL 8,
-  	  Rocky Linux 8,
-  	  Ubuntu 22.04.
-  * Deprecated 'apt-key' replaced.
+opsi-quickinstall (4.2.0.7-2)
+  Fixes:
+    Deprecated 'apt-key' replaced
+  New:
+    Support for UCS 5.0, Alma Linux 8, RHEL 8, Rocky Linux 8, Ubuntu 22.04.
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  04 Apr 2022 17:30
 
 
-opsi-quickinstall (4.2.0.6-3) stable; urgency=low
-  * openSUSE 15.1 removed from supported distributions (discontinued)
-  * opsi-quickinstall version from now on synchronized with latest released l-opsi-server
-  * default l-opsi-server of quickinstall from now on synchronized with latest released l-opsi-server
-  * improved l-opsi-server installation process:
-    1) Try downloading latest released l-opsi-server.
-    2) If 1) worked then compare versions of downloaded and default l-opsi-server.
-      2a) Try to install the newer l-opsi-server.
-      2b) If 2a) failed then try to install the older l-opsi-server.
-  * logging improved
+opsi-quickinstall (4.2.0.6-3)
+  Changes:
+    Version of opsi-QuickInstall and l-opsi-server are from now on synchronized
+    Process of l-opsi-server installation improved:
+      1) Try downloading latest released l-opsi-server.
+      2) If 1) worked then compare versions of downloaded and default l-opsi-server.
+        2a) Try to install the newer l-opsi-server.
+        2b) If 2a) failed then try to install the older l-opsi-server.
+  Remove:
+    Support for openSUSE 15.1
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  15 Mar 2022 11:40
 
 
-opsi-quickinstall (4.2.0.1-2) stable; urgency=low
-  * new default l-opsi-server 4.2.0.5-2
-  * openSUSE 15.3 added as supported distribution
-  * Debian 11 added as supported distribution
-  * default admin name in NOGUI-version changed from 'Alexandra' to 'adminuser'
-  * error with adding release key fixed
-  * bug fixed in closing Opsi-QuickInstall
+opsi-quickinstall (4.2.0.1-2)
+  Fixes:
+    Fix error with adding release key for opsi-script repository
+    Fix bug in closing opsi-QuickInstall
+  New:
+    Support for openSUSE 15.3, Debian 11
+    Use l-opsi-server 4.2.0.5-2 as default
+  Changes:
+    (nogui) Default admin name changed from 'Alexandra' to 'adminuser'
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu,  30 Sep 2021 18:30:00 +0200
 
 
-opsi-quickinstall (4.2.0.1) stable; urgency=low
-  * installing opsi 4.2 from stable (default), testing or experimental
-  * try downloading latest l-opsi-server now from stable
-  * log the version number of downloaded l-opsi-server
-  * correctly assume yes in all package management shell commands
-  * nogui:
-    * error of empty l-opsi-server folder directory in option -f <file> fixed
-    * use repo from file in option -f <file> instead of default repo
-  * gui:
-    * layout improved
+opsi-quickinstall (4.2.0.1)
+  Fixes:
+    Correctly assume 'yes' in all package management shell commands
+  New:
+    You can install opsi 4.2 from stable (default), testing or experimental
+    Try downloading latest l-opsi-server now from stable
+    Log the version of the downloaded l-opsi-server
+  Changes:
+    (gui) Layout improved
     
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  01 Jun 2021 17:30:00 +0200
 
 
-opsi-quickinstall (4.2.0.0) stable; urgency=low
-  * initial
-  * installing opsi 4.2 from testing or experimental
+opsi-quickinstall (4.2.0.0)
+  Initial:
+    You can install opsi 4.2 from testing or experimental
   
 -- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu,  29 Apr 2021 13:00:00 +0200
