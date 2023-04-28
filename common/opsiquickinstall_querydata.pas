@@ -6,8 +6,6 @@ interface
 
 uses
   Classes, SysUtils,
-  DistributionInfo,
-  osfunclin,
   oslog,
   opsi_quick_install_CommonResourceStrings,
   OpsiLinuxInstaller_QueryData;
@@ -35,7 +33,7 @@ type
   var
     CustomSetup: boolean;
 
-    opsiVersion, repo, proxy, repoNoCache: string;
+    opsiVersion, repo, proxy, repoNoCache, grafanaRepo: string;
 
     backend: string;
     copyMod: TSplitData;
@@ -49,7 +47,7 @@ type
     netmask, networkAddress, domain, nameserver, gateway: string;
     adminName, adminPassword, ipName, ipNumber: string;
   const
-    QuickInstallVersion = '4.2.0.8';
+    QuickInstallVersion = '4.2.0.9';
     baseRepoUrlOpsi41 =
       'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.1:/';
     baseRepoUrlOpsi42 =
@@ -84,14 +82,15 @@ end;
 
 procedure TQuickInstallData.SetDefaultValues;
 begin
-  opsiVersion := 'Opsi 4.2';
+  opsiVersion := 'opsi 4.2';
   // automatically adjust repo to opsiVersion
-  if opsiVersion = 'Opsi 4.2' then
+  if opsiVersion = 'opsi 4.2' then
     repo := baseRepoUrlOpsi42
   else
     repo := baseRepoUrlOpsi41;
   proxy := '';
   repoNoCache := repo;
+  grafanaRepo := 'https://packages.grafana.com/oss';
 
   backend := 'file';
   copyMod := TSplitData.Create;
@@ -120,11 +119,6 @@ end;
 constructor TQuickInstallData.Create;
 begin
   inherited Create;
-
-  // Following line takes time and is therefore executed only once at the
-  // beginning of oqi when Data is created.
-  DistrInfo := TDistributionInfo.Create(getLinuxDistroName, getLinuxDistroRelease);
-
   SetDefaultValues;
 end;
 

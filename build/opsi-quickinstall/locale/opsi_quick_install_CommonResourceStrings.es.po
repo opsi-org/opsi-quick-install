@@ -25,8 +25,8 @@ msgid "Opsi admin user password: "
 msgstr "clave del admin de opsi:"
 
 #: opsi_quick_install_CommonResourceStrings.rsback
-msgid " < back "
-msgstr " < volver "
+msgid " Back "
+msgstr " Volver "
 
 #: opsi_quick_install_CommonResourceStrings.rsbackend
 msgid ""
@@ -74,6 +74,14 @@ msgstr "Gateway (opción routers para dhcp):"
 #: opsi_quick_install_CommonResourceStrings.rsgatewayoverview
 msgid "Gateway: "
 msgstr "Gateway:"
+
+#: opsi_quick_install_CommonResourceStrings.rsgrafanarepo
+msgid "(Base-) Repository for the grafana installation: "
+msgstr "Repositorio (Base-) para la instalación de grafana: "
+
+#: opsi_quick_install_CommonResourceStrings.rsgrafanarepooverview
+msgid "Grafana repository: "
+msgstr "Repositorio de grafana: "
 
 #: opsi_quick_install_CommonResourceStrings.rsinfoadmin
 msgid ""
@@ -209,8 +217,8 @@ msgid "Network address: "
 msgstr "Network address:"
 
 #: opsi_quick_install_CommonResourceStrings.rsnext
-msgid " next > "
-msgstr " siguiente > "
+msgid " Next "
+msgstr " Siguiente "
 
 #: opsi_quick_install_CommonResourceStrings.rsno
 msgid "No"
@@ -247,7 +255,7 @@ msgstr "Reiniciar luego de que el script finalice:"
 
 #: opsi_quick_install_CommonResourceStrings.rsrepo
 msgid "(Base-) Repository for the opsi-server installation:"
-msgstr "Repositorio (Base-) para la instalación del servidor opsi:"
+msgstr "Repositorio (base) para la instalación del servidor opsi:"
 
 #: opsi_quick_install_CommonResourceStrings.rsrepokind
 msgid "From which repo kind should be installed?"
@@ -262,16 +270,16 @@ msgid ""
 "(Base-) Repository for the opsi-server installation (without any cache "
 "proxy):"
 msgstr ""
-"Repositorio (Base-) para la instalación del servidor opsi (sin cache de "
+"Repositorio (base) para la instalación del servidor opsi (sin cache de "
 "proxy):"
 
 #: opsi_quick_install_CommonResourceStrings.rsreponocacheoverview
 msgid "Repository (without cache proxy): "
-msgstr "Repositorio (sin cache de proxy):"
+msgstr "Repositorio (sin cache de proxy): "
 
 #: opsi_quick_install_CommonResourceStrings.rsrepooverview
 msgid "Repository: "
-msgstr "Repositorio:"
+msgstr "Repositorio: "
 
 #: opsi_quick_install_CommonResourceStrings.rssetup
 msgid "Please select a setup type:"

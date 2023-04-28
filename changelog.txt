@@ -1,0 +1,122 @@
+opsi-quickinstall (4.2.0.9-3) experimental; urgency=medium
+  * fix (lazarus/common/OpsiLinuxInstaller):
+    	* Do not log a confusing exception-error if 'lsb_release' does not exist on the system since this is normal on newer redhat distributions
+    	* Install 'tar' before using it
+    	* Show download message for opsi-script only once
+    	* Create TOpsiLinuxInstallerData.FDistrInfo directly with arguments to avoid double creation
+  * fix: Remove creation of TQuickInstallData.FDistrInfo since it is done in the parent class 
+  * update l-opsi-server to 4.2.0.9-3
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri, 28 Apr 2023 12:00
+
+
+opsi-quickinstall (4.2.0.9-2) stable; urgency=medium
+  * new: Query for grafana repository
+  * fix (nogui): Read all properties from the file given with the file parameter
+  * update l-opsi-server to 4.2.0.9-2
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 02 Mar 2023 10:00
+
+
+opsi-quickinstall (4.2.0.8-12) experimental; urgency=medium
+  * fix: Return empty dhcp network suggestions if nmcli is not installed 
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Mon, 17 Oct 2022 14:30
+
+
+opsi-quickinstall (4.2.0.8-11) experimental; urgency=medium
+  * new (nogui):
+  		* New option '-o' in query to jump forward to the overwiew again after jumping back from the overview to a question for correcting the answer
+  		* Use default values for language (system language), ip name ("auto") and ip number ("auto")
+  * change (nogui): Use first suggestion as default value in dhcp query, i.e. for netmask, network address, domain, nameserver and gateway
+  * change (internal): code revised for sustainable stability and easy maintenance
+  * remove: Remove 'lan' from dhcp domain suggestions
+  * fix (gui): Use root rights in OpsiPackageDownloader only where necessary to avoid permission problems with sudo and root  
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu, 13 Oct 2022 12:00
+
+
+opsi-quickinstall (4.2.0.8-1) stable; urgency=low
+  * new: AlmaLinux 9, Rocky 9, RHEL 9, SUSE 15.3 and SUSE 15.4 added to supported distributions
+  * change: Download opsi-script now directly from download.opensuse.org as tar.gz and delete it again after the installation
+    (the way before was to add a repository from download.opensuse.org and install opsi-script on the system)
+  * fix (gui): Use root rights in all parts of OpsiPackageDownloader so that downloading the latest l-opsi-server works correctly
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri, 26 Aug 2022 12:30
+
+
+opsi-quickinstall (4.2.0.7-21) stable; urgency=low
+  * fix reading hostname from command line and checking it for valid fqdn
+    (delete line break at end of hostname)
+  * use generalized OpsiPackageDownloader instead of LOpsiServerDownloader
+  * gui: set sudo as default in password query
+  * gui: exit Opsi-QuickInstall in case of an unsupported distribution
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Wed,  13 Jul 2022 14:00
+
+
+opsi-quickinstall (4.2.0.7-3) experimental; urgency=low
+  * openSUSE 15.4 added as supported distribution
+  * warning in case of invalid local dns hostname added
+  * check of ip name and ip number added in nogui query
+  * nogui query code revised
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Fri,  01 Jul 2022 11:00
+
+
+opsi-quickinstall (4.2.0.7-2) testing; urgency=low
+  * Added to supported distributions:
+  	  UCS 5.0,
+  	  Alma Linux 8,
+  	  RHEL 8,
+  	  Rocky Linux 8,
+  	  Ubuntu 22.04.
+  * Deprecated 'apt-key' replaced.
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  04 Apr 2022 17:30
+
+
+opsi-quickinstall (4.2.0.6-3) stable; urgency=low
+  * openSUSE 15.1 removed from supported distributions (discontinued)
+  * opsi-quickinstall version from now on synchronized with latest released l-opsi-server
+  * default l-opsi-server of quickinstall from now on synchronized with latest released l-opsi-server
+  * improved l-opsi-server installation process:
+    1) Try downloading latest released l-opsi-server.
+    2) If 1) worked then compare versions of downloaded and default l-opsi-server.
+      2a) Try to install the newer l-opsi-server.
+      2b) If 2a) failed then try to install the older l-opsi-server.
+  * logging improved
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  15 Mar 2022 11:40
+
+
+opsi-quickinstall (4.2.0.1-2) stable; urgency=low
+  * new default l-opsi-server 4.2.0.5-2
+  * openSUSE 15.3 added as supported distribution
+  * Debian 11 added as supported distribution
+  * default admin name in NOGUI-version changed from 'Alexandra' to 'adminuser'
+  * error with adding release key fixed
+  * bug fixed in closing Opsi-QuickInstall
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu,  30 Sep 2021 18:30:00 +0200
+
+
+opsi-quickinstall (4.2.0.1) stable; urgency=low
+  * installing opsi 4.2 from stable (default), testing or experimental
+  * try downloading latest l-opsi-server now from stable
+  * log the version number of downloaded l-opsi-server
+  * correctly assume yes in all package management shell commands
+  * nogui:
+    * error of empty l-opsi-server folder directory in option -f <file> fixed
+    * use repo from file in option -f <file> instead of default repo
+  * gui:
+    * layout improved
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue,  01 Jun 2021 17:30:00 +0200
+
+
+opsi-quickinstall (4.2.0.0) stable; urgency=low
+  * initial
+  * installing opsi 4.2 from testing or experimental
+  
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Thu,  29 Apr 2021 13:00:00 +0200

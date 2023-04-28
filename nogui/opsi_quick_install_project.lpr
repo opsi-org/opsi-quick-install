@@ -135,7 +135,7 @@ type
     begin
       LogDatei.Log('Use default property values.', LLInfo);
       writeln('');
-      writeln('Start Opsi-QuickInstall ' + Data.QuickInstallVersion);
+      writeln('Start ' + ProgramName + ' ' + Data.QuickInstallVersion);
       InstallOpsiServer;
       Terminate;
       Exit;
@@ -160,7 +160,7 @@ type
           end;
         end;
       except
-        writeln('Executing Opsi-QuickInstall with properties from file didn''t work!');
+        writeln('Executing ' + ProgramName + ' with properties from file didn''t work!');
       end;
       PropsFile.Free;
       Terminate;
@@ -204,6 +204,9 @@ type
       Data.DistrInfo.PackageManagementShellCommand, 'l-opsi-server',
       'download.uib.de/opsi4.2/testing/packages/linux/localboot/', MessageDisplayer);
 
+    if HasOption('f', 'file') then
+      LOpsiServerInstallationScriptExecuter.UsePropertiesFromFile(PropsFile);
+
     writeln('');
     LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
   end;
@@ -211,15 +214,15 @@ type
 
   procedure TQuickInstall.NoGuiQuery;
   var
-    QuickInstallNoQuiQuery: TQuickInstallNoQuiQuery;
+    QuickInstallNoGuiQuery: TQuickInstallNoGuiQuery;
   begin
-    QuickInstallNoQuiQuery := TQuickInstallNoQuiQuery.Create;
+    QuickInstallNoGuiQuery := TQuickInstallNoGuiQuery.Create;
     // Start the series of queries and fill Data:
-    QuickInstallNoQuiQuery.StartQuery;
+    QuickInstallNoGuiQuery.StartQuery;
 
-    if QuickInstallNoQuiQuery.QueryFinished then
+    if QuickInstallNoGuiQuery.QueryFinished then
     begin
-      FreeAndNil(QuickInstallNoQuiQuery);
+      FreeAndNil(QuickInstallNoGuiQuery);
       InstallOpsiServer;
     end;
   end;
@@ -233,9 +236,9 @@ type
 
     // Read opsi version from repo url
     if Pos('4.1', Data.repo) > 0 then
-      Data.opsiVersion := 'Opsi 4.1'
+      Data.opsiVersion := 'opsi 4.1'
     else
-      Data.opsiVersion := 'Opsi 4.2';
+      Data.opsiVersion := 'opsi 4.2';
 
     InstallOpsiServer;
   end;
@@ -257,7 +260,7 @@ type
 
     if not ((user = 'root') and (userID = '0')) then
     begin
-      writeln('Please execute Opsi Quick-Install as root!');
+      writeln('Please execute ' + ProgramName + ' as root!');
       Halt(1);
     end;
   end;
@@ -265,7 +268,7 @@ type
   procedure LogQuickInstallVersion;
   begin
     LogDatei.log('', LLessential);
-    LogDatei.log('Opsi-QuickInstall version: ' + Data.QuickInstallVersion, LLessential);
+    LogDatei.log(ProgramName + ' version: ' + Data.QuickInstallVersion, LLessential);
     LogDatei.log('', LLessential);
   end;
 
@@ -280,7 +283,7 @@ type
 
   procedure CheckThatOqiSupportsDistribution(QuickInstall: TQuickInstall);
   begin
-    // In the nogui query the checking of the distribution will be done later to
+    // In the query (option '-n') the checking of the distribution will be done later to
     // give the user the option to edit a wrongly detected distribution.
     if QuickInstall.HasOption('d', 'default') or QuickInstall.HasOption('f', 'file') then
     begin

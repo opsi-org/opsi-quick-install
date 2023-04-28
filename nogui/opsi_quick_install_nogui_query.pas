@@ -19,7 +19,7 @@ type
   TQueryProcedure = procedure of object;
   TQueryProceduresList = array of TQueryProcedure;
 
-  TQuickInstallNoQuiQuery = class(TObject)
+  TQuickInstallNoGuiQuery = class(TObject)
   private
     input: string;
     NetworkDetails: array of string;
@@ -37,6 +37,7 @@ type
     procedure QueryRepo;
     procedure QueryProxy;
     procedure QueryRepoNoCache;
+    procedure QueryGrafanaRepo;
     procedure QueryBackend;
     procedure QueryCopyModules;
     procedure QueryRepoKind;
@@ -66,7 +67,7 @@ type
 
 implementation
 
-function TQuickInstallNoQuiQuery.CheckJumpToOverview: boolean;
+function TQuickInstallNoGuiQuery.CheckJumpToOverview: boolean;
 begin
   Result := False;
   if (input = '-o') and FJumpToOverviewAllowed then
@@ -76,7 +77,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.CheckInput(ValidOptions: string;
+procedure TQuickInstallNoGuiQuery.CheckInput(ValidOptions: string;
   EmptyInputAllowed: boolean; HelpInfo: string);
 var
   ListOfValidOptions: TStringList;
@@ -96,7 +97,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.CheckHelp(HelpInfo: string);
+procedure TQuickInstallNoGuiQuery.CheckHelp(HelpInfo: string);
 begin
   readln(input);
   while input = '-h' do
@@ -106,7 +107,7 @@ begin
   end;
 end;
 
-function TQuickInstallNoQuiQuery.JumpBackToQuery(QueryProcedure:
+function TQuickInstallNoGuiQuery.JumpBackToQuery(QueryProcedure:
   TQueryProcedure): boolean;
 begin
   Result := (input = '-b');
@@ -117,14 +118,14 @@ end;
 // Input variables not set by resourcestrings but by characters for no
 // requirement of a mouse.
 
-procedure TQuickInstallNoQuiQuery.StartQuery;
+procedure TQuickInstallNoGuiQuery.StartQuery;
 begin
   FJumpToOverviewAllowed := False;
   Data.adminPassword := '';
   QueryDistribution;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryDistribution;
+procedure TQuickInstallNoGuiQuery.QueryDistribution;
 var
   UserEditedDistroName, UserEditedDistroRelease: string;
 begin
@@ -154,7 +155,7 @@ begin
   QuerySetupType;
 end;
 
-procedure TQuickInstallNoQuiQuery.QuerySetupType;
+procedure TQuickInstallNoGuiQuery.QuerySetupType;
 begin
   writeln(rsSetup, rsSetupOp);
   readln(input);
@@ -206,11 +207,11 @@ begin
   end;
 end;}
 
-procedure TQuickInstallNoQuiQuery.QueryRepo;
+procedure TQuickInstallNoGuiQuery.QueryRepo;
 begin
-  if Data.opsiVersion = 'Opsi 4.1' then
+  if Data.opsiVersion = 'opsi 4.1' then
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi41, ']', '*')
-  else if Data.opsiVersion = 'Opsi 4.2' then
+  else if Data.opsiVersion = 'opsi 4.2' then
     writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi42, ']', '*');
 
   readln(input);
@@ -229,8 +230,8 @@ begin
     if input = '' then
     begin
       case Data.opsiVersion of
-        'Opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
-        'Opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
+        'opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
+        'opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
       end
     end
     else
@@ -240,7 +241,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryProxy;
+procedure TQuickInstallNoGuiQuery.QueryProxy;
 begin
   writeln(rsUseProxy, rsYesNoOp);
   readln(input);
@@ -263,12 +264,12 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryRepoNoCache;
+procedure TQuickInstallNoGuiQuery.QueryRepoNoCache;
 begin
   // repo without cache proxy:
-  if Data.opsiVersion = 'Opsi 4.1' then
+  if Data.opsiVersion = 'opsi 4.1' then
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi41, ']')
-  else if Data.opsiVersion = 'Opsi 4.2' then
+  else if Data.opsiVersion = 'opsi 4.2' then
     writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi42, ']');
 
   readln(input);
@@ -286,18 +287,41 @@ begin
     else
       Data.repoNoCache := input;
 
+    QueryGrafanaRepo;
+  end;
+end;
+
+procedure TQuickInstallNoGuiQuery.QueryGrafanaRepo;
+begin
+  writeln(rsGrafanaRepo, rsSuggestion +
+    'https://packages.grafana.com/oss, https://packages.grafana.com/enterprise]');
+  readln(input);
+  if CheckJumpToOverview then Exit;
+  while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
+  begin
+    writeln('"', input, '"', rsNotValid);
+    readln(input);
+  end;
+
+  if not JumpBackToQuery(@QueryRepoNoCache) then
+  begin // cases input = 'http...', input = ''
+    if input = '' then
+      Data.grafanaRepo := 'https://packages.grafana.com/oss'
+    else
+      Data.grafanaRepo := input;
+
     QueryBackend;
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryBackend;
+procedure TQuickInstallNoGuiQuery.QueryBackend;
 begin
   writeln(rsBackend, rsBackendOp, '*');
   readln(input);
   if CheckJumpToOverview then Exit;
   CheckInput('f,m,-b', True, rsInfoBackend);
 
-  if not JumpBackToQuery(@QueryRepoNoCache) then
+  if not JumpBackToQuery(@QueryGrafanaRepo) then
   begin
     case input of
       'm': Data.backend := 'mysql';
@@ -312,7 +336,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryCopyModules;
+procedure TQuickInstallNoGuiQuery.QueryCopyModules;
 begin
   writeln(rsCopyModules, rsYesNoOp, '*');
   readln(input);
@@ -330,7 +354,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryRepoKind;
+procedure TQuickInstallNoGuiQuery.QueryRepoKind;
 begin
   writeln(rsRepoKind, rsRepoKindOp, '*');
   readln(input);
@@ -360,7 +384,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryUCSPassword;
+procedure TQuickInstallNoGuiQuery.QueryUCSPassword;
 begin
   writeln(rsUCS);
   readln(input);
@@ -382,7 +406,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryReboot;
+procedure TQuickInstallNoGuiQuery.QueryReboot;
 begin
   writeln(rsReboot, rsYesNoOp, '*');
   readln(input);
@@ -407,7 +431,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryDhcp;
+procedure TQuickInstallNoGuiQuery.QueryDhcp;
 begin
   writeln(rsDhcp, rsYesNoOp, '*');
   readln(input);
@@ -449,7 +473,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryLink;
+procedure TQuickInstallNoGuiQuery.QueryLink;
 begin
   writeln(rsTFTPROOT, rsLinkOp, '*');
   readln(input);
@@ -467,7 +491,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryNetmask;
+procedure TQuickInstallNoGuiQuery.QueryNetmask;
 var
   Suggestions: string;
 begin
@@ -486,7 +510,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryNetworkAddress;
+procedure TQuickInstallNoGuiQuery.QueryNetworkAddress;
 var
   Suggestions: string;
 begin
@@ -505,7 +529,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryDomain;
+procedure TQuickInstallNoGuiQuery.QueryDomain;
 var
   Suggestions: string;
 begin
@@ -524,7 +548,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryNameserver;
+procedure TQuickInstallNoGuiQuery.QueryNameserver;
 var
   Suggestions: string;
 begin
@@ -543,7 +567,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryGateway;
+procedure TQuickInstallNoGuiQuery.QueryGateway;
 var
   suggestion: string = '';
 begin
@@ -565,7 +589,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryAdminName;
+procedure TQuickInstallNoGuiQuery.QueryAdminName;
 begin
   writeln(rsAdminName, '*');
   CheckHelp(rsInfoAdmin);
@@ -588,7 +612,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryAdminPassword;
+procedure TQuickInstallNoGuiQuery.QueryAdminPassword;
 begin
   writeln(rsAdminPassword, '*');
   readln(input);
@@ -600,7 +624,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryIPName;
+procedure TQuickInstallNoGuiQuery.QueryIPName;
 begin
   writeln(rsIPName);
   readln(input);
@@ -629,7 +653,7 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryIPNumber;
+procedure TQuickInstallNoGuiQuery.QueryIPNumber;
 begin
   writeln(rsIPNumber);
   readln(input);
@@ -651,13 +675,13 @@ begin
   end;
 end;
 
-procedure TQuickInstallNoQuiQuery.JumpBackFromOverviewToQuery(
+procedure TQuickInstallNoGuiQuery.JumpBackFromOverviewToQuery(
   QueryProcedure: TQueryProcedure);
 begin
   QueryProcedure;
 end;
 
-procedure TQuickInstallNoQuiQuery.PrintOverview;
+procedure TQuickInstallNoGuiQuery.PrintOverview;
 var
   // number of asked question
   Counter: integer = 1;
@@ -673,6 +697,8 @@ begin
     writeln(Counter, ' ', rsProxyOverview, Data.proxy);
     Inc(Counter);
     writeln(Counter, ' ', rsRepoNoCacheOverview, Data.repoNoCache);
+    Inc(Counter);
+    writeln(Counter, ' ', rsGrafanaRepoOverview, Data.grafanaRepo);
     Inc(Counter);
     writeln(Counter, ' ', rsBackendOverview, Data.backend);
     Inc(Counter);
@@ -733,7 +759,7 @@ begin
   QueryProceduresList[Length(QueryProceduresList) - 1] := QueryProcedure;
 end;
 
-function TQuickInstallNoQuiQuery.GetAskedQueries: TQueryProceduresList;
+function TQuickInstallNoGuiQuery.GetAskedQueries: TQueryProceduresList;
 var
   QueryProceduresList: TQueryProceduresList;
 begin
@@ -749,6 +775,7 @@ begin
     AddQueryToList(@QueryRepo, QueryProceduresList);
     AddQueryToList(@QueryProxy, QueryProceduresList);
     AddQueryToList(@QueryRepoNoCache, QueryProceduresList);
+    AddQueryToList(@QueryGrafanaRepo, QueryProceduresList);
     AddQueryToList(@QueryBackend, QueryProceduresList);
 
     if Data.backend = 'mysql' then
@@ -788,7 +815,7 @@ begin
   Result := QueryProceduresList;
 end;
 
-procedure TQuickInstallNoQuiQuery.QueryOverview;
+procedure TQuickInstallNoGuiQuery.QueryOverview;
 var
   // list of the asked questions by numbers
   QueryProceduresList: TQueryProceduresList;

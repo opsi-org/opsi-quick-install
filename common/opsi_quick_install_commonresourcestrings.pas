@@ -15,16 +15,17 @@ const
   {$IFDEF NOGUI}
   LongMessageSeperator = '';
   {$ENDIF NOGUI}
+  ProgramName = 'opsi-QuickInstall';
 
 resourcestring
 
   rsYes = 'Yes';
   rsNo = 'No';
-  rsNext = ' next > ';
-  rsBack = ' < back ';
+  rsNext = ' Next ';
+  rsBack = ' Back ';
   rsOverview = 'Overview';
   rsInvalidFqdnWarning =
-    'Opsi-QuickInstall Warning:' + #10 +
+    ProgramName + ' Warning:' + #10 +
     'We could not find a valid local DNS hostname on this computer.' +
     ' This can lead to problems during the installation! Please see' +
     #10 + 'https://docs.opsi.org/opsi-docs-en/4.2/quickinstall/' +
@@ -41,6 +42,7 @@ resourcestring
   rsInfoRepo = 'Source from which opsi will be installed.';
   rsRepoNoCache =
     '(Base-) Repository for the opsi-server installation (without any cache proxy):';
+  rsGrafanaRepo = '(Base-) Repository for the grafana installation: ';
   rsBackend = 'Which backend should be installed? (mysql needs a valid activation file)';
   rsInfoBackend = 'Should the data of opsi be stored in a file or a mysql database?';
   rsCopyModules = 'Should we copy modules even if /etc/opsi/modules still exists?';
@@ -81,6 +83,7 @@ resourcestring
   rsRepoOverview = 'Repository: ';
   rsProxyOverview = 'Proxy: ';
   rsRepoNoCacheOverview = 'Repository (without cache proxy): ';
+  rsGrafanaRepoOverview = 'Grafana repository: ';
   rsBackendOverview = 'Backend: ';
   rsCopyModulesOverview = 'Copy modules: ';
   rsRepoKindOverview = 'Repo kind: ';

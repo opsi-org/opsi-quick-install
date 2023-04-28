@@ -58,7 +58,7 @@ begin
   PanelFinish.Width := 400;
 
   MemoOverview.Clear;
-  // Opsi version
+  // opsi version
   MemoOverview.Lines.Add(rsOpsiVersionOverview + Data.opsiVersion);
 
   {Custom installation}
@@ -71,6 +71,8 @@ begin
     MemoOverview.Lines.Add(rsProxyOverview + Data.proxy);
     // Repository (no cache)
     MemoOverview.Lines.Add(rsRepoNoCacheOverview + Data.repoNoCache);
+    // Grafana repository
+    MemoOverview.Lines.Add(rsGrafanaRepoOverview + Data.grafanaRepo);
 
     MemoOverview.Lines.Add('');
     // Backend
