@@ -23,8 +23,7 @@ variables:
 # Control of the Pipline
 workflow:
   rules:
-    - if: '$RUN_PIPLINE == "true"' # && $CI_PIPELINE_SOURCE == "push"'
-    # - if: '$CI_COMMIT_MESSAGE =~ /-compile$/ && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$RUN_PIPLINE == "true"'
       when: always
 
 stages:
@@ -46,7 +45,6 @@ compile opsi-quickinstall linux:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $UPDATE_SUBMODULE == "true"
-      #when: always
   before_script:
     - git submodule update --init
   script:
@@ -69,8 +67,6 @@ compile opsi-quickinstall linux:
     - '[-n "$(ls -d l-opsi-server*)"] && rm -r build/opsi-quickinstall/l-opsi-server*'
     - mkdir build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
     - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
-    #- cd build/opsi-quickinstall/ &&
-    #- $BINARY_OUT_PATH = $PROJECT_NAME -eq "opsiscript")
    
   artifacts:
     name: "opsi-quickinstall $BINARY_VERSION linux"
@@ -84,14 +80,10 @@ publish opsi-quick-install:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: $CI_COMMIT_BRANCH == "main"
-      #when: always
   before_script:
     - git submodule update --init
   script:
     - git submodule update --init --recursive
-    #- git submodule update --remote // this does not work and is not required
-    #- MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
-    #- SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
     - echo "Read Opsi-QuickInstall version from file"
     - "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
     # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
