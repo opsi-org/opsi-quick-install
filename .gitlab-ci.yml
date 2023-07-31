@@ -10,15 +10,17 @@ variables:
     value: "opsi_quick_install_project"
     description: "Project name of the project the pipline should run on."
 
-  BINARY_VERSION:
-    value: "4.12.4.30"
-    description: "Version of the binary"
-
   PLATFORM:
     value: "Linux"
     description: "For which build modes should the lazarus project be compiled?
     all: build project for all platforms (Win32, Win64, Linux, MacOS)
     Windows (Linux, MacOS):  build project for the specified platform only"
+
+  MAINVERSION:
+    value: "0"
+
+  SUBVERSION:
+    value: "0"
 
 # Control of the Pipline
 workflow:
@@ -28,6 +30,8 @@ workflow:
 
 stages:
   - build
+  - getversion
+  - upload
   - publish
 
 default:
@@ -35,16 +39,13 @@ default:
     - echo "Execute this command before any 'script:' commands."
 
 #***************************************#
-#  opsi-script pipline                  #
+#  opsi-QuickInstall pipline                  #
 #***************************************#
 
 compile opsi-quickinstall linux:
   stage: build
-  tags:
-    - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: $UPDATE_SUBMODULE == "true"
   before_script:
     - git submodule update --init
   script:
@@ -62,42 +63,49 @@ compile opsi-quickinstall linux:
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI --build-mode=Release
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI --build-mode=Release
-    - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
-    - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - LOS_MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    - LOS_SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
     - '[-n "$(ls -d l-opsi-server*)"] && rm -r build/opsi-quickinstall/l-opsi-server*'
-    - mkdir build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
-    - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
+    - mkdir build/opsi-quickinstall/l-opsi-server_$LOS_MAINVERSION-$SUBVERSION
+    - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$LOS_MAINVERSION-$SUBVERSION
    
   artifacts:
-    name: "opsi-quickinstall $BINARY_VERSION linux"
+    name: "opsi-quickinstall (linux)"
     paths:
       - build/*
 
-publish opsi-quick-install:
-  stage: publish
-  tags:
-    - laz-linux
+getversion opsi-quick-install:
+  stage: getversion
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: $CI_COMMIT_BRANCH == "main"
-  before_script:
-    - git submodule update --init
   script:
-    - git submodule update --init --recursive
     - echo "Read Opsi-QuickInstall version from file"
     - "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
     # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
     # for publishing (binaryindex, download.uib) in case that something in OQI changed and
     # you like to increase the version but there is no new l-opsi-server)
-    - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
-    - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
+    - $MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
+    - $SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
     - echo $MAINVERSION $SUBVERSION
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
-    - '[ "$CI_COMMIT_TAG" = "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --uib-binaryindex-password=ahx9taePhu --binary-cleanup opsi-quick-install linux x64'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
-    - '[ "$CI_COMMIT_TAG" = "" ] || zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
+
+upload opsi-quick-install:
+  stage: upload
+  rules:
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+  script:
+    - '[ "$CI_COMMIT_TAG" == "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
+    - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && ./opsi-dev-tool --uib-binaryindex-password=ahx9taePhu --binary-cleanup opsi-quick-install linux x64'
+    - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
+
+publish opsi-quick-install:
+  stage: publish
+  rules:
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+    - if: ($CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != "")
+  script:
+    - 'zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
+    - 'ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
+    - 'scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/'
+    - 'ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
