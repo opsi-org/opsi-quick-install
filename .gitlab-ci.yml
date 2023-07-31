@@ -88,8 +88,8 @@ getversion opsi-quick-install:
     # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
     # for publishing (binaryindex, download.uib) in case that something in OQI changed and
     # you like to increase the version but there is no new l-opsi-server)
-    - $MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
-    - $SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
+    - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
+    - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
     - echo $MAINVERSION $SUBVERSION
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
