@@ -44,9 +44,10 @@ default:
 
 compile opsi-quickinstall linux:
   stage: build
+  tags:
+    - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: $UPDATE_SUBMODULE == "true"
   before_script:
     - git submodule update --init
   script:
@@ -77,6 +78,8 @@ compile opsi-quickinstall linux:
 
 getversion opsi-quick-install:
   stage: getversion
+  tags:
+    - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
   script:
@@ -112,6 +115,8 @@ getversion opsi-quick-install:
 
 upload opsi-quick-install:
   stage: upload
+  tags:
+    - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
   script:
@@ -122,6 +127,8 @@ upload opsi-quick-install:
 
 publish opsi-quick-install:
   stage: publish
+  tags:
+    - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
     - if: ($CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != "")
