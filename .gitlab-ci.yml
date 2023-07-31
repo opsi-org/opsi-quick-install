@@ -46,6 +46,7 @@ compile opsi-quickinstall linux:
   stage: build
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+    - if: $UPDATE_SUBMODULE == "true"
   before_script:
     - git submodule update --init
   script:
