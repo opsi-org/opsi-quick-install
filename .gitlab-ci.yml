@@ -16,12 +16,6 @@ variables:
     all: build project for all platforms (Win32, Win64, Linux, MacOS)
     Windows (Linux, MacOS):  build project for the specified platform only"
 
-  MAINVERSION:
-    value: "0"
-
-  SUBVERSION:
-    value: "0"
-
 # Control of the Pipline
 workflow:
   rules:
@@ -30,7 +24,6 @@ workflow:
 
 stages:
   - build
-  - getversion
   - upload
   - publish
 
@@ -76,22 +69,6 @@ compile opsi-quickinstall linux:
     paths:
       - build/*
 
-getversion opsi-quick-install:
-  stage: getversion
-  tags:
-    - laz-linux
-  rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-  script:
-    - echo "Read Opsi-QuickInstall version from file"
-    - "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
-    # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
-    # for publishing (binaryindex, download.uib) in case that something in OQI changed and
-    # you like to increase the version but there is no new l-opsi-server)
-    - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
-    - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
-    - echo $MAINVERSION $SUBVERSION
-
 .jenkinsintegrationtest: &jenkinsintegrationtest |
   response=$(curl --insecure -v -X POST https://jenkinsttt.uib.local/job/4.2/debian11-qi.experimental42 2>&1)
   url=$(echo "$response" | grep "Location" | grep -o 'https://.*/')   # this is the global queue id
@@ -118,22 +95,21 @@ upload opsi-quick-install:
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
   script:
+    - echo "Read Opsi-QuickInstall version from file"
+    - "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
+    # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
+    # for publishing (binaryindex, download.uib) in case that something in OQI changed and
+    # you like to increase the version but there is no new l-opsi-server)
+    - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
+    - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
+    - echo $MAINVERSION $SUBVERSION
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
     - '[ "$CI_COMMIT_TAG" == "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && ./opsi-dev-tool --uib-binaryindex-password=ahx9taePhu --binary-cleanup opsi-quick-install linux x64'
     - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
     - *jenkinsintegrationtest
-
-publish opsi-quick-install:
-  stage: publish
-  tags:
-    - laz-linux
-  rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: ($CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != "")
-  script:
-    - 'zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
-    - 'ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
-    - 'scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/'
-    - 'ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
+    - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall
+    - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"
+    - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/
+    - '[ "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "" ] && ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"
