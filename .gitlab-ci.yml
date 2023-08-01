@@ -74,13 +74,13 @@ compile opsi-quickinstall linux:
   echo "waiting for start of queue item $url"
   sleep 20
   response=$(curl --insecure "$url/api/json" 2> /dev/null)
-  echo "$response"
+  echo "First response: $response"
   while echo "$response" | grep -q '"blocked":true'; do echo "waiting for job start"; sleep 20; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
-  url=$(echo "$response" | grep -o 'https://[^"]*[0-9]\+/')           # this is the specific build id for the pipeline
+  url=$(echo "$response" | grep -o 'https://[^"]*[0-9]+/')           # this is the specific build id for the pipeline
   echo "waiting for completion of job $url"
   response=$(curl --insecure "$url/api/json" 2> /dev/null)
   while echo "$response" | grep -q '"result":null'; do echo "still waiting"; sleep 20; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
-  echo "$response"
+  echo "Last response: $response"
   if echo "$response" | grep -q '"result":"SUCCESS"'; then echo 'result:SUCCESS'; exit 0; fi
   echo 'NOT successful'
   response=$(curl --insecure "$url/consoleText/api/json" 2> /dev/null)
