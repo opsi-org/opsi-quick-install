@@ -76,7 +76,7 @@ compile opsi-quickinstall linux:
   response=$(curl --insecure "$url/api/json" 2> /dev/null)
   echo "First response: $response"
   while echo "$response" | grep -q '"blocked":true'; do echo "waiting for job start"; sleep 20; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
-  url=$(echo "$response" | grep -o 'https://[^"]*[0-9]+/')           # this is the specific build id for the pipeline
+  url=$(echo "$response" | grep -o 'executable:url:https://[^"]*[0-9]\+/' | grep -o 'https://[^"]*[0-9]\+/')           # this is the specific build id for the pipeline
   echo "waiting for completion of job $url"
   response=$(curl --insecure "$url/api/json" 2> /dev/null)
   while echo "$response" | grep -q '"result":null'; do echo "still waiting"; sleep 20; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
@@ -101,7 +101,7 @@ upload opsi-quick-install:
     # you like to increase the version but there is no new l-opsi-server)
     - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
     - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
-    - echo $MAINVERSION $SUBVERSION
+    - echo $MAINVERSION-$SUBVERSION
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
     - '[ "$CI_COMMIT_TAG" == "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
