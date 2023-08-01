@@ -79,7 +79,7 @@ compile opsi-quickinstall linux:
   url=$(echo "$response" | grep -o 'https://[^"]*-qi.experimental42/[0-9]\+/')           # this is the specific build id for the pipeline
   echo "waiting for completion of job $url"
   response=$(curl --insecure "$url/api/json" 2> /dev/null)
-  while echo "$response" | grep -q '"result":null'; do echo "still waiting"; sleep 20; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
+  while echo "$response" | grep -q '"result":null'; do echo "still waiting"; sleep 120; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
   echo "Last response: $response"
   if echo "$response" | grep -q '"result":"SUCCESS"'; then echo 'result:SUCCESS'; exit 0; fi
   echo 'NOT successful'
