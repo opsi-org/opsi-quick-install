@@ -116,7 +116,12 @@ upload opsi-quick-install:
     - *readversion
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - TEST_SUCCESSFUL=true
-    - for TEST_DISTRIBUTION in alma9 debian11 leap154; do *jenkinsintegrationtest; done
+    - TEST_DISTRIBUTION="alma9"
+    - *jenkinsintegrationtest
+    - TEST_DISTRIBUTION="debian11"
+    - *jenkinsintegrationtest
+    - TEST_DISTRIBUTION="leap154"
+    - *jenkinsintegrationtest
     - if $TEST_SUCCESSFUL; then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
