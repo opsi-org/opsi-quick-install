@@ -114,7 +114,7 @@ upload opsi-quick-install:
     - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: "$CI_COMMIT_TAG" == ""
+    - if: ("$CI_COMMIT_TAG" == "")
   script:
     - *readversion
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
