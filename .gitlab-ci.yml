@@ -69,7 +69,7 @@ compile opsi-quickinstall linux:
     paths:
       - build/*
 
-# These are yaml anchors:
+# These are yaml anchors used in the stages below (The pipe in the anchor head is to preserve line breaks):
 
 # We store the Opsi-QuickInstall version in a file to be able to easily adjust it
 # for publishing (binaryindex, download.uib) in case that something in OQI changed and
@@ -105,8 +105,6 @@ compile opsi-quickinstall linux:
     TEST_SUCCESSFUL=false
   fi
 
-# Jobs:
-
 upload opsi-quick-install:
   stage: upload
   timeout: 3h
@@ -119,12 +117,7 @@ upload opsi-quick-install:
     - *readversion
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - TEST_SUCCESSFUL=true
-    - TEST_DISTRIBUTION="alma9"
-    - *jenkinsintegrationtest
-    - TEST_DISTRIBUTION="debian11"
-    - *jenkinsintegrationtest
-    - TEST_DISTRIBUTION="leap154"
-    - *jenkinsintegrationtest
+    - for TEST_DISTRIBUTION in alma9 debian11 leap154; do *jenkinsintegrationtest; done
     - if $TEST_SUCCESSFUL; then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
