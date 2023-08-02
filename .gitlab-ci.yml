@@ -111,7 +111,7 @@ upload opsi-quick-install:
   tags:
     - laz-linux
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && "$CI_COMMIT_TAG" == "")
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_TAG == "")
   script:
     - *readversion
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
@@ -125,7 +125,7 @@ publish opsi-quick-install:
   tags:
     - laz-linux
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && "$CI_COMMIT_BRANCH" == "main" && "$CI_COMMIT_TAG" != "")
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != "")
   script:
     - *readversion
     - ./opsi-dev-tool --binary-cleanup opsi-quick-install linux x64
