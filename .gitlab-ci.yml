@@ -41,10 +41,10 @@ compile opsi-quickinstall linux:
     - git submodule update --init
   script:
     - echo "Chech variables:"
-    - echo $CI_COMMIT_TAG
-    - echo ($CI_COMMIT_TAG == "")
-    - echo $CI_COMMIT_BRANCH
-    - echo ($CI_COMMIT_BRANCH == "main")
+    - echo "$CI_COMMIT_TAG"
+    - echo ("$CI_COMMIT_TAG" == "")
+    - echo "$CI_COMMIT_BRANCH"
+    - echo ("$CI_COMMIT_BRANCH" == "main")
     - git submodule update --init --recursive
     - cd l-opsi-server-products && git pull origin master && cd ..
     
