@@ -81,11 +81,14 @@ compile opsi-quickinstall linux:
   response=$(curl --insecure "$url/api/json" 2> /dev/null)
   while echo "$response" | grep -q '"result":null'; do echo "still waiting"; sleep 120; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
   echo "Last response: $response"
-  if echo "$response" | grep -q '"result":"SUCCESS"'; then echo 'result:SUCCESS'; exit 0; fi
-  echo 'NOT successful'
-  response=$(curl --insecure "$url/consoleText/api/json" 2> /dev/null)
-  echo "$response" | grep "Failed in branch"
-  exit 1
+  if echo "$response" | grep -q '"result":"SUCCESS"'; then
+    echo 'result:SUCCESS'
+  else
+    echo 'NOT successful'
+    response=$(curl --insecure "$url/consoleText/api/json" 2> /dev/null)
+    echo "$response" | grep "Failed in branch"
+    TEST_SUCCESSFUL=false
+  fi
 
 upload opsi-quick-install:
   stage: upload
@@ -105,12 +108,14 @@ upload opsi-quick-install:
     - cd build/
     - rm -rf opsi-quickinstall/l-opsi-server
     - '[ "$CI_COMMIT_TAG" == "" ] && ./opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
+    - TEST_SUCCESSFUL=true
     - TEST_DISTRIBUTION="alma9"
     - *jenkinsintegrationtest
     - TEST_DISTRIBUTION="debian11"
     - *jenkinsintegrationtest
     - TEST_DISTRIBUTION="leap154"
     - *jenkinsintegrationtest
+    - if $TEST_SUCCESSFUL; then exit 0; else exit 1; fi
     - '[ "$CI_COMMIT_BRANCH" == "main" ] && [ "$CI_COMMIT_TAG" != "" ] && ./opsi-dev-tool --binary-cleanup opsi-quick-install linux x64'
     - '[ "$CI_COMMIT_BRANCH" == "main" ] && [ "$CI_COMMIT_TAG" != "" ] && ./opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
     - '[ "$CI_COMMIT_BRANCH" == "main" ] && [ "$CI_COMMIT_TAG" != "" ] && zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
