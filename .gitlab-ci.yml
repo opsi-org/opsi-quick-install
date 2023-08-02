@@ -69,7 +69,7 @@ compile opsi-quickinstall linux:
     paths:
       - build/*
 
-# These are a yaml anchors:
+# These are yaml anchors:
 
 # We store the Opsi-QuickInstall version in a file to be able to easily adjust it
 # for publishing (binaryindex, download.uib) in case that something in OQI changed and
@@ -105,8 +105,11 @@ compile opsi-quickinstall linux:
     TEST_SUCCESSFUL=false
   fi
 
+# Jobs:
+
 upload opsi-quick-install:
   stage: upload
+  timeout: 3h
   tags:
     - laz-linux
   rules:
@@ -126,6 +129,7 @@ upload opsi-quick-install:
 
 publish opsi-quick-install:
   stage: publish
+  timeout: 5h
   tags:
     - laz-linux
   rules:
