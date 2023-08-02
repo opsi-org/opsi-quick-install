@@ -76,7 +76,7 @@ compile opsi-quickinstall linux:
 # you like to increase the version but there is no new l-opsi-server.
 .readversion: &readversion |
   echo "Read Opsi-QuickInstall version from file"
-  "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
+  echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'
   MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
   SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
   echo $MAINVERSION-$SUBVERSION
