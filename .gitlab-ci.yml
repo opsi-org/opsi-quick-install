@@ -27,10 +27,6 @@ stages:
   - upload
   - publish
 
-default:
-  before_script:
-    - echo "Execute this command before any 'script:' commands."
-
 #***************************************#
 #  opsi-QuickInstall pipline                  #
 #***************************************#
@@ -44,6 +40,11 @@ compile opsi-quickinstall linux:
   before_script:
     - git submodule update --init
   script:
+    - echo "Chech variables:"
+    - echo $CI_COMMIT_TAG
+    - echo ($CI_COMMIT_TAG == "")
+    - echo $CI_COMMIT_BRANCH
+    - echo ($CI_COMMIT_BRANCH == "main")
     - git submodule update --init --recursive
     - cd l-opsi-server-products && git pull origin master && cd ..
     
