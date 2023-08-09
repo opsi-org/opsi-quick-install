@@ -2,13 +2,9 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-  RUN_PIPLINE:
-    value: "true"  # run pipline NOT by default
-    description: "Run the pipline if set to true."
-
   PROJECT_NAME:
     value: "opsi_quick_install_project"
-    description: "Project name of the project the pipline should run on."
+    description: "Project name of the project the pipeline should run on."
 
   PLATFORM:
     value: "Linux"
@@ -16,19 +12,13 @@ variables:
     all: build project for all platforms (Win32, Win64, Linux, MacOS)
     Windows (Linux, MacOS):  build project for the specified platform only"
 
-# Control of the Pipline
-workflow:
-  rules:
-    - if: '$RUN_PIPLINE == "true"'
-      when: always
-
 stages:
   - build
   - upload
   - publish
 
 #***************************************#
-#  opsi-QuickInstall pipline                  #
+#  opsi-QuickInstall pipeline                  #
 #***************************************#
 
 compile opsi-quickinstall linux:
@@ -42,14 +32,14 @@ compile opsi-quickinstall linux:
   script:
     - git submodule update --init --recursive
     - cd l-opsi-server-products && git pull origin master && cd ..
-    
+
     # move common translation files to locale folder in build folder so that they are also delivered
     - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
-    
+
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"
-    - echo "$LAZ_PROJECT_FILE_NOGUI"   
+    - echo "$LAZ_PROJECT_FILE_NOGUI"
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI --build-mode=Release
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
@@ -59,7 +49,7 @@ compile opsi-quickinstall linux:
     - '[-n "$(ls -d l-opsi-server*)"] && rm -r build/opsi-quickinstall/l-opsi-server*'
     - mkdir build/opsi-quickinstall/l-opsi-server_$LOS_MAINVERSION-$SUBVERSION
     - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$LOS_MAINVERSION-$SUBVERSION
-   
+
   artifacts:
     name: "opsi-quickinstall (linux)"
     paths:
@@ -74,7 +64,7 @@ compile opsi-quickinstall linux:
   echo "Read Opsi-QuickInstall version from file"
   echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'
   MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
-  SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
+  SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')
   echo $MAINVERSION-$SUBVERSION
   cd build/
   rm -rf opsi-quickinstall/l-opsi-server
