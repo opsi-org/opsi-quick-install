@@ -14,6 +14,7 @@ variables:
 
 stages:
   - build
+  - get_dev_tools
   - upload
   - publish
 
@@ -32,10 +33,8 @@ compile opsi-quickinstall linux:
   script:
     - git submodule update --init --recursive
     - cd l-opsi-server-products && git pull origin master && cd ..
-
     # move common translation files to locale folder in build folder so that they are also delivered
     - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
-
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"
@@ -49,7 +48,6 @@ compile opsi-quickinstall linux:
     - '[-n "$(ls -d l-opsi-server*)"] && rm -r build/opsi-quickinstall/l-opsi-server*'
     - mkdir build/opsi-quickinstall/l-opsi-server_$LOS_MAINVERSION-$SUBVERSION
     - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$LOS_MAINVERSION-$SUBVERSION
-
   artifacts:
     name: "opsi-quickinstall (linux)"
     paths:
@@ -69,27 +67,17 @@ compile opsi-quickinstall linux:
   cd build/
   rm -rf opsi-quickinstall/l-opsi-server
 
-.jenkinsintegrationtest: &jenkinsintegrationtest |
-  response=$(curl --insecure -v -X POST https://jenkinsttt.uib.gmbh/job/4.2/job/$TEST_DISTRIBUTION-qi.experimental42/build --user service_testumgebung_gitlab:$JENKINS_CICD_TOKEN 2>&1)
-  url=$(echo "$response" | grep "Location" | grep -o 'https://.*/')   # this is the global queue id
-  echo "waiting for start of queue item $url"
-  sleep 20
-  response=$(curl --insecure "$url/api/json" 2> /dev/null)
-  echo "First response: $response"
-  while echo "$response" | grep -q '"blocked":true'; do echo "waiting for job start"; sleep 20; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
-  url=$(echo "$response" | grep -o 'https://[^"]*-qi.experimental42/[0-9]\+/')           # this is the specific build id for the pipeline
-  echo "waiting for completion of job $url"
-  response=$(curl --insecure "$url/api/json" 2> /dev/null)
-  while echo "$response" | grep -q '"result":null'; do echo "still waiting"; sleep 120; response=$(curl --insecure "$url/api/json" 2> /dev/null); done
-  echo "Last response: $response"
-  if echo "$response" | grep -q '"result":"SUCCESS"'; then
-    echo 'result:SUCCESS'
-  else
-    echo 'NOT successful'
-    response=$(curl --insecure "$url/consoleText/api/json" 2> /dev/null)
-    echo "$response" | grep "Failed in branch"
-    TEST_SUCCESSFUL=false
-  fi
+get opsi-dev-tools:
+  stage: get_dev_tools
+  tags:
+    - laz-linux
+  rules:
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
+  script:
+    - apt update
+    - apt -y install wget tar
+    - wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
+    - cp opsi-dev-tool opsi-dev-cli
 
 upload opsi-quick-install:
   stage: upload
@@ -102,12 +90,12 @@ upload opsi-quick-install:
     - *readversion
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - TEST_SUCCESSFUL=true
-    - TEST_DISTRIBUTION="alma9"
-    - *jenkinsintegrationtest
-    - TEST_DISTRIBUTION="debian11"
-    - *jenkinsintegrationtest
-    - TEST_DISTRIBUTION="leap154"
-    - *jenkinsintegrationtest
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/alma9-qi.experimental42 --buildwithparameters=False
+    - if [$? -ne 0]; then TEST_SUCCESSFUL=false; fi
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/debian11-qi.experimental42 --buildwithparameters=False
+    - if [$? -ne 0]; then TEST_SUCCESSFUL=false; fi
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/leap154-qi.experimental42 --buildwithparameters=False
+    - if [$? -ne 0]; then TEST_SUCCESSFUL=false; fi
     - if $TEST_SUCCESSFUL; then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
@@ -125,7 +113,5 @@ publish opsi-quick-install:
     - 'ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
     - scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/
     - 'ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
-    - TEST_SUCCESSFUL=true
-    - TEST_DISTRIBUTION="all"
-    - *jenkinsintegrationtest
-    - if $TEST_SUCCESSFUL; then exit 0; else exit 1; fi
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/all-qi.experimental42 --buildwithparameters=False
+    - if [$? -ne 0]; then exit 0; else exit 1; fi

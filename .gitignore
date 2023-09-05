@@ -34,6 +34,7 @@ x86_64-linux/
 # binaries
 build/opsi-quickinstall/gui/opsi_quick_install_project
 build/opsi-quickinstall/nogui/opsi_quick_install_project
+build/opsi-dev-tool
 # download on runtime
 build/opsi-quickinstall/downloaded_l-opsi-server_*
 # l-opsi-server copy from submodule
