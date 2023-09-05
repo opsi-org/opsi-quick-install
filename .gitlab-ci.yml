@@ -75,7 +75,7 @@ get opsi-dev-tools:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
   script:
     #- apt update
-    - apt -y install wget tar
+    #- apt -y install wget tar
     - wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
     - cp opsi-dev-tool opsi-dev-cli
 
