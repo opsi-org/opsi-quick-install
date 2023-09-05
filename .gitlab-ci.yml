@@ -14,7 +14,6 @@ variables:
 
 stages:
   - build
-  - get_dev_tools
   - upload
   - publish
 
@@ -67,17 +66,11 @@ compile opsi-quickinstall linux:
   cd build/
   rm -rf opsi-quickinstall/l-opsi-server
 
-get opsi-dev-tools:
-  stage: get_dev_tools
-  tags:
-    - laz-linux
-  rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-  script:
-    #- apt update
-    #- apt -y install wget tar
-    - wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
-    - cp opsi-dev-tool opsi-dev-cli
+.getopsidevtools: &getopsidevtools |
+    apt update
+    apt -y install wget tar
+    wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
+    cp opsi-dev-tool opsi-dev-cli
 
 upload opsi-quick-install:
   stage: upload
@@ -88,6 +81,7 @@ upload opsi-quick-install:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_TAG == null)
   script:
     - *readversion
+    - *getopsidevtools
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - TEST_SUCCESSFUL=true
     - ./opsi-dev-cli jenkins test --pipeline=4.2/job/alma9-qi.experimental42 --buildwithparameters=False
@@ -107,6 +101,7 @@ publish opsi-quick-install:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG)
   script:
     - *readversion
+    - *getopsidevtools
     - ./opsi-dev-tool --binary-cleanup opsi-quick-install linux x64
     - ./opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION
     - zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall
