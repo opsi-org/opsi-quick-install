@@ -67,8 +67,6 @@ compile opsi-quickinstall linux:
   rm -rf opsi-quickinstall/l-opsi-server
 
 .getopsidevtools: &getopsidevtools |
-    apt update
-    apt -y install wget tar
     wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
     cp opsi-dev-tool opsi-dev-cli
 
