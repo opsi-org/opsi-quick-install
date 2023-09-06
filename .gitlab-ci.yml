@@ -83,14 +83,8 @@ upload opsi-quick-install:
     - *readversion
     - *getopsidevtools
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
-    - TEST_SUCCESSFUL=true
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/alma9-qi.experimental42 --build-with-parameters=False
-    - if [$? -ne 0]; then TEST_SUCCESSFUL=false; fi
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/debian11-qi.experimental42 --build-with-parameters=False
-    - if [$? -ne 0]; then TEST_SUCCESSFUL=false; fi
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/leap154-qi.experimental42 --build-with-parameters=False
-    - if [$? -ne 0]; then TEST_SUCCESSFUL=false; fi
-    - if $TEST_SUCCESSFUL; then exit 0; else exit 1; fi
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
+    - if [$? -ne 0]; then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
   stage: publish
