@@ -184,7 +184,7 @@ end;
 
 procedure TQuickInstallNoGuiQuery.QueryRepo;
 begin
-  writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi43, ']', '*')
+  writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi43, ']', '*');
   readln(input);
   if CheckJumpToOverview then Exit;
   while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
