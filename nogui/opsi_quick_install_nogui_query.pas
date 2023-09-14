@@ -182,38 +182,9 @@ begin
   end;
 end;
 
-{procedure TQuickInstall.QueryOpsiVersion;
-begin
-  // opsi version:
-  writeln(rsOpsiVersion, rsOpsiVersionOp, '*');
-  readln(input);
-  while not ((input = '1') or (input = '2') or (input = '-b') or
-      (input = '')) do
-  begin
-    if input = '-h' then
-      writeln(rsInfoOpsiVersion)
-    else
-      writeln('"', input, '"', rsNotValid);
-    readln(input);
-  end;
-  if input = '-b' then
-    QuerySetupType
-  else
-  begin
-    opsiVersion := 'Opsi 4.' + input;
-    if input = '' then
-      opsiVersion := 'Opsi 4.1';
-    QueryRepo;
-  end;
-end;}
-
 procedure TQuickInstallNoGuiQuery.QueryRepo;
 begin
-  if Data.opsiVersion = 'opsi 4.1' then
-    writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi41, ']', '*')
-  else if Data.opsiVersion = 'opsi 4.2' then
-    writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi42, ']', '*');
-
+  writeln(rsRepo, ' [Example: ', Data.baseRepoUrlOpsi43, ']', '*')
   readln(input);
   if CheckJumpToOverview then Exit;
   while not ((Pos('http', input) = 1) or (input = '-b') or (input = '')) do
@@ -229,13 +200,17 @@ begin
   begin // cases input = 'http...', input = ''
     if input = '' then
     begin
-      case Data.opsiVersion of
-        'opsi 4.1': Data.repo := Data.baseRepoUrlOpsi41;
-        'opsi 4.2': Data.repo := Data.baseRepoUrlOpsi42;
-      end
+      Data.repo := Data.baseRepoUrlOpsi43;
     end
     else
+    begin
       Data.repo := input;
+      if Pos('4.3', Data.repo) > 0 then
+        Data.opsiVersion := 'opsi 4.3'
+      else
+        Data.opsiVersion := 'opsi 4.2';
+    end;
+
 
     QueryProxy;
   end;
@@ -267,10 +242,7 @@ end;
 procedure TQuickInstallNoGuiQuery.QueryRepoNoCache;
 begin
   // repo without cache proxy:
-  if Data.opsiVersion = 'opsi 4.1' then
-    writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi41, ']')
-  else if Data.opsiVersion = 'opsi 4.2' then
-    writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi42, ']');
+  writeln(rsRepoNoCache, ' [Example: ', Data.baseRepoUrlOpsi43, ']');
 
   readln(input);
   if CheckJumpToOverview then Exit;

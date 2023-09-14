@@ -25,12 +25,10 @@ type
     EditOtherNoCache: TEdit;
     InfoRepo: TImage;
     InfoOpsiVersion: TImage;
-    LabelOpsiVersion: TLabel;
     LabelNoCache: TLabel;
     LabelProxy: TLabel;
     LabelGrafanaRepo: TLabel;
     LabelRepo: TLabel;
-    PanelOpsiVersion: TPanel;
     PanelNoCache: TPanel;
     PanelProxy: TPanel;
     PanelGrafanaRepo: TPanel;
@@ -45,13 +43,10 @@ type
     RadioBtnOtherNoCache: TRadioButton;
     RadioBtnRepoNoCache: TRadioButton;
     RadioBtnMyProxy: TRadioButton;
-    RadioBtnOpsi41: TRadioButton;
-    RadioBtnOpsi42: TRadioButton;
     procedure BtnBackClick(Sender: TObject); override;
     procedure BtnNextClick(Sender: TObject); override;
     procedure FormActivate(Sender: TObject); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
-    procedure RadioBtnOpsi41Change(Sender: TObject);
   end;
 
 var
@@ -68,16 +63,16 @@ uses
 procedure TQuery.BtnNextClick(Sender: TObject);
 begin
   // Make Data entries:
-  // opsi version
-  if RadioBtnOpsi41.Checked then
-    Data.opsiVersion := RadioBtnOpsi41.Caption
-  else
-    Data.opsiVersion := RadioBtnOpsi42.Caption;
   // Repository
   if RadioBtnRepo.Checked then
     Data.repo := EditDefaultRepo.Text
   else
     Data.repo := EditRepo.Text;
+  // opsi version
+  if Pos('4.3', Data.repo) > 0 then
+    Data.opsiVersion := 'opsi 4.3'
+  else
+    Data.opsiVersion := 'opsi 4.2';
   // Proxy
   if RadioBtnNone.Checked then
     Data.proxy := ''
@@ -110,21 +105,14 @@ procedure TQuery.FormActivate(Sender: TObject);
 begin
   inherited FormActivate(Sender);
 
-  // default opsi version is 4.2
-  // set default repo depending on default opsi version
-  if self.RadioBtnOpsi41.Checked then
-    EditDefaultRepo.Text := Data.baseRepoUrlOpsi41
-  else
-    EditDefaultRepo.Text := Data.baseRepoUrlOpsi42;
+  // default opsi version is 4.3
+  // set default repo
+  EditDefaultRepo.Text := Data.baseRepoUrlOpsi43;
   // same repo for no cache proxy
   EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
 
   // text by resourcestrings
   Caption := ProgramName + ' - ' + rsCapQuery;
-  LabelOpsiVersion.Caption := rsOpsiVersion;
-  RadioBtnOpsi41.Caption := rsOpsi41;
-  RadioBtnOpsi42.Caption := rsOpsi42;
-  //InfoOpsiVersion.Hint := rsInfoOpsiVersion;
   LabelRepo.Caption := rsRepo;
   RadioBtnOtherRepo.Caption := rsRepoOther;
   InfoRepo.Hint := rsInfoRepo;
@@ -143,21 +131,6 @@ procedure TQuery.FormClose(Sender: TObject; var CloseAction: TCloseAction);
 begin
   CloseAction := caFree;
   QuickInstall.Close;
-end;
-
-procedure TQuery.RadioBtnOpsi41Change(Sender: TObject);
-begin
-  // when opsi version changes, adjust default repos
-  if RadioBtnOpsi41.Checked then
-  begin
-    EditDefaultRepo.Text := Data.baseRepoUrlOpsi41;
-    EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
-  end
-  else
-  begin
-    EditDefaultRepo.Text := Data.baseRepoUrlOpsi42;
-    EditDefaultRepoNoCache.Text := EditDefaultRepo.Text;
-  end;
 end;
 
 procedure TQuery.BtnBackClick(Sender: TObject);

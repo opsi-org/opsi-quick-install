@@ -38,10 +38,6 @@ msgstr "[Opciones: \"m\" por defecto.menu, \"nom\" para por defecto.nomenu]"
 msgid " is not a valid input."
 msgstr "El input no es correcto."
 
-#: opsi_quick_install_NoguiResourceStrings.rsopsiversionop
-msgid " [Options: \"1\" for Opsi 4.1, \"2\" for Opsi 4.2]"
-msgstr "[Opciones: \"1\" para Opsi 4.1, \"2\" para Opsi 4.2]"
-
 #: opsi_quick_install_NoguiResourceStrings.rsotherdistr
 msgid "Please type in the correct distribution:"
 msgstr "Por favor introduzca la distribución correcta:"

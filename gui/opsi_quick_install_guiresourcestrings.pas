@@ -22,9 +22,6 @@ resourcestring
   rsCorrect =
     'If this is correct, please click "Next" to continue. If not, please edit the distribution and then continue with "Next".';
   {Query}
-  rsOpsiVersion = 'Which opsi version would you like to install?';
-  rsOpsi41 = 'Opsi 4.1';
-  rsOpsi42 = 'Opsi 4.2';
   rsRepoOther = 'Other:';
   rsProxy = 'Proxy to use (http://myproxy.dom.org:8080):';
   rsProxyNone = 'None';
