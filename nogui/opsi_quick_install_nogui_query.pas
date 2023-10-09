@@ -210,8 +210,6 @@ begin
       else
         Data.opsiVersion := 'opsi 4.2';
     end;
-
-
     QueryProxy;
   end;
 end;
@@ -346,7 +344,7 @@ begin
       'e': Data.repoKind := 'experimental';
       't': Data.repoKind := 'testing';
       's': Data.repoKind := 'stable';
-      '': Data.repoKind := 'stable';
+      '': Data.repoKind := 'testing';
     end;
 
     if lowerCase(Data.DistrInfo.DistroName) = 'univention' then
