@@ -29,9 +29,9 @@ compile opsi-quickinstall linux:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
   before_script:
     - git submodule update --init
-  script:
     - git submodule update --init --recursive
     - cd l-opsi-server-products && git pull origin master && cd ..
+  script:
     # move common translation files to locale folder in build folder so that they are also delivered
     - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
@@ -79,9 +79,10 @@ upload opsi-quick-install:
     - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_TAG == null)
-  script:
+  before_script:
     - *readversion
     - *getopsidevtools
+  script:
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
     - ./opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi
@@ -93,9 +94,10 @@ publish opsi-quick-install:
     - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG)
-  script:
+  before_script:
     - *readversion
     - *getopsidevtools
+  script:
     - ./opsi-dev-tool --binary-cleanup opsi-quick-install linux x64
     - ./opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION
     - zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall
