@@ -88,7 +88,7 @@ upload opsi-quick-install:
     - *getopsidevtools
   script:
     - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
+    - ./opsi-dev-cli jenkins test --pipeline=4.3/job/few-qi.experimental42 --build-with-parameters=False && ./opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
@@ -108,5 +108,5 @@ publish opsi-quick-install:
     - 'ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
     - scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/
     - 'ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/all-qi.experimental42 --build-with-parameters=False
+    - ./opsi-dev-cli jenkins test --pipeline=4.3/job/all-qi.experimental42 --build-with-parameters=False && ./opsi-dev-cli jenkins test --pipeline=4.2/job/all-qi.experimental42 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi
