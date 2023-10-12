@@ -2,17 +2,9 @@
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
 
-  RUN_PIPLINE:
-    value: "true"  # run pipline NOT by default
-    description: "Run the pipline if set to true."
-
   PROJECT_NAME:
     value: "opsi_quick_install_project"
-    description: "Project name of the project the pipline should run on."
-
-  BINARY_VERSION:
-    value: "4.12.4.30"
-    description: "Version of the binary"
+    description: "Project name of the project the pipeline should run on."
 
   PLATFORM:
     value: "Linux"
@@ -20,22 +12,13 @@ variables:
     all: build project for all platforms (Win32, Win64, Linux, MacOS)
     Windows (Linux, MacOS):  build project for the specified platform only"
 
-# Control of the Pipline
-workflow:
-  rules:
-    - if: '$RUN_PIPLINE == "true"'
-      when: always
-
 stages:
   - build
+  - upload
   - publish
 
-default:
-  before_script:
-    - echo "Execute this command before any 'script:' commands."
-
 #***************************************#
-#  opsi-script pipline                  #
+#  opsi-QuickInstall pipeline                  #
 #***************************************#
 
 compile opsi-quickinstall linux:
@@ -44,60 +27,82 @@ compile opsi-quickinstall linux:
     - laz-linux
   rules:
     - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: $UPDATE_SUBMODULE == "true"
   before_script:
     - git submodule update --init
-  script:
     - git submodule update --init --recursive
     - cd l-opsi-server-products && git pull origin master && cd ..
-    
+  script:
     # move common translation files to locale folder in build folder so that they are also delivered
     - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
-    
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"
-    - echo "$LAZ_PROJECT_FILE_NOGUI"   
+    - echo "$LAZ_PROJECT_FILE_NOGUI"
     - echo "Compiling $PROJECT_NAME for Linux with no GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_NOGUI --build-mode=Release
     - echo "Compiling $PROJECT_NAME for Linux with GUI"
     - /usr/bin/lazbuild $LAZ_PROJECT_FILE_GUI --build-mode=Release
-    - MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
-    - SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
+    - LOPSISERVER_MAINVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 2p | awk '{ print $2 }')
+    - LOPSISERVER_SUBVERSION=$(cat l-opsi-server-products/l-opsi-server/OPSI/control | grep -m2 version | sed -n 1p | awk '{ print $2 }')
     - '[-n "$(ls -d l-opsi-server*)"] && rm -r build/opsi-quickinstall/l-opsi-server*'
-    - mkdir build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
-    - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$MAINVERSION-$SUBVERSION
-   
+    - mkdir build/opsi-quickinstall/l-opsi-server_$LOPSISERVER_MAINVERSION-$LOPSISERVER_SUBVERSION
+    - cp -r l-opsi-server-products/l-opsi-server/* build/opsi-quickinstall/l-opsi-server_$LOPSISERVER_MAINVERSION-$LOPSISERVER_SUBVERSION
   artifacts:
-    name: "opsi-quickinstall $BINARY_VERSION linux"
+    name: "opsi-quickinstall (linux)"
     paths:
       - build/*
 
-publish opsi-quick-install:
-  stage: publish
+# These are yaml anchors used in the stages below (The pipe in the anchor head is to preserve line breaks):
+
+# We store the Opsi-QuickInstall version in a file to be able to easily adjust it
+# for publishing (binaryindex, download.uib) in case that something in OQI changed and
+# you like to increase the version but there is no new l-opsi-server.
+.readversion: &readversion |
+  echo "Read Opsi-QuickInstall version from file"
+  echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'
+  MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
+  SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')
+  echo $MAINVERSION-$SUBVERSION
+  cd build/
+  rm -rf opsi-quickinstall/l-opsi-server
+
+.getopsidevtools: &getopsidevtools |
+    wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
+    cp opsi-dev-tool opsi-dev-cli
+    ./opsi-dev-tool --version
+    ./opsi-dev-cli --version
+
+upload opsi-quick-install:
+  stage: upload
+  timeout: 3h
   tags:
     - laz-linux
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
-    - if: $CI_COMMIT_BRANCH == "main"
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_TAG == null)
   before_script:
-    - git submodule update --init
+    - *readversion
+    - *getopsidevtools
   script:
-    - git submodule update --init --recursive
-    - echo "Read Opsi-QuickInstall version from file"
-    - "echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'"
-    # (We store the Opsi-QuickInstall version in a file to be able to easily adjust it
-    # for publishing (binaryindex, download.uib) in case that something in OQI changed and
-    # you like to increase the version but there is no new l-opsi-server)
-    - MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
-    - SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')  
-    - echo $MAINVERSION $SUBVERSION
-    - cd build/
-    - rm -rf opsi-quickinstall/l-opsi-server
-    - '[ "$CI_COMMIT_TAG" = "" ] && ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --uib-binaryindex-password=ahx9taePhu --binary-cleanup opsi-quick-install linux x64'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ./opsi-dev-tool --log-level info --uib-binaryindex-password=ahx9taePhu --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION'
-    - '[ "$CI_COMMIT_TAG" = "" ] || zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
-    - '[ "$CI_COMMIT_TAG" = "" ] || scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/'
-    - '[ "$CI_COMMIT_TAG" = "" ] || ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
+    - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
+    - if (($? == 0)); then exit 0; else exit 1; fi
+
+publish opsi-quick-install:
+  stage: publish
+  timeout: 5h
+  tags:
+    - laz-linux
+  rules:
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG)
+  before_script:
+    - *readversion
+    - *getopsidevtools
+  script:
+    - ./opsi-dev-tool --binary-cleanup opsi-quick-install linux x64
+    - ./opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION
+    - zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall
+    - 'ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
+    - scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/
+    - 'ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
+    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/all-qi.experimental42 --build-with-parameters=False
+    - if (($? == 0)); then exit 0; else exit 1; fi
