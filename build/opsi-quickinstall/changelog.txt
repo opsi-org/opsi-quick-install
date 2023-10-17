@@ -1,3 +1,10 @@
+opsi-quickinstall (4.2.0.9-4)
+  New:
+    Use l-opsi-server 4.2.0.9-4 as default
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue, 17 Oct 2023 14:00
+
+
 opsi-quickinstall (4.2.0.9-3)
   Fixes:
     Install 'tar' before using it because it is not pre-installed on all distributions
