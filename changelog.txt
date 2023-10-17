@@ -1,4 +1,13 @@
-opsi-quickinstall (4.2.0.9-3) experimental; urgency=medium
+opsi-quickinstall (4.2.0.9-4) experimental; urgency=medium
+  * new: Change workflow to having a 'main' branch that is always tested and ready for release.
+  * new: Update CI to trigger jenkins tests automatically and run tests for every push in every branch.
+  * new: License
+  * update l-opsi-server to 4.2.0.9-4
+    
+-- Anja-Melanie Schmitz <a.schmitz@uib.de>  Tue, 17 Oct 2023 14:00
+
+
+opsi-quickinstall (4.2.0.9-3) stable; urgency=medium
   * fix (lazarus/common/OpsiLinuxInstaller):
     	* Do not log a confusing exception-error if 'lsb_release' does not exist on the system since this is normal on newer redhat distributions
     	* Install 'tar' before using it
