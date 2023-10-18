@@ -82,7 +82,9 @@ publish opsi-quick-install:
   script:
     - opsi-dev-cli binary cleanup opsi-quick-install
     - opsi-dev-cli -l 6 binary push opsi-quickinstall --product=opsi-quick-install --version="$MAINVERSION-$SUBVERSION"  # for testing
-    - zip -r opsi-quickinstall.zip opsi-quickinstall
+    - mv opsi-quickinstall opsi-quickinstall_$MAINVERSION-$SUBVERSION
+    - zip -r opsi-quickinstall.zip opsi-quickinstall_$MAINVERSION-$SUBVERSION
+    - mv opsi-quickinstall_$MAINVERSION-$SUBVERSION opsi-quickinstall
     - opsi-dev-cli -l 6 binary push opsi-quickinstall.zip --product=opsi-quickinstall.zip --version="$MAINVERSION-$SUBVERSION"  # for production
     - opsi-dev-cli -l 6 release-service register-package-version opsi-quickinstall.zip TOOL --version="$MAINVERSION-$SUBVERSION" --files=opsi-quickinstall.zip  # TODO: --changelog-file
     - opsi-dev-cli -l 6 release-service push-repository-state opsi-quickinstall.zip TOOL TOOL-4.3-experimental --version="$MAINVERSION-$SUBVERSION" --publish
