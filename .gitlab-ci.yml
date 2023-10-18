@@ -93,7 +93,7 @@ publish opsi-quick-install:
   tags:
     - laz-linux
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG)
+    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_BRANCH == "main" && $CI_COMMIT_TAG != null)
   before_script:
     - *readversion
     - *getopsidevtools
