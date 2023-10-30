@@ -47,7 +47,6 @@ type
     netmask, networkAddress, domain, nameserver, gateway: string;
     adminName, adminPassword, ipName, ipNumber: string;
   const
-    QuickInstallVersion = '4.3.0.0';
     baseRepoUrlOpsi43 =
       'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.3:/';
     baseRepoUrlOpsi42 =
