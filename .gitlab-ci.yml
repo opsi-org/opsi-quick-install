@@ -79,6 +79,7 @@ publish opsi-quick-install:
   before_script:
     - *readversion
   script:
+    - 'if [[ $(read -r FIRSTLINE < opsi-quickinstall/changelog.txt) != *"${MAINVERSION}-${SUBVERSION}"* ]]; then echo "Changelog entry missing!"; exit 1; fi'
     - opsi-dev-cli binary cleanup opsi-quick-install
     - opsi-dev-cli -l 6 binary push opsi-quickinstall --product=opsi-quick-install --version="$MAINVERSION-$SUBVERSION"  # for testing
     - mv opsi-quickinstall opsi-quickinstall_$MAINVERSION-$SUBVERSION
