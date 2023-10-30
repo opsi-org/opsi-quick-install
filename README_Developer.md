@@ -59,7 +59,8 @@ If opsi supports a new linux server distribution and you want to add it to Opsi-
 
 2. In the Lazarus-Repo in SupportedOpsiServerDistributions:
 	+ Add the distriution to TSupportedDistribution with exactly the same name (replace "." with "_") that the folder on download.opensuse.org has.
-	+ Add the distriution in the function GetSupportedDistribution.
+	+ Add the distriution in the function GetSupportedDistribution
+	(Hint: The easiest way to find out the correct name and release of the distribution is to run the respective QuickInstall test on Jenkins and look at the resulting QuickInstall log file).
 	
 3. Don't forget to add the distribution after tests are done to
 	+ the constant string SupportedDistributionsInfoString in SupportedOpsiServerDistributions
