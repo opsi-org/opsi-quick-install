@@ -8,7 +8,7 @@ object Query: TQuery
   ClientWidth = 730
   OnActivate = FormActivate
   OnClose = FormClose
-  LCLVersion = '2.2.0.4'
+  LCLVersion = '2.2.6.0'
   object BackgroundImage: TImage
     Left = 0
     Height = 450
@@ -53,9 +53,7 @@ object Query: TQuery
     Stretch = True
   end
   object InfoOpsiVersion: TImage
-    AnchorSideLeft.Control = PanelOpsiVersion
     AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = PanelOpsiVersion
     Left = 480
     Height = 16
     Top = 50
@@ -64,60 +62,6 @@ object Query: TQuery
     ShowHint = True
     Stretch = True
     Visible = False
-  end
-  object PanelOpsiVersion: TPanel
-    AnchorSideTop.Control = Owner
-    Left = 176
-    Height = 46
-    Top = 50
-    Width = 304
-    BorderSpacing.Top = 50
-    BevelOuter = bvNone
-    ClientHeight = 46
-    ClientWidth = 304
-    ParentFont = False
-    TabOrder = 2
-    Visible = False
-    object LabelOpsiVersion: TLabel
-      Left = 0
-      Height = 19
-      Top = 0
-      Width = 304
-      Align = alTop
-      Caption = 'Which opsi version would you like to install?'
-      ParentFont = False
-      ParentShowHint = False
-      ShowHint = True
-      WordWrap = True
-    end
-    object RadioBtnOpsi41: TRadioButton
-      AnchorSideTop.Control = LabelOpsiVersion
-      AnchorSideTop.Side = asrBottom
-      Left = 0
-      Height = 21
-      Top = 19
-      Width = 74
-      Caption = 'Opsi 4.1'
-      OnChange = RadioBtnOpsi41Change
-      ParentFont = False
-      TabOrder = 0
-    end
-    object RadioBtnOpsi42: TRadioButton
-      AnchorSideLeft.Control = RadioBtnOpsi41
-      AnchorSideLeft.Side = asrBottom
-      AnchorSideTop.Control = LabelOpsiVersion
-      AnchorSideTop.Side = asrBottom
-      Left = 124
-      Height = 21
-      Top = 19
-      Width = 74
-      BorderSpacing.Left = 50
-      Caption = 'Opsi 4.2'
-      Checked = True
-      ParentFont = False
-      TabOrder = 1
-      TabStop = True
-    end
   end
   object PanelRepo: TPanel
     AnchorSideTop.Control = Owner
@@ -130,7 +74,7 @@ object Query: TQuery
     ClientHeight = 78
     ClientWidth = 384
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 2
     object LabelRepo: TLabel
       Left = 0
       Height = 19
@@ -139,6 +83,7 @@ object Query: TQuery
       Width = 384
       Align = alTop
       Caption = '(Base-) Repository for opsi-server installation'
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -203,7 +148,7 @@ object Query: TQuery
     ClientHeight = 92
     ClientWidth = 384
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 3
     object LabelProxy: TLabel
       Left = 0
       Height = 19
@@ -211,6 +156,7 @@ object Query: TQuery
       Width = 384
       Align = alTop
       Caption = 'Proxy to use (http://myproxy.dom.org:8080)'
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -273,7 +219,7 @@ object Query: TQuery
     ClientHeight = 100
     ClientWidth = 384
     ParentFont = False
-    TabOrder = 5
+    TabOrder = 4
     object LabelNoCache: TLabel
       Left = 0
       Height = 36
@@ -282,6 +228,7 @@ object Query: TQuery
       Align = alTop
       Caption = '(Base-) Repository for opsi-server installation'#10'(without any cache proxy)'
       Font.Height = 13
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -346,7 +293,7 @@ object Query: TQuery
     ClientHeight = 92
     ClientWidth = 384
     ParentFont = False
-    TabOrder = 6
+    TabOrder = 5
     object LabelGrafanaRepo: TLabel
       Left = 0
       Height = 19
@@ -354,6 +301,7 @@ object Query: TQuery
       Width = 384
       Align = alTop
       Caption = '(Base-) Repository for grafana installation'
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end

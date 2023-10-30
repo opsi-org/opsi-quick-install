@@ -47,9 +47,9 @@ type
     netmask, networkAddress, domain, nameserver, gateway: string;
     adminName, adminPassword, ipName, ipNumber: string;
   const
-    QuickInstallVersion = '4.2.0.9';
-    baseRepoUrlOpsi41 =
-      'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.1:/';
+    QuickInstallVersion = '4.3.0.0';
+    baseRepoUrlOpsi43 =
+      'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.3:/';
     baseRepoUrlOpsi42 =
       'http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/';
 
@@ -82,12 +82,8 @@ end;
 
 procedure TQuickInstallData.SetDefaultValues;
 begin
-  opsiVersion := 'opsi 4.2';
-  // automatically adjust repo to opsiVersion
-  if opsiVersion = 'opsi 4.2' then
-    repo := baseRepoUrlOpsi42
-  else
-    repo := baseRepoUrlOpsi41;
+  opsiVersion := 'opsi 4.3';
+  repo := baseRepoUrlOpsi43;
   proxy := '';
   repoNoCache := repo;
   grafanaRepo := 'https://packages.grafana.com/oss';
@@ -95,7 +91,7 @@ begin
   backend := 'file';
   copyMod := TSplitData.Create;
   copyMod.SetEntries('false');
-  repoKind := 'stable';
+  repoKind := 'testing';
 
   ucsPassword := '';
   reboot := TSplitData.Create;

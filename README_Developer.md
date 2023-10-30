@@ -53,7 +53,7 @@ The log file of the l-opsi-server installation is located in /var/log/opsi-quick
 
 ## How to add a new distribution
 
-If opsi supports a new linux distribution and you want to add it to Opsi-QuickInstall, follow these steps:
+If opsi supports a new linux server distribution and you want to add it to Opsi-QuickInstall, follow these steps:
 
 1. Check that the distribution is available on http://download.opensuse.org/repositories/home:/uibmz:/opsi:/4.2:/stable/ .
 

@@ -235,8 +235,8 @@ type
     Data.repo := PropsFile.Values['opsi_online_repository'];
 
     // Read opsi version from repo url
-    if Pos('4.1', Data.repo) > 0 then
-      Data.opsiVersion := 'opsi 4.1'
+    if Pos('4.3', Data.repo) > 0 then
+      Data.opsiVersion := 'opsi 4.3'
     else
       Data.opsiVersion := 'opsi 4.2';
 

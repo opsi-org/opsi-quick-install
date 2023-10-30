@@ -126,14 +126,6 @@ msgid "Information on the network in which the opsi-server will be installed."
 msgstr ""
 "Informations sur le réseau dans lequel le serveur opsi doit être installé."
 
-#: opsi_quick_install_CommonResourceStrings.rsinfoopsiversion
-msgid ""
-"It's recommended to install opsi 4.2 since it is the latest version; the "
-"support for opsi 4.1 will end soon."
-msgstr ""
-"Vous devriez installer opsi 4.2 car il s'agit de la dernière version; le "
-"support pour opsi 4.1 sera bientôt terminé."
-
 #: opsi_quick_install_CommonResourceStrings.rsinforeboot
 msgid ""
 "If yes, shortly after the opsi-server is installed, your computer will "

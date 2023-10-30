@@ -16,7 +16,6 @@ resourcestring
   rsIsCorrect = 'Is this correct?';
   rsYesNoOp = ' [Options: "y" for yes, "n" for no]';
   rsOtherDistr = 'Please type in the correct distribution:';
-  rsOpsiVersionOp = ' [Options: "1" for Opsi 4.1, "2" for Opsi 4.2]';
   rsUseProxy = 'Would you like to use a proxy?';
   rsBackendOp = ' [Options: "f" for file, "m" for mysql]';
   rsRepoKindOp = ' [Options: "s" for stable, "t" for testing, "e" for experimental]';

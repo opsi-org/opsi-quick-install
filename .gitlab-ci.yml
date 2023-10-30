@@ -1,16 +1,8 @@
+image: docker.uib.gmbh/opsi/dev/pybuilder:uib-python-default
+
 # Variable definitions
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-
-  PROJECT_NAME:
-    value: "opsi_quick_install_project"
-    description: "Project name of the project the pipeline should run on."
-
-  PLATFORM:
-    value: "Linux"
-    description: "For which build modes should the lazarus project be compiled?
-    all: build project for all platforms (Win32, Win64, Linux, MacOS)
-    Windows (Linux, MacOS):  build project for the specified platform only"
 
 stages:
   - build
@@ -25,8 +17,6 @@ compile opsi-quickinstall linux:
   stage: build
   tags:
     - laz-linux
-  rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux")
   before_script:
     - git submodule update --init
     - git submodule update --init --recursive
@@ -34,6 +24,7 @@ compile opsi-quickinstall linux:
   script:
     # move common translation files to locale folder in build folder so that they are also delivered
     - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
+    - PROJECT_NAME="opsi_quick_install_project"
     - LAZ_PROJECT_FILE_GUI=gui/${PROJECT_NAME}.lpi
     - LAZ_PROJECT_FILE_NOGUI=nogui/${PROJECT_NAME}.lpi
     - echo "$LAZ_PROJECT_FILE_GUI"
@@ -52,7 +43,7 @@ compile opsi-quickinstall linux:
     paths:
       - build/*
 
-# These are yaml anchors used in the stages below (The pipe in the anchor head is to preserve line breaks):
+# This is a yaml anchor used in the stages below (The pipe in the anchor head is to preserve line breaks):
 
 # We store the Opsi-QuickInstall version in a file to be able to easily adjust it
 # for publishing (binaryindex, download.uib) in case that something in OQI changed and
@@ -66,43 +57,37 @@ compile opsi-quickinstall linux:
   cd build/
   rm -rf opsi-quickinstall/l-opsi-server
 
-.getopsidevtools: &getopsidevtools |
-    wget "$OPSIDEVTOOLS_URL_LINUX_X64" -O - | tar xzf -
-    cp opsi-dev-tool opsi-dev-cli
-    ./opsi-dev-tool --version
-    ./opsi-dev-cli --version
-
 upload opsi-quick-install:
   stage: upload
-  timeout: 3h
-  tags:
-    - laz-linux
+  timeout: 2h
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_TAG == null)
+    - if: '$CI_COMMIT_TAG == null && $CI_PIPELINE_SOURCE != "merge_request_event"'
   before_script:
     - *readversion
-    - *getopsidevtools
   script:
-    - './opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION "$CI_JOB_ID"'
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
+    - opsi-dev-cli -l 6 binary push opsi-quickinstall --product=opsi-quick-install --version="$MAINVERSION-$SUBVERSION" --prerelease="$CI_JOB_ID"
+    - opsi-dev-cli jenkins test --pipeline=4.3/job/few-qi.experimental43 --build-with-parameters=False
+    - if (($? == 0)); then exit 0; else exit 1; fi
+    - opsi-dev-cli jenkins test --pipeline=4.2/job/few-qi.experimental42 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
   stage: publish
-  timeout: 5h
-  tags:
-    - laz-linux
+  timeout: 2h
   rules:
-    - if: ($PROJECT_NAME == "opsi_quick_install_project" && $PLATFORM == "Linux" && $CI_COMMIT_TAG != null)
+    - if: $CI_COMMIT_TAG
   before_script:
     - *readversion
-    - *getopsidevtools
   script:
-    - ./opsi-dev-tool --binary-cleanup opsi-quick-install linux x64
-    - ./opsi-dev-tool --log-level info --binary-push opsi-quickinstall opsi-quick-install linux x64 $MAINVERSION-$SUBVERSION
-    - zip -r opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall
-    - 'ssh opsi@download.uib.de "rm -rf ~/htdocs/opsi4.2/experimental/quickinstall/opsi-quickinstall_*"'
-    - scp opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi@download.uib.de:~/htdocs/opsi4.2/experimental/quickinstall/
-    - 'ssh opsi@download.uib.de "cd ~/htdocs/opsi4.2/experimental/quickinstall/ && ln -sf opsi-quickinstall_$MAINVERSION-$SUBVERSION.zip opsi-quickinstall.zip"'
-    - ./opsi-dev-cli jenkins test --pipeline=4.2/job/all-qi.experimental42 --build-with-parameters=False
+    - opsi-dev-cli binary cleanup opsi-quick-install
+    - opsi-dev-cli -l 6 binary push opsi-quickinstall --product=opsi-quick-install --version="$MAINVERSION-$SUBVERSION"  # for testing
+    - mv opsi-quickinstall opsi-quickinstall_$MAINVERSION-$SUBVERSION
+    - zip -r opsi-quickinstall.zip opsi-quickinstall_$MAINVERSION-$SUBVERSION
+    - mv opsi-quickinstall_$MAINVERSION-$SUBVERSION opsi-quickinstall
+    - opsi-dev-cli -l 6 binary push opsi-quickinstall.zip --product=opsi-quickinstall.zip --version="$MAINVERSION-$SUBVERSION"  # for production
+    - opsi-dev-cli -l 6 release-service register-package-version opsi-quickinstall.zip TOOL --version="$MAINVERSION-$SUBVERSION" --files=opsi-quickinstall.zip  # TODO: --changelog-file
+    - opsi-dev-cli -l 6 release-service push-repository-state opsi-quickinstall.zip TOOL TOOL-4.3-experimental --version="$MAINVERSION-$SUBVERSION" --publish
+    - opsi-dev-cli jenkins test --pipeline=4.3/job/all-qi.experimental43 --build-with-parameters=False
+    - if (($? == 0)); then exit 0; else exit 1; fi
+    - opsi-dev-cli jenkins test --pipeline=4.2/job/all-qi.experimental42 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi

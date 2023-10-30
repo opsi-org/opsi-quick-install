@@ -73,14 +73,6 @@ msgctxt "opsi_quick_install_GuiResourceStrings.rsnetworkaddressother"
 msgid "Other:"
 msgstr "Other:"
 
-#: opsi_quick_install_GuiResourceStrings.rsopsi41
-msgid "Opsi 4.1"
-msgstr "Opsi 4.1"
-
-#: opsi_quick_install_GuiResourceStrings.rsopsi42
-msgid "Opsi 4.2"
-msgstr "Opsi 4.2"
-
 #: opsi_quick_install_GuiResourceStrings.rsproxy
 msgid "Proxy to use (http://myproxy.dom.org:8080):"
 msgstr "Proxy to use (http://myproxy.dom.org:8080)"
