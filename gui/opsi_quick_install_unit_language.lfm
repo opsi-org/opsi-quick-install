@@ -8,7 +8,7 @@ object QuickInstall: TQuickInstall
   ClientWidth = 730
   OnActivate = FormActivate
   OnCreate = FormCreate
-  LCLVersion = '2.2.0.4'
+  LCLVersion = '2.2.6.0'
   object BackgroundImage: TImage
     Left = 0
     Height = 450
@@ -51,6 +51,7 @@ object QuickInstall: TQuickInstall
       Width = 364
       Align = alTop
       Caption = 'Please select a setup type:'
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -83,6 +84,7 @@ object QuickInstall: TQuickInstall
       Width = 364
       Align = alBottom
       Caption = 'To carry out the remaing installation automatically, we need some information first.'
+      ParentColor = False
       ParentFont = False
       ParentShowHint = False
       WordWrap = True
@@ -109,6 +111,7 @@ object QuickInstall: TQuickInstall
       Caption = 'Welcome to the installation of opsi-server on this computer!'
       Font.Height = -19
       Font.Name = 'Sans'
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end
@@ -122,6 +125,7 @@ object QuickInstall: TQuickInstall
       Anchors = [akTop, akLeft, akBottom]
       BorderSpacing.Top = 45
       Caption = 'Please choose a language for this setup program:'
+      ParentColor = False
       ParentFont = False
       WordWrap = True
     end

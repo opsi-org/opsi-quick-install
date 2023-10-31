@@ -92,6 +92,7 @@ type
   var
     ErrorMsg: string;
     FilePath: string;
+    VersionFile: TStringList;
   begin
     // quick check parameters
     ErrorMsg := CheckOptions('hgndf:', 'help gui nogui default file:');
@@ -135,7 +136,12 @@ type
     begin
       LogDatei.Log('Use default property values.', LLInfo);
       writeln('');
-      writeln('Start ' + ProgramName + ' ' + Data.QuickInstallVersion);
+      VersionFile := TStringList.Create;
+      VersionFile.LoadFromFile('../version.txt');
+      VersionFile.NameValueSeparator := ':';
+      writeln('Start ' + ProgramName + ' ' + VersionFile.Values['Mainversion'].Trim() +
+        '-' + VersionFile.Values['Subversion'].Trim());
+      FreeAndNil(VersionFile);
       InstallOpsiServer;
       Terminate;
       Exit;
@@ -266,9 +272,16 @@ type
   end;
 
   procedure LogQuickInstallVersion;
+  var
+    VersionFile: TStringList;
   begin
     LogDatei.log('', LLessential);
-    LogDatei.log(ProgramName + ' version: ' + Data.QuickInstallVersion, LLessential);
+    VersionFile := TStringList.Create;
+    VersionFile.LoadFromFile('../version.txt');
+    VersionFile.NameValueSeparator := ':';
+    LogDatei.log(ProgramName + ' version: ' + VersionFile.Values['Mainversion'].Trim() +
+      '-' + VersionFile.Values['Subversion'].Trim(), LLessential);
+    FreeAndNil(VersionFile);
     LogDatei.log('', LLessential);
   end;
 

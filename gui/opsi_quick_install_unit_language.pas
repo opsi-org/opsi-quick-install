@@ -119,6 +119,8 @@ begin
 end;
 
 procedure TQuickInstall.FormCreate(Sender: TObject);
+var
+  VersionFile: TStringList;
 begin
   inherited FormCreate(Sender);
   CenterFormOnScreen(Sender as TForm);
@@ -146,7 +148,12 @@ begin
 
   InitializeLogFile(LogFileName);
   LogDatei.log('', LLnothing);
-  LogDatei.log(ProgramName + ' version: ' + Data.QuickInstallVersion, LLessential);
+  VersionFile := TStringList.Create;
+  VersionFile.LoadFromFile('../version.txt');
+  VersionFile.NameValueSeparator := ':';
+  LogDatei.log(ProgramName + ' version: ' + VersionFile.Values['Mainversion'].Trim() +
+    '-' + VersionFile.Values['Subversion'].Trim(), LLessential);
+  FreeAndNil(VersionFile);
   LogDatei.log('', LLnothing);
 
   // initialize data structure to store the QuickInstall data for easier access

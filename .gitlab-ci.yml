@@ -50,9 +50,9 @@ compile opsi-quickinstall linux:
 # you like to increase the version but there is no new l-opsi-server.
 .readversion: &readversion |
   echo "Read Opsi-QuickInstall version from file"
-  echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/OpsiQuickInstall_Version!'
-  MAINVERSION=$(cat build/OpsiQuickInstall_Version | grep Mainversion | awk '{ print $2 }')
-  SUBVERSION=$(cat build/OpsiQuickInstall_Version | grep Subversion | awk '{ print $2 }')
+  echo 'Hint: A new l-opsi-server version has to be written manually as Opsi-QuickInstall version to the file build/opsi-quickinstall/version.txt!'
+  MAINVERSION=$(cat build/opsi-quickinstall/version.txt | grep Mainversion | awk '{ print $2 }')
+  SUBVERSION=$(cat build/opsi-quickinstall/version.txt | grep Subversion | awk '{ print $2 }')
   echo $MAINVERSION-$SUBVERSION
   cd build/
   rm -rf opsi-quickinstall/l-opsi-server
@@ -79,6 +79,7 @@ publish opsi-quick-install:
   before_script:
     - *readversion
   script:
+    - 'if [[ $(read -r FIRSTLINE < opsi-quickinstall/changelog.txt) != *"${MAINVERSION}-${SUBVERSION}"* ]]; then echo "Changelog entry missing!"; exit 1; fi'
     - opsi-dev-cli binary cleanup opsi-quick-install
     - opsi-dev-cli -l 6 binary push opsi-quickinstall --product=opsi-quick-install --version="$MAINVERSION-$SUBVERSION"  # for testing
     - mv opsi-quickinstall opsi-quickinstall_$MAINVERSION-$SUBVERSION
