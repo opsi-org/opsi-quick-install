@@ -32,15 +32,19 @@ procedure TWait.FormActivate(Sender: TObject);
 var
   LOpsiServerInstallationScriptExecuter: TLOpsiServerInstallationScriptExecuter;
   MessageDisplayer: TIndependentMessageDisplayer;
+  LOpsiServerDownloadSite: string;
 begin
   CenterFormOnForm(self, Password);
 
   MessageDisplayer := TIndependentMessageDisplayer.Create(LabelWait);
+  if Data.opsiVersion = 'opsi 4.3' then
+    LOpsiServerDownloadSite := 'opsipackages.43.opsi.org/testing/linux/localboot/'
+  else
+    LOpsiServerDownloadSite := 'download.uib.de/opsi4.2/testing/packages/linux/localboot/';
   LOpsiServerInstallationScriptExecuter :=
     TLOpsiServerInstallationScriptExecuter.Create(Password.EditPassword.Text,
     Password.RadioBtnSudo.Checked, Data.DistrInfo.PackageManagementShellCommand,
-    'l-opsi-server', 'download.uib.de/opsi4.2/testing/packages/linux/localboot/',
-    MessageDisplayer);
+    'l-opsi-server', LOpsiServerDownloadSite, MessageDisplayer);
 
   Application.ProcessMessages;
   LOpsiServerInstallationScriptExecuter.InstallOpsiProduct;
