@@ -1,3 +1,9 @@
+opsi-quickinstall (4.3.0.4-2)
+  New:
+    Use l-opsi-server 4.3.0.4-2 as default
+    
+-- Jan Werner <j.werner@uib.de>  Tue, 14 Nov 2023
+
 opsi-quickinstall (4.2.0.9-4)
   New:
     Use l-opsi-server 4.2.0.9-4 as default
