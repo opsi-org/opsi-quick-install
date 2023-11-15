@@ -1,3 +1,8 @@
+opsi-quickinstall (4.3.0.5-1)
+  * update l-opsi-server to 4.3.0.5-1
+
+-- Jan Werner <j.werner@uib.de>  Wed, 15 Nov 2023
+
 opsi-quickinstall (4.3.0.4-2) stable; urgency=medium
   * update: l-opsi-server to 4.3.0.4-2
     
