@@ -36,7 +36,6 @@ type
     opsiVersion, repo, proxy, repoNoCache, grafanaRepo: string;
 
     backend: string;
-    copyMod: TSplitData;
     repoKind: string;
 
     ucsPassword: string;
@@ -87,9 +86,7 @@ begin
   repoNoCache := repo;
   grafanaRepo := 'https://packages.grafana.com/oss';
 
-  backend := 'file';
-  copyMod := TSplitData.Create;
-  copyMod.SetEntries('false');
+  backend := 'mysql';
   repoKind := 'testing';
 
   ucsPassword := '';
@@ -119,7 +116,6 @@ end;
 
 destructor TQuickInstallData.Destroy;
 begin
-  if Assigned(copyMod) then FreeAndNil(copyMod);
   if Assigned(reboot) then FreeAndNil(reboot);
   if Assigned(dhcp) then FreeAndNil(dhcp);
   inherited Destroy;

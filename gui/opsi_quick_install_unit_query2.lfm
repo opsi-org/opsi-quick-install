@@ -19,9 +19,9 @@ object Query2: TQuery2
   end
   object BtnNext: TButton
     Left = 672
-    Height = 33
+    Height = 35
     Top = 416
-    Width = 56
+    Width = 62
     AutoSize = True
     Caption = ' next > '
     OnClick = BtnNextClick
@@ -30,75 +30,14 @@ object Query2: TQuery2
   end
   object BtnBack: TButton
     Left = 8
-    Height = 33
+    Height = 35
     Top = 416
-    Width = 57
+    Width = 64
     AutoSize = True
     Caption = ' < back '
     OnClick = BtnBackClick
     ParentFont = False
     TabOrder = 1
-  end
-  object PanelBackend: TPanel
-    AnchorSideTop.Control = Owner
-    Left = 216
-    Height = 78
-    Top = 50
-    Width = 351
-    BorderSpacing.Top = 50
-    BevelOuter = bvNone
-    ClientHeight = 78
-    ClientWidth = 351
-    ParentFont = False
-    TabOrder = 2
-    object LabelBackend: TLabel
-      Left = 0
-      Height = 38
-      Top = 0
-      Width = 351
-      Align = alTop
-      Caption = 'Which backend should be installed?'#10'(mysql needs valid activation file)'
-      ParentColor = False
-      ParentFont = False
-      WordWrap = True
-    end
-    object PanelRadioBackend: TPanel
-      Left = 0
-      Height = 21
-      Top = 38
-      Width = 351
-      Align = alTop
-      AutoSize = True
-      BevelOuter = bvNone
-      ClientHeight = 21
-      ClientWidth = 351
-      ParentFont = False
-      TabOrder = 0
-      object RadioBtnFile: TRadioButton
-        Left = 0
-        Height = 21
-        Top = 0
-        Width = 43
-        Align = alLeft
-        Caption = 'file'
-        Checked = True
-        OnChange = RadioBtnFileChange
-        ParentFont = False
-        TabOrder = 0
-        TabStop = True
-      end
-      object RadioBtnMySql: TRadioButton
-        Left = 93
-        Height = 21
-        Top = 0
-        Width = 60
-        Align = alLeft
-        BorderSpacing.Left = 50
-        Caption = 'mysql'
-        ParentFont = False
-        TabOrder = 1
-      end
-    end
   end
   object PanelRepoKind: TPanel
     AnchorSideTop.Control = PanelCopyModules
@@ -112,7 +51,7 @@ object Query2: TQuery2
     ClientHeight = 40
     ClientWidth = 351
     ParentFont = False
-    TabOrder = 3
+    TabOrder = 2
     object LabelRepoKind: TLabel
       Left = 0
       Height = 19
@@ -127,21 +66,21 @@ object Query2: TQuery2
     object PanelRadioRepoKind: TPanel
       AnchorSideTop.Side = asrBottom
       Left = 0
-      Height = 21
+      Height = 23
       Top = 19
       Width = 351
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 21
+      ClientHeight = 23
       ClientWidth = 351
       ParentFont = False
       TabOrder = 0
       object RadioBtnTesting: TRadioButton
-        Left = 111
-        Height = 21
+        Left = 116
+        Height = 23
         Top = 0
-        Width = 67
+        Width = 71
         Align = alLeft
         BorderSpacing.Left = 50
         Caption = 'testing'
@@ -152,19 +91,19 @@ object Query2: TQuery2
       end
       object RadioBtnStable: TRadioButton
         Left = 0
-        Height = 21
+        Height = 23
         Top = 0
-        Width = 61
+        Width = 66
         Align = alLeft
         Caption = 'stable'
         ParentFont = False
         TabOrder = 1
       end
       object RadioBtnExperimental: TRadioButton
-        Left = 228
-        Height = 21
+        Left = 237
+        Height = 23
         Top = 0
-        Width = 106
+        Width = 113
         Align = alLeft
         BorderSpacing.Left = 50
         Caption = 'experimental'
@@ -174,7 +113,6 @@ object Query2: TQuery2
     end
   end
   object PanelCopyModules: TPanel
-    AnchorSideTop.Control = PanelBackend
     AnchorSideTop.Side = asrBottom
     Left = 216
     Height = 50
@@ -185,7 +123,7 @@ object Query2: TQuery2
     ClientHeight = 50
     ClientWidth = 460
     ParentFont = False
-    TabOrder = 4
+    TabOrder = 3
     Visible = False
     Wordwrap = True
     object LabelCopyModules: TLabel
@@ -201,31 +139,31 @@ object Query2: TQuery2
     end
     object PanelRadio: TPanel
       Left = 5
-      Height = 21
+      Height = 23
       Top = 24
       Width = 450
       Align = alTop
       AutoSize = True
       BevelOuter = bvNone
-      ClientHeight = 21
+      ClientHeight = 23
       ClientWidth = 450
       ParentFont = False
       TabOrder = 0
       object RadioBtnYesCopy: TRadioButton
         Left = 0
-        Height = 21
+        Height = 23
         Top = 0
-        Width = 45
+        Width = 50
         Align = alLeft
         Caption = 'Yes'
         ParentFont = False
         TabOrder = 0
       end
       object RadioBtnNoCopy: TRadioButton
-        Left = 95
-        Height = 21
+        Left = 100
+        Height = 23
         Top = 0
-        Width = 42
+        Width = 45
         Align = alLeft
         BorderSpacing.Left = 50
         Caption = 'No'
@@ -235,18 +173,6 @@ object Query2: TQuery2
         TabStop = True
       end
     end
-  end
-  object InfoBackend: TImage
-    AnchorSideLeft.Control = PanelBackend
-    AnchorSideLeft.Side = asrBottom
-    AnchorSideTop.Control = PanelBackend
-    Left = 567
-    Height = 18
-    Top = 50
-    Width = 18
-    ParentShowHint = False
-    ShowHint = True
-    Stretch = True
   end
   object InfoModules: TImage
     AnchorSideLeft.Control = PanelCopyModules

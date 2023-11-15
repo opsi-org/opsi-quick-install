@@ -15,20 +15,14 @@ uses
 type
 
   TQuery2 = class(TOpsiLinuxInstallerQueryForm)
-    InfoBackend: TImage;
     InfoModules: TImage;
     InfoRepoKind: TImage;
     LabelCopyModules: TLabel;
     LabelRepoKind: TLabel;
-    LabelBackend: TLabel;
     PanelCopyModules: TPanel;
     PanelRadio: TPanel;
     PanelRadioRepoKind: TPanel;
-    PanelRadioBackend: TPanel;
     PanelRepoKind: TPanel;
-    PanelBackend: TPanel;
-    RadioBtnFile: TRadioButton;
-    RadioBtnMySql: TRadioButton;
     RadioBtnExperimental: TRadioButton;
     RadioBtnNoCopy: TRadioButton;
     RadioBtnStable: TRadioButton;
@@ -38,7 +32,6 @@ type
     procedure BtnNextClick(Sender: TObject); override;
     procedure FormActivate(Sender: TObject); override;
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction); override;
-    procedure RadioBtnFileChange(Sender: TObject);
   end;
 
 var
@@ -55,16 +48,6 @@ uses
 procedure TQuery2.BtnNextClick(Sender: TObject);
 begin
   // Make Data entries:
-  // Backend
-  if RadioBtnFile.Checked then
-    Data.backend := RadioBtnFile.Caption
-  else
-    Data.backend := RadioBtnMySql.Caption;
-  // Copy modules
-  if RadioBtnYesCopy.Checked then
-    Data.copyMod.SetEntries('true')
-  else
-    Data.copyMod.SetEntries('false');
   // Repo kind
   if RadioBtnStable.Checked then
     Data.repoKind := RadioBtnStable.Caption
@@ -93,8 +76,6 @@ begin
 
   // text by resourcestrings
   Caption := ProgramName + ' - ' + rsCapQuery2;
-  LabelBackend.Caption := rsBackend;
-  InfoBackend.Hint := rsInfoBackend;
   LabelCopyModules.Caption := rsCopyModules;
   InfoModules.Hint := rsInfoModules;
   RadioBtnYesCopy.Caption := rsYes;
@@ -111,20 +92,6 @@ begin
   Query.Close;
 end;
 
-procedure TQuery2.RadioBtnFileChange(Sender: TObject);
-begin
-  // ask for copying modules only if backend is mysql
-  if RadioBtnFile.Checked then
-  begin
-    PanelCopyModules.Visible := False;
-    InfoModules.Visible := False;
-  end
-  else
-  begin
-    PanelCopyModules.Visible := True;
-    InfoModules.Visible := True;
-  end;
-end;
 
 procedure TQuery2.BtnBackClick(Sender: TObject);
 begin

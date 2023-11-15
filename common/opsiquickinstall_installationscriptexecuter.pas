@@ -45,7 +45,6 @@ begin
     FFileText.Add('allow_reboot=' + Data.reboot.PropertyEntry);
     FFileText.Add('backend=' + Data.backend);
     FFileText.Add('dnsdomain=' + Data.domain);
-    FFileText.Add('force_copy_modules=' + Data.copyMod.PropertyEntry);
     FFileText.Add('gateway=' + Data.gateway);
     FFileText.Add('grafana_online_repository=' + Data.grafanaRepo);
     FFileText.Add('install_and_configure_dhcp=' + Data.dhcp.PropertyEntry);
