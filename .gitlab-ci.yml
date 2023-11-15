@@ -20,7 +20,7 @@ compile opsi-quickinstall linux:
   before_script:
     - git submodule update --init
     - git submodule update --init --recursive
-    - cd l-opsi-server-products && git pull origin master && cd ..
+    - cd l-opsi-server-products && git pull origin main && cd ..
   script:
     # move common translation files to locale folder in build folder so that they are also delivered
     - cp lazarus/common/OpsiLinuxInstaller/locale/* build/opsi-quickinstall/locale
