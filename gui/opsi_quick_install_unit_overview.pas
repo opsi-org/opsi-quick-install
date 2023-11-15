@@ -77,6 +77,8 @@ begin
     MemoOverview.Lines.Add('');
     // Backend
     MemoOverview.Lines.Add(rsBackendOverview + Data.backend);
+    // Copy modules
+    MemoOverview.Lines.Add(rsCopyModulesOverview + Data.copyMod.OverviewEntry);
     // Repo kind
     MemoOverview.Lines.Add(rsRepoKindOverview + Data.repoKind);
 
