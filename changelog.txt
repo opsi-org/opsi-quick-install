@@ -1,3 +1,8 @@
+opsi-quickinstall (4.3.0.6-1)
+  * update l-opsi-server to 4.3.0.6-1
+
+-- Mathias Radtke <m.radtke@uib.de> Tue, 26 Mar 2024
+
 opsi-quickinstall (4.3.0.5-1)
   * update l-opsi-server to 4.3.0.5-1
 
