@@ -1,3 +1,9 @@
+opsi-quickinstall (4.3.0.6-1)
+  * update l-opsi-server to 4.3.0.6-1
+  * add Ubuntu 24.04 and openSUSE Leap 15.6
+
+-- Jan Werner <j.werner@uib.de>  Tue, 26 March 2024
+
 opsi-quickinstall (4.3.0.5-1)
   * update l-opsi-server to 4.3.0.5-1
 

@@ -1,3 +1,10 @@
+opsi-quickinstall (4.3.0.6-1)
+  New:
+    Use l-opsi-server 4.3.0.6-1 as default
+    Add support for  Ubuntu 24.04 and openSUSE Leap 15.6
+
+-- Jan Werner <j.werner@uib.de>  Tue, 26 March 2024
+
 opsi-quickinstall (4.3.0.5-1)
   New:
     Use l-opsi-server 4.3.0.5-1 as default
