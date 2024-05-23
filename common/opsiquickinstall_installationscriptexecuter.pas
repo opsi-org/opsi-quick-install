@@ -95,13 +95,13 @@ begin
   end;
 
   {$IFDEF GUI}
-  FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -batch ' +
+  FInstallRunCommand.Run('./opsi-script/opsi-script -batch ' +
     FClientDataDir + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
     Output);
   {$ENDIF GUI}
 
   {$IFDEF NOGUI}
-  FInstallRunCommand.Run('./BUILD/rootfs/usr/bin/opsi-script -silent -batch ' +
+  FInstallRunCommand.Run('./opsi-script/opsi-script -silent -batch ' +
     FClientDataDir + 'setup.opsiscript /var/log/opsi-quick-install-l-opsi-server.log',
     Output);
   {$ENDIF NOGUI}
