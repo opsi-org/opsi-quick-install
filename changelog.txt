@@ -1,3 +1,8 @@
+opsi-quickinstall (4.3.0.6-2)
+  * download opsi-script from https://opsipackages.43.opsi.org/stable/linux/localboot/
+
+-- Jan Werner <j.werner@uib.de>  Mon, 27 May 2024
+
 opsi-quickinstall (4.3.0.6-1)
   * update l-opsi-server to 4.3.0.6-1
   * add Ubuntu 24.04 and openSUSE Leap 15.6
