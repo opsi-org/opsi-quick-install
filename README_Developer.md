@@ -67,4 +67,8 @@ If opsi supports a new linux server distribution and you want to add it to Opsi-
     + the changelog,
     + the oqi manual (after publishing to experimental on download.uib).
 
+## Remarks
+We store the Opsi-QuickInstall version in a file to be able to easily adjust it for publishing (binaryindex, download.uib) in case that something in OQI changed and you like to increase the version but there is no new l-opsi-server.
+
+
 
