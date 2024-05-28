@@ -59,7 +59,7 @@ compile opsi-quickinstall linux:
 
 upload opsi-quick-install:
   stage: upload
-  timeout: 2h
+  timeout: 4h
   rules:
     - if: '$CI_COMMIT_TAG == null && $CI_PIPELINE_SOURCE != "merge_request_event"'
   before_script:
@@ -71,7 +71,7 @@ upload opsi-quick-install:
 
 publish opsi-quick-install:
   stage: publish
-  timeout: 2h
+  timeout: 4h
   rules:
     - if: $CI_COMMIT_TAG
   before_script:
