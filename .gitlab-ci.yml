@@ -88,5 +88,5 @@ publish opsi-quick-install:
     - opsi-dev-cli -l 6 binary push opsi-quickinstall.zip --product=opsi-quickinstall.zip --version="$MAINVERSION-$SUBVERSION"  # for production
     - opsi-dev-cli -l 6 release-service register-package-version opsi-quickinstall.zip TOOL --version="$MAINVERSION-$SUBVERSION" --files=opsi-quickinstall.zip  # TODO: --changelog-file
     - opsi-dev-cli -l 6 release-service push-repository-state opsi-quickinstall.zip TOOL TOOL-4.3-experimental --version="$MAINVERSION-$SUBVERSION" --publish
-    - opsi-dev-cli jenkins test --pipeline=4.3/job/all-qi.experimental43 --build-with-parameters=False
+    - opsi-dev-cli jenkins test --pipeline=all-qi.experimental43 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi
