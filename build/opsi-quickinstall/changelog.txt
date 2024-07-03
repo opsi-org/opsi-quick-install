@@ -1,3 +1,9 @@
+opsi-quickinstall (4.3.0.7-1)
+  Change:
+    use l-opsi-server 4.3.0.7-1
+
+-- Mathias Radtke <m.radtke@uib.de> Wed, 3 Jul 2024
+
 opsi-quickinstall (4.3.0.6-2)
   Change:
     download opsi-script from https://opsipackages.43.opsi.org/stable/linux/localboot/
