@@ -66,7 +66,7 @@ upload opsi-quick-install:
     - *readversion
   script:
     - opsi-dev-cli -l 6 binary push opsi-quickinstall --product=opsi-quick-install --version="$MAINVERSION-$SUBVERSION" --prerelease="$CI_JOB_ID"
-    - opsi-dev-cli jenkins test --pipeline=4.3/job/few-qi.experimental43 --build-with-parameters=False
+    - opsi-dev-cli jenkins test --pipeline=few-qi.experimental43 --build-with-parameters=False
     - if (($? == 0)); then exit 0; else exit 1; fi
 
 publish opsi-quick-install:
