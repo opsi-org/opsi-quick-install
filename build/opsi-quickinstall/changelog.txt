@@ -1,3 +1,9 @@
+opsi-quickinstall (4.3.0.7-2)
+  Change:
+    use l-opsi-server 4.3.0.7-2
+
+-- Mathias Radtke <m.radtke@uib.de> Fri, 2 Aug 2024
+
 opsi-quickinstall (4.3.0.7-1)
   Change:
     use l-opsi-server 4.3.0.7-1
