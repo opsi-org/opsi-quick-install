@@ -207,9 +207,9 @@ type
   begin
     MessageDisplayer := TIndependentMessageDisplayer.Create;
     if Data.opsiVersion = 'opsi 4.3' then
-      LOpsiServerDownloadSite := 'opsipackages.43.opsi.org/testing/linux/localboot/'
+      LOpsiServerDownloadSite := 'opsipackages.43.opsi.org/stable/linux/localboot/'
     else
-      LOpsiServerDownloadSite := 'download.uib.de/opsi4.2/testing/packages/linux/localboot/';
+      LOpsiServerDownloadSite := 'download.uib.de/opsi4.2/stable/packages/linux/localboot/';
     LOpsiServerInstallationScriptExecuter :=
       TLOpsiServerInstallationScriptExecuter.Create('', False,
       Data.DistrInfo.PackageManagementShellCommand, 'l-opsi-server',
