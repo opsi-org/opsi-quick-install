@@ -22,8 +22,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <MajorVersionNr Value="4"/>
-      <MinorVersionNr Value="2"/>
-      <BuildNr Value="1"/>
+      <MinorVersionNr Value="3"/>
     </VersionInfo>
     <BuildModes Count="3">
       <Item1 Name="Default" Default="True"/>
@@ -160,11 +159,6 @@
       <CustomOptions Value="-dSYNAPSE
 -dTARGETOPSISERVER
 -dNOGUI"/>
-      <OtherDefines Count="3">
-        <Define0 Value="SYNAPSE"/>
-        <Define1 Value="TARGETOPSISERVER"/>
-        <Define2 Value="NOGUI"/>
-      </OtherDefines>
     </Other>
   </CompilerOptions>
   <Debugging>
