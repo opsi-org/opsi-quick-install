@@ -1,3 +1,9 @@
+opsi-quickinstall (4.3.0.8-1)
+  * update l-opsi-server to 4.3.0.8-1
+  * add tar support
+
+-- Jan Werner <j.werner@uib.de>  Thu, 27 Februray 2025
+
 opsi-quickinstall (4.3.0.6-2)
   * download opsi-script from https://opsipackages.43.opsi.org/stable/linux/localboot/
 
