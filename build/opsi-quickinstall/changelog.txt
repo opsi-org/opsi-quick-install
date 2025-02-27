@@ -1,8 +1,11 @@
-opsi-quickinstall (4.3.0.7-3)
+opsi-quickinstall (4.3.0.8-1)
   Change:
-    use l-opsi-server 4.3.0.7-3
+    use l-opsi-server 4.3.0.8-1
+    internal quick-install binary version 4.3.0.1
+    use tar instead of cpio
 
--- Mathias Radtke <m.radtke@uib.de> Fri, 30 Aug 2024
+-- Jan Werner <j.werner@uib.de> Thu, 27 Feb 2025
+
 
 opsi-quickinstall (4.3.0.7-2)
   Change:
